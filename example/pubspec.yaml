@@ -37,6 +37,7 @@ dependencies:
   alchemy:
     path: ../
 
+  console_mixin: ^0.0.1
   flutter_dotenv: ^5.0.2
 
 dev_dependencies:

@@ -1,11 +1,10 @@
-import 'dart:convert';
-
+import 'package:console_mixin/console_mixin.dart';
 import 'package:dio/dio.dart';
-import 'package:either_option/either_option.dart';
+import 'package:either_dart/either.dart';
 
 import '../model/error.model.dart';
 
-class AlchemyClient {
+class AlchemyClient with ConsoleMixin {
   // PROPERTIES
   String apiKey;
   String scheme;
@@ -43,7 +42,7 @@ class AlchemyClient {
     String? scheme,
     String? subDomain,
     String? host,
-    int? version,
+    int? apiVersion,
     double? jsonRPCVersion,
     bool? verbose,
     int? receiveTimeout,
@@ -53,7 +52,7 @@ class AlchemyClient {
     this.scheme = scheme ?? this.scheme;
     this.subDomain = subDomain ?? this.subDomain;
     this.host = host ?? this.host;
-    this.apiVersion = version ?? this.apiVersion;
+    this.apiVersion = apiVersion ?? this.apiVersion;
     this.jsonRPCVersion = jsonRPCVersion ?? this.jsonRPCVersion;
     this.verbose = verbose ?? this.verbose;
     this.sendTimeout = sendTimeout ?? this.sendTimeout;
@@ -64,11 +63,12 @@ class AlchemyClient {
     Map<String, dynamic> data, {
     HTTPMethod method = HTTPMethod.post,
   }) async {
-    if (apiKey.isEmpty)
+    if (apiKey.isEmpty) {
       throw 'Missing Alchemy API Key! Did you forget to initialize with setClient()?';
+    }
 
     if (verbose) {
-      print('${method.name.toUpperCase()}: $apiUrl, Data: $data');
+      console.info('${method.name.toUpperCase()}: $apiUrl, Data: $data');
     }
 
     try {
@@ -89,7 +89,7 @@ class AlchemyClient {
       );
 
       if (verbose) {
-        print(
+        console.info(
             '${response.statusCode}: ${Uri.decodeFull(response.realUri.toString())}');
       }
 
@@ -109,7 +109,7 @@ class AlchemyClient {
       }
 
       if (verbose) {
-        print(
+        console.error(
             '${e.response!.statusCode}: ${Uri.decodeFull(e.response!.realUri.toString())}, Data: ${e.response!.data}, Status Message: ${e.response!.statusMessage}');
       }
 
