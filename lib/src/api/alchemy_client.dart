@@ -25,8 +25,8 @@ class AlchemyClient with ConsoleMixin {
     this.apiVersion = 2,
     this.jsonRPCVersion = 2.0,
     this.verbose = false,
-    this.receiveTimeout = 20000,
-    this.sendTimeout = 20000,
+    this.receiveTimeout = 10000,
+    this.sendTimeout = 10000,
   });
 
   // GETTERS

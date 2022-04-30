@@ -1,5 +1,7 @@
 import 'package:alchemy/src/model/eth/eth_block.model.dart';
+import 'package:alchemy/src/model/eth/eth_fee_history.model.dart';
 import 'package:alchemy/src/model/eth/eth_transaction.model.dart';
+import 'package:alchemy/src/model/eth/eth_transaction_log.model.dart';
 import 'package:alchemy/src/model/eth/eth_transaction_receipt.model.dart';
 
 class AlchemyResponse<T> {
@@ -26,6 +28,13 @@ class AlchemyResponse<T> {
       } else if (T == List<EthTransactionReceipt>) {
         result = List<EthTransactionReceipt>.from(
             result.map((x) => EthTransactionReceipt.fromJson(x)));
+      } else if (T == List<EthTransactionLog>) {
+        result = List<EthTransactionLog>.from(
+            result.map((x) => EthTransactionLog.fromJson(x)));
+      } else if (T == EthFeeHistory) {
+        result = EthFeeHistory.fromJson(result);
+      } else if (T == List<String>) {
+        result = result.cast<String>();
       }
     }
 
