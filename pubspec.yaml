@@ -1,0 +1,16 @@
+name: alchemy
+description: A wrapper for web3dart with Alchemy APIs
+version: 0.0.1
+homepage: https://github.com/oliverbytes/alchemy
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+
+dependencies:
+  dio: ^4.0.3
+  logger: ^1.1.0
+  either_option: ^2.0.0
+
+dev_dependencies:
+  lints: ^1.0.0
+  test: ^1.16.0
