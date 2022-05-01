@@ -1,3 +1,4 @@
+import 'package:alchemy/alchemy.dart';
 import 'package:example/chain_apis.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -14,6 +15,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alchemy = Alchemy();
+
+    alchemy.client.init(
+      subDomain: 'polygon-mumbai.g',
+      apiKey: dotenv.env['API_KEY']!, // YOUR API KEY
+      verbose: true,
+    );
+
     const tabs = [
       Tab(
         text: 'Chain APIs',

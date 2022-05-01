@@ -1,7 +1,6 @@
 import 'package:alchemy/alchemy.dart';
 import 'package:console_mixin/console_mixin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChainAPIsScreen extends StatefulWidget {
   const ChainAPIsScreen({Key? key}) : super(key: key);
@@ -11,7 +10,6 @@ class ChainAPIsScreen extends StatefulWidget {
 }
 
 class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
-  // Instantiate Object
   final alchemy = Alchemy();
 
   // Result TextEditingController
@@ -51,17 +49,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
 
     setState(() {});
     console.debug('request done');
-  }
-
-  @override
-  void initState() {
-    alchemy.client.init(
-      subDomain: 'polygon-mumbai.g',
-      apiKey: dotenv.env['API_KEY']!, // YOUR API KEY
-      verbose: true,
-    );
-
-    super.initState();
   }
 
   @override

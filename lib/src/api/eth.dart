@@ -9,7 +9,6 @@ import 'package:either_dart/either.dart';
 
 import '../../alchemy.dart';
 import '../model/eth/eth_response.model.dart';
-import 'alchemy_client.dart';
 
 class EthAPI with ConsoleMixin {
   late AlchemyClient client;
