@@ -1,5 +1,5 @@
 name: alchemy
-description: A wrapper for web3dart with Alchemy APIs
+description: An Alchemy Platform client for Flutter & Dart
 version: 0.0.1
 homepage: https://github.com/oliverbytes/alchemy
 

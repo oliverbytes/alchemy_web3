@@ -92,18 +92,17 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Wrap(
+            runSpacing: 20,
+            spacing: 20,
             children: [
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('blockNumber'),
+              ElevatedButton(
+                child: const Text('blockNumber'),
                 onPressed: () => call(alchemy.polygon.blockNumber()),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getBlockByHash'),
+
+              ElevatedButton(
+                child: const Text('getBlockByHash'),
                 onPressed: () => call(
                   alchemy.polygon.getBlockByHash(
                     hash:
@@ -111,20 +110,18 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getBlockByNumber'),
+
+              ElevatedButton(
+                child: const Text('getBlockByNumber'),
                 onPressed: () => call(
                   alchemy.polygon.getBlockByNumber(
                     block: '0x1b4',
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getTransactionByHash'),
+
+              ElevatedButton(
+                child: const Text('getTransactionByHash'),
                 onPressed: () => call(
                   alchemy.polygon.getTransactionByHash(
                     hash:
@@ -132,20 +129,18 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getTransactionCount'),
+
+              ElevatedButton(
+                child: const Text('getTransactionCount'),
                 onPressed: () => call(
                   alchemy.polygon.getTransactionCount(
                     address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getTransactionReceipt'),
+
+              ElevatedButton(
+                child: const Text('getTransactionReceipt'),
                 onPressed: () => call(
                   alchemy.polygon.getTransactionReceipt(
                     hash:
@@ -153,10 +148,9 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getBlockTransactionCountByHash'),
+
+              ElevatedButton(
+                child: const Text('getBlockTransactionCountByHash'),
                 onPressed: () => call(
                   alchemy.polygon.getBlockTransactionCountByHash(
                     hash:
@@ -164,20 +158,18 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getBlockTransactionCountByNumber'),
+
+              ElevatedButton(
+                child: const Text('getBlockTransactionCountByNumber'),
                 onPressed: () => call(
                   alchemy.polygon.getBlockTransactionCountByNumber(
                     block: 'latest',
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getTransactionByBlockNumberAndIndex'),
+
+              ElevatedButton(
+                child: const Text('getTransactionByBlockNumberAndIndex'),
                 onPressed: () => call(
                   alchemy.polygon.getTransactionByBlockNumberAndIndex(
                     block: 'latest',
@@ -185,10 +177,9 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getRootHash'),
+
+              ElevatedButton(
+                child: const Text('getRootHash'),
                 onPressed: () => call(
                   alchemy.polygon.getRootHash(
                     from: 1000000,
@@ -196,20 +187,18 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getTransactionReceiptsByBlock'),
+
+              ElevatedButton(
+                child: const Text('getTransactionReceiptsByBlock'),
                 onPressed: () => call(
                   alchemy.polygon.getTransactionReceiptsByBlock(
                     block: 'latest',
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getTransactionByBlockHashAndIndex'),
+
+              ElevatedButton(
+                child: const Text('getTransactionByBlockHashAndIndex'),
                 onPressed: () => call(
                   alchemy.polygon.getTransactionByBlockHashAndIndex(
                     hash:
@@ -218,10 +207,9 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('sendRawTransaction'),
+
+              ElevatedButton(
+                child: const Text('sendRawTransaction'),
                 onPressed: () => call(
                   alchemy.polygon.sendRawTransaction(
                     signedData:
@@ -229,18 +217,16 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getBalance'),
+
+              ElevatedButton(
+                child: const Text('getBalance'),
                 onPressed: () => call(alchemy.polygon.getBalance(
                   address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
                 )),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getCode'),
+
+              ElevatedButton(
+                child: const Text('getCode'),
                 onPressed: () => call(
                   alchemy.polygon.getCode(
                     address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
@@ -248,10 +234,9 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getStorageAt'),
+
+              ElevatedButton(
+                child: const Text('getStorageAt'),
                 onPressed: () => call(
                   alchemy.polygon.getStorageAt(
                     address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
@@ -260,16 +245,14 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('accounts'),
+
+              ElevatedButton(
+                child: const Text('accounts'),
                 onPressed: () => call(alchemy.polygon.accounts()),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getProof'),
+
+              ElevatedButton(
+                child: const Text('getProof'),
                 onPressed: () => call(
                   alchemy.polygon.getProof(
                     address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
@@ -280,10 +263,9 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('call'),
+
+              ElevatedButton(
+                child: const Text('call'),
                 onPressed: () => call(
                   alchemy.polygon.call(
                     call: EthTransactionCall(
@@ -299,10 +281,9 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getLogs'),
+
+              ElevatedButton(
+                child: const Text('getLogs'),
                 onPressed: () => call(
                   alchemy.polygon.getLogs(
                     options: [
@@ -323,23 +304,20 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
+
               // works for Ethereum only
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('protocolVersion'),
+              ElevatedButton(
+                child: const Text('protocolVersion'),
                 onPressed: () => call(alchemy.eth.protocolVersion()),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('gasPrice'),
+
+              ElevatedButton(
+                child: const Text('gasPrice'),
                 onPressed: () => call(alchemy.polygon.gasPrice()),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('estimateGas'),
+
+              ElevatedButton(
+                child: const Text('estimateGas'),
                 onPressed: () => call(
                   alchemy.polygon.estimateGas(
                     call: EthTransactionCall(
@@ -355,11 +333,10 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
+
               // works for Ethereum only
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('feeHistory'),
+              ElevatedButton(
+                child: const Text('feeHistory'),
                 onPressed: () => call(
                   alchemy.eth.feeHistory(
                     blockCount: 4,
@@ -368,26 +345,23 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('chainId'),
+
+              ElevatedButton(
+                child: const Text('chainId'),
                 onPressed: () => call(alchemy.polygon.chainId()),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getUncleByBlockNumberAndIndex'),
+
+              ElevatedButton(
+                child: const Text('getUncleByBlockNumberAndIndex'),
                 onPressed: () => call(
                   alchemy.polygon.getUncleByBlockNumberAndIndex(
                     index: '0x0',
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getUncleByBlockHashAndIndex'),
+
+              ElevatedButton(
+                child: const Text('getUncleByBlockHashAndIndex'),
                 onPressed: () => call(
                   alchemy.polygon.getUncleByBlockHashAndIndex(
                     block:
@@ -396,10 +370,9 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getUncleCountByBlockHash'),
+
+              ElevatedButton(
+                child: const Text('getUncleCountByBlockHash'),
                 onPressed: () => call(
                   alchemy.polygon.getUncleCountByBlockHash(
                     hash:
@@ -407,36 +380,32 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getUncleCountByBlockNumber'),
+
+              ElevatedButton(
+                child: const Text('getUncleCountByBlockNumber'),
                 onPressed: () => call(
                   alchemy.polygon.getUncleCountByBlockNumber(
                     block: '0x0',
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getFilterChanges'),
+
+              ElevatedButton(
+                child: const Text('getFilterChanges'),
                 onPressed: () => call(
                   alchemy.polygon.getFilterChanges(
                     filterId: '0xfe704947a3cd3ca12541458a4321c869',
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('newBlockFilter'),
+
+              ElevatedButton(
+                child: const Text('newBlockFilter'),
                 onPressed: () => call(alchemy.polygon.newBlockFilter()),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('newFilter'),
+
+              ElevatedButton(
+                child: const Text('newFilter'),
                 onPressed: () => call(
                   alchemy.polygon.newFilter(
                     options: [
@@ -457,27 +426,24 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('newPendingTransactionFilter'),
+
+              ElevatedButton(
+                child: const Text('newPendingTransactionFilter'),
                 onPressed: () =>
                     call(alchemy.polygon.newPendingTransactionFilter()),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('uninstallFilter'),
+
+              ElevatedButton(
+                child: const Text('uninstallFilter'),
                 onPressed: () => call(
                   alchemy.polygon.uninstallFilter(
                     filterId: '0xfe704947a3cd3ca12541458a4321c869',
                   ),
                 ),
               ),
-              const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('uninstallFilter'),
+
+              ElevatedButton(
+                child: const Text('uninstallFilter'),
                 onPressed: () => call(
                   alchemy.polygon.uninstallFilter(
                     filterId: '0xfe704947a3cd3ca12541458a4321c869',
