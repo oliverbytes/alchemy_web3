@@ -4,18 +4,18 @@ import 'package:alchemy/src/model/eth/eth_transaction.model.dart';
 import 'package:alchemy/src/model/eth/eth_transaction_log.model.dart';
 import 'package:alchemy/src/model/eth/eth_transaction_receipt.model.dart';
 
-class AlchemyResponse<T> {
+class EthResponse<T> {
   final String jsonrpc;
   final dynamic id;
   final T? result;
 
-  AlchemyResponse({
+  EthResponse({
     required this.jsonrpc,
     required this.id,
     required this.result,
   });
 
-  factory AlchemyResponse.fromJson(Map<String, dynamic> json) {
+  factory EthResponse.fromJson(Map<String, dynamic> json) {
     var result = json["result"];
 
     if (result != null) {
@@ -38,7 +38,7 @@ class AlchemyResponse<T> {
       }
     }
 
-    return AlchemyResponse(
+    return EthResponse(
       jsonrpc: json["jsonrpc"],
       id: json["id"],
       result: result,

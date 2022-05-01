@@ -3,14 +3,14 @@ import 'package:console_mixin/console_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class PlaygroundScreen extends StatefulWidget {
-  const PlaygroundScreen({Key? key}) : super(key: key);
+class ChainAPIsScreen extends StatefulWidget {
+  const ChainAPIsScreen({Key? key}) : super(key: key);
 
   @override
-  State<PlaygroundScreen> createState() => _PlaygroundScreenState();
+  State<ChainAPIsScreen> createState() => _ChainAPIsScreenState();
 }
 
-class _PlaygroundScreenState extends State<PlaygroundScreen> with ConsoleMixin {
+class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
   // Instantiate Object
   final alchemy = Alchemy();
 
@@ -20,10 +20,19 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> with ConsoleMixin {
 
   // Generic API call function
   void call(Future function) async {
-    console.info('requesting...');
+    console.debug('requesting...');
     resultAreaController.text = 'requesting...';
 
-    final result = await function;
+    dynamic result;
+
+    try {
+      result = await function;
+    } catch (e) {
+      resultAreaController.text = e.toString();
+      resultColor = Colors.red;
+      console.error('Exception: $e}');
+      rethrow;
+    }
 
     result.either(
       (error) {
@@ -37,17 +46,17 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> with ConsoleMixin {
             response is String ? response : response.toJson().toString();
         resultAreaController.text = text;
         resultColor = null;
-        console.info(text);
       },
     );
 
     setState(() {});
-    console.info('request done');
+    console.debug('request done');
   }
 
   @override
   void initState() {
     alchemy.client.init(
+      subDomain: 'polygon-mumbai.g',
       apiKey: dotenv.env['API_KEY']!, // YOUR API KEY
       verbose: true,
     );
@@ -58,12 +67,6 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> with ConsoleMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Alchemy Playground",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

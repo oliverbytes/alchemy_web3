@@ -20,7 +20,7 @@ class AlchemyClient with ConsoleMixin {
   AlchemyClient({
     this.apiKey = '',
     this.scheme = 'https',
-    this.subDomain = 'polygon-mumbai.g',
+    this.subDomain = '',
     this.host = 'alchemyapi.io',
     this.apiVersion = 2,
     this.jsonRPCVersion = 2.0,
@@ -59,21 +59,38 @@ class AlchemyClient with ConsoleMixin {
     this.receiveTimeout = receiveTimeout ?? this.receiveTimeout;
   }
 
-  Future<Either<AlchemyError, Response<dynamic>>> request(
-    Map<String, dynamic> data, {
+  Future<Either<AlchemyError, Response<dynamic>>> request({
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? parameters,
+    String endpoint = '',
     HTTPMethod method = HTTPMethod.post,
   }) async {
     if (apiKey.isEmpty) {
       throw 'Missing Alchemy API Key! Did you forget to initialize with setClient()?';
     }
 
+    if (subDomain.isEmpty) {
+      throw 'Missing SubDomain/Network parameter! Did you forget to initialize with setClient()?';
+    }
+
+    // if an enhanced api function
+    if (endpoint.isNotEmpty) endpoint = '/$endpoint';
+
+    // if a direct chain function
+    if (data != null && endpoint.isEmpty) {
+      data.addAll({'jsonrpc': jsonRPCVersion.toString()});
+    }
+
+    // remove null map property values
+    parameters?.removeWhere((key, value) => value == null);
+
     if (verbose) {
-      console.info('${method.name.toUpperCase()}: $apiUrl, Data: $data');
+      console.verbose(
+        '${method.name.toUpperCase()}: $apiUrl$endpoint, Data: $data, Parameters: $parameters',
+      );
     }
 
     try {
-      data.addAll({'jsonrpc': jsonRPCVersion.toString()});
-
       final options = Options(
         method: method.name.toUpperCase(),
         receiveTimeout: receiveTimeout,
@@ -83,14 +100,16 @@ class AlchemyClient with ConsoleMixin {
       Response<dynamic>? response;
 
       response = await _dio.request(
-        apiUrl,
+        '$apiUrl$endpoint',
         data: data,
+        queryParameters: parameters,
         options: options,
       );
 
       if (verbose) {
         console.info(
-            '${response.statusCode}: ${Uri.decodeFull(response.realUri.toString())}');
+          '${response.statusCode}: ${Uri.decodeFull(response.realUri.toString())}\n${response.data}',
+        );
       }
 
       return Right(response);
@@ -110,7 +129,8 @@ class AlchemyClient with ConsoleMixin {
 
       if (verbose) {
         console.error(
-            '${e.response!.statusCode}: ${Uri.decodeFull(e.response!.realUri.toString())}, Data: ${e.response!.data}, Status Message: ${e.response!.statusMessage}');
+          '${e.response!.statusCode}: ${Uri.decodeFull(e.response!.realUri.toString())}, Data: ${e.response!.data}, Status Message: ${e.response!.statusMessage}',
+        );
       }
 
       return Left(AlchemyError.fromJson(e.response!.data));

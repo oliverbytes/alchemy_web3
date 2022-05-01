@@ -11,11 +11,12 @@ class Alchemy {
   // VARIABLES
   late AlchemyClient client;
 
-  // ETH / ROOT API
+  // APIs
   late api.EthAPI eth;
-
-  // POLYGON API
   late api.PolygonAPI polygon;
+  late api.ArbitrumAPI arbitrum;
+  late api.OptimismAPI optimism;
+  late api.EnhancedAPI enhanced;
 
   // CONSTRUCTOR
   Alchemy._internal() {
@@ -28,5 +29,17 @@ class Alchemy {
     // POLYGON API
     polygon = api.PolygonAPI();
     polygon.setClient(client);
+
+    // ARBITRUM API
+    arbitrum = api.ArbitrumAPI();
+    arbitrum.setClient(client);
+
+    // OPTIMISM API
+    optimism = api.OptimismAPI();
+    optimism.setClient(client);
+
+    // ENHANCED API
+    enhanced = api.EnhancedAPI();
+    enhanced.setClient(client);
   }
 }

@@ -1,7 +1,8 @@
+import 'package:example/chain_apis.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'playground_screen.dart';
+import 'enhanced_apis.screen.dart';
 
 void main() async {
   await dotenv.load(fileName: 'assets/.env');
@@ -13,10 +14,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const tabs = [
+      Tab(
+        text: 'Chain APIs',
+        icon: Icon(Icons.code),
+      ),
+      Tab(
+        text: 'Enhanced APIs',
+        icon: Icon(Icons.rocket),
+      ),
+    ];
+
+    const screens = [
+      ChainAPIsScreen(),
+      EnhancedAPIsScreen(),
+    ];
+
     return MaterialApp(
-      title: 'IPFS RPC Demo',
       theme: ThemeData.dark(),
-      home: const PlaygroundScreen(),
+      home: DefaultTabController(
+        length: tabs.length,
+        child: Scaffold(
+          body: const TabBarView(children: screens),
+          appBar: AppBar(
+            title: const Text('Alchemy Playground'),
+            bottom: const TabBar(
+              tabs: tabs,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
