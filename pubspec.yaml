@@ -8,9 +8,12 @@ environment:
 
 dependencies:
   console_mixin: ^0.0.1
-  dio: ^4.0.3
   logger: ^1.1.0
   either_dart: ^0.1.4
+  # NETWORK
+  dio: ^4.0.3
+  json_rpc_2: ^3.0.1
+  web_socket_channel: ^2.1.0
 
 dev_dependencies:
   lints: ^1.0.0

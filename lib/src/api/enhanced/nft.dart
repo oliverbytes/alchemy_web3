@@ -1,3 +1,4 @@
+import 'package:alchemy/src/enhanced_http_rpc_client.dart';
 import 'package:alchemy/src/model/enhanced/enhanced_nft.model.dart';
 import 'package:alchemy/src/model/enhanced/enhanced_nft_response.model.dart';
 import 'package:console_mixin/console_mixin.dart';
@@ -8,23 +9,21 @@ import '../../model/enhanced/enhanced_nft_collection.model.dart';
 import '../../model/enhanced/enhanced_nft_owners.model.dart';
 
 class NFTAPI with ConsoleMixin {
-  late AlchemyClient client;
+  late EnhancedHttpRpcClient client;
 
-  void setClient(AlchemyClient client) {
+  void setClient(EnhancedHttpRpcClient client) {
     this.client = client;
   }
 
   // FUNCTIONS
 
-  Future<Either<AlchemyError, EnhancedNFTResponse>> getNFTs({
+  Future<Either<EnhancedHTTPError, EnhancedNFTResponse>> getNFTs({
     required String owner,
     String? pageKey,
     List<String> contractAddresses = const [],
     bool withMetadata = true,
     List<String> filters = const [],
   }) async {
-    console.warning('client: ${client.apiUrl}');
-
     final result = await client.request(
       endpoint: 'getNFTs',
       method: HTTPMethod.get,
@@ -43,7 +42,7 @@ class NFTAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<AlchemyError, EnhancedNFT>> getNFTMetadata({
+  Future<Either<EnhancedHTTPError, EnhancedNFT>> getNFTMetadata({
     required String contractAddress,
     required String tokenId,
     String? tokenType,
@@ -64,7 +63,8 @@ class NFTAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<AlchemyError, EnhancedNFTCollection>> getNFTsForCollection({
+  Future<Either<EnhancedHTTPError, EnhancedNFTCollection>>
+      getNFTsForCollection({
     required String contractAddress,
     bool withMetadata = false,
     String? startToken,
@@ -85,7 +85,7 @@ class NFTAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<AlchemyError, EnhancedNFTOwners>> getOwnersForToken({
+  Future<Either<EnhancedHTTPError, EnhancedNFTOwners>> getOwnersForToken({
     required String contractAddress,
     required String tokenId,
   }) async {

@@ -18,7 +18,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
 
   // Generic API call function
   void call(Future function) async {
-    console.debug('requesting...');
     resultAreaController.text = 'requesting...';
 
     dynamic result;
@@ -40,8 +39,7 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
         console.error(text);
       },
       (response) {
-        final text =
-            response is String ? response : response.toJson().toString();
+        final text = response is String ? response : response.toString();
         resultAreaController.text = text;
         resultColor = null;
       },
@@ -72,7 +70,7 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
               ),
             ),
             const SizedBox(height: 15),
-            Text(alchemy.client.baseUrl),
+            Text(alchemy.eth.client.url),
           ],
         ),
       ),
@@ -171,6 +169,15 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   alchemy.polygon.getRootHash(
                     from: 1000000,
                     to: 1032767,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                child: const Text('getSignersAtHash'),
+                onPressed: () => call(
+                  alchemy.polygon.getSignersAtHash(
+                    hash:
+                        '0xd679a083f7d33c6f47f900ccc77ec58ef8e1c503d6d781e05f4af4f910c5e310',
                   ),
                 ),
               ),

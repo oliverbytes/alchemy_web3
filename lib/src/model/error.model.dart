@@ -1,15 +1,16 @@
-class AlchemyError {
+class EnhancedHTTPError {
   final String jsonrpc;
   final RPCError error;
   final int id;
 
-  AlchemyError({
+  EnhancedHTTPError({
     required this.jsonrpc,
     required this.error,
     required this.id,
   });
 
-  factory AlchemyError.fromJson(Map<String, dynamic> json) => AlchemyError(
+  factory EnhancedHTTPError.fromJson(Map<String, dynamic> json) =>
+      EnhancedHTTPError(
         jsonrpc: json["jsonrpc"],
         error: RPCError.fromJson(json["error"]),
         id: json["id"],

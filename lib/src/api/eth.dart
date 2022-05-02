@@ -1,3 +1,4 @@
+import 'package:alchemy/src/ethereum_ws_rpc_client.dart';
 import 'package:alchemy/src/model/eth/eth_account_proof.model.dart';
 import 'package:alchemy/src/model/eth/eth_block.model.dart';
 import 'package:alchemy/src/model/eth/eth_fee_history.model.dart';
@@ -8,557 +9,524 @@ import 'package:console_mixin/console_mixin.dart';
 import 'package:either_dart/either.dart';
 
 import '../../alchemy.dart';
-import '../model/eth/eth_response.model.dart';
 
 class EthAPI with ConsoleMixin {
-  late AlchemyClient client;
+  late EthereumWsRpcClient client;
 
-  void setClient(AlchemyClient client) {
+  void setClient(EthereumWsRpcClient client) {
     this.client = client;
   }
 
   // FUNCTIONS
 
-  Future<Either<AlchemyError, EthResponse<String>>> blockNumber() async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_blockNumber',
-      'params': [],
-    });
+  Future<Either<RPCErrorData, String>> blockNumber() async {
+    final result = await client.request(method: 'eth_blockNumber', params: []);
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<EthBlockResult>>> getBlockByHash({
+  Future<Either<RPCErrorData, EthBlockResult>> getBlockByHash({
     required String hash,
     bool asObject = true, // return as object or hash only
   }) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_getBlockByHash',
-      'params': [hash, asObject],
-    });
+    final result = await client.request(
+      method: 'eth_getBlockByHash',
+      params: [hash, asObject],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<EthBlockResult>.fromJson(response.data)),
+      (response) => Right(EthBlockResult.fromJson(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<EthBlockResult>>> getBlockByNumber({
+  Future<Either<RPCErrorData, EthBlockResult>> getBlockByNumber({
     required String block,
     bool asObject = true, // return as object or hash only
   }) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_getBlockByNumber',
-      'params': [block, asObject],
-    });
+    final result = await client.request(
+      method: 'eth_getBlockByNumber',
+      params: [block, asObject],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<EthBlockResult>.fromJson(response.data)),
+      (response) => Right(EthBlockResult.fromJson(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<EthTransaction>>>
-      getTransactionByHash({required String hash}) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_getTransactionByHash',
-      'params': [hash],
-    });
+  Future<Either<RPCErrorData, EthTransaction>> getTransactionByHash(
+      {required String hash}) async {
+    final result = await client.request(
+      method: 'eth_getTransactionByHash',
+      params: [hash],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<EthTransaction>.fromJson(response.data)),
+      (response) => Right(EthTransaction.fromJson(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> getTransactionCount({
+  Future<Either<RPCErrorData, String>> getTransactionCount({
     required String address,
     String block = 'latest',
   }) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_getTransactionCount',
-      'params': [address, block],
-    });
+    final result = await client.request(
+      method: 'eth_getTransactionCount',
+      params: [address, block],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<EthTransactionReceipt>>>
-      getTransactionReceipt({required String hash}) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_getTransactionReceipt',
-      'params': [hash],
-    });
+  Future<Either<RPCErrorData, EthTransactionReceipt>> getTransactionReceipt(
+      {required String hash}) async {
+    final result = await client.request(
+      method: 'eth_getTransactionReceipt',
+      params: [hash],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) =>
-          Right(EthResponse<EthTransactionReceipt>.fromJson(response.data)),
+      (response) => Right(EthTransactionReceipt.fromJson(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>>
-      getBlockTransactionCountByHash({required String hash}) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_getBlockTransactionCountByHash',
-      'params': [hash],
-    });
+  Future<Either<RPCErrorData, String>> getBlockTransactionCountByHash(
+      {required String hash}) async {
+    final result = await client.request(
+      method: 'eth_getBlockTransactionCountByHash',
+      params: [hash],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>>
-      getBlockTransactionCountByNumber({required String block}) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_getBlockTransactionCountByNumber',
-      'params': [block],
-    });
+  Future<Either<RPCErrorData, String>> getBlockTransactionCountByNumber(
+      {required String block}) async {
+    final result = await client.request(
+      method: 'eth_getBlockTransactionCountByNumber',
+      params: [block],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>>
-      getTransactionByBlockNumberAndIndex({
+  Future<Either<RPCErrorData, String>> getTransactionByBlockNumberAndIndex({
     required String block,
     required String index,
   }) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_getTransactionByBlockNumberAndIndex',
-      'params': [block, index],
-    });
+    final result = await client.request(
+      method: 'eth_getTransactionByBlockNumberAndIndex',
+      params: [block, index],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> getRootHash({
+  Future<Either<RPCErrorData, String>> getRootHash({
     required int from,
     required int to,
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getRootHash',
-      'params': [from, to],
-    });
+    final result = await client.request(
+      method: 'eth_getRootHash',
+      params: [from, to],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<List<String>>>> getSignersAtHash(
+  Future<Either<RPCErrorData, List<String>>> getSignersAtHash(
       {required String hash}) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getSignersAtHash',
-      'params': [hash],
-    });
+    final result = await client.request(
+      method: 'eth_getSignersAtHash',
+      params: [hash],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<List<String>>.fromJson(response.data)),
+      (response) => Right(List<String>.from(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<List<EthTransactionReceipt>>>>
+  Future<Either<RPCErrorData, List<EthTransactionReceipt>>>
       getTransactionReceiptsByBlock({required String block}) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getTransactionReceiptsByBlock',
-      'params': [block],
-    });
+    final result = await client.request(
+      method: 'eth_getTransactionReceiptsByBlock',
+      params: [block],
+    );
 
     return result.fold(
       (error) => Left(error),
       (response) => Right(
-          EthResponse<List<EthTransactionReceipt>>.fromJson(response.data)),
+        List<EthTransactionReceipt>.from(
+          response.map((x) => EthTransactionReceipt.fromJson(x)),
+        ),
+      ),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<EthTransaction>>>
+  Future<Either<RPCErrorData, EthTransaction>>
       getTransactionByBlockHashAndIndex({
     required String hash,
     required String index,
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getTransactionByBlockHashAndIndex',
-      'params': [hash, index],
-    });
+    final result = await client.request(
+      method: 'eth_getTransactionByBlockHashAndIndex',
+      params: [hash, index],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<EthTransaction>.fromJson(response.data)),
+      (response) => Right(EthTransaction.fromJson(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> sendRawTransaction({
+  Future<Either<RPCErrorData, String>> sendRawTransaction({
     required String signedData,
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_sendRawTransaction',
-      'params': [signedData],
-    });
+    final result = await client.request(
+      method: 'eth_sendRawTransaction',
+      params: [signedData],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> getBalance({
+  Future<Either<RPCErrorData, String>> getBalance({
     required String address,
     String block = 'latest',
   }) async {
-    final result = await client.request(data: {
-      'id': '0',
-      'method': 'eth_getBalance',
-      'params': [address, block],
-    });
+    final result = await client.request(
+      method: 'eth_getBalance',
+      params: [address, block],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> getCode({
+  Future<Either<RPCErrorData, String>> getCode({
     required String address,
     String block = 'latest',
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getCode',
-      'params': [address, block],
-    });
+    final result = await client.request(
+      method: 'eth_getCode',
+      params: [address, block],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> getStorageAt({
+  Future<Either<RPCErrorData, String>> getStorageAt({
     required String address,
     required String index,
     String block = 'latest',
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getStorageAt',
-      'params': [address, index, block],
-    });
+    final result = await client.request(
+      method: 'eth_getStorageAt',
+      params: [address, index, block],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<List<String>>>> accounts() async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_accounts',
-      'params': [],
-    });
+  Future<Either<RPCErrorData, List<String>>> accounts() async {
+    final result = await client.request(
+      method: 'eth_accounts',
+      params: [],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<List<String>>.fromJson(response.data)),
+      (response) => Right(List<String>.from(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<EthAccountProof>>> getProof({
+  Future<Either<RPCErrorData, EthAccountProof>> getProof({
     required String address,
     required List<String> storageKeys,
     String block = 'latest',
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getProof',
-      'params': [],
-    });
+    final result = await client.request(
+      method: 'eth_getProof',
+      params: [],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<EthAccountProof>.fromJson(response.data)),
+      (response) => Right(EthAccountProof.fromJson(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> call({
+  Future<Either<RPCErrorData, String>> call({
     required EthTransactionCall call,
     String block = 'latest',
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getProof',
-      'params': [call.toJson(), block],
-    });
+    final result = await client.request(
+      method: 'eth_getProof',
+      params: [call.toJson(), block],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<List<EthTransactionLog>>>> getLogs({
+  Future<Either<RPCErrorData, List<EthTransactionLog>>> getLogs({
     required List<EthFilterOptions> options,
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getLogs',
-      'params': List<dynamic>.from(options.map((x) => x.toJson())),
-    });
+    final result = await client.request(
+      method: 'eth_getLogs',
+      params: List<dynamic>.from(options.map((x) => x.toJson())),
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) =>
-          Right(EthResponse<List<EthTransactionLog>>.fromJson(response.data)),
+      (response) => Right(
+        List<EthTransactionLog>.from(
+          response.map((x) => EthTransactionLog.fromJson(x)),
+        ),
+      ),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> protocolVersion() async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_protocolVersion',
-      'params': [],
-    });
+  Future<Either<RPCErrorData, String>> protocolVersion() async {
+    final result = await client.request(
+      method: 'eth_protocolVersion',
+      params: [],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> gasPrice() async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_gasPrice',
-      'params': [],
-    });
+  Future<Either<RPCErrorData, String>> gasPrice() async {
+    final result = await client.request(
+      method: 'eth_gasPrice',
+      params: [],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> estimateGas({
+  Future<Either<RPCErrorData, String>> estimateGas({
     required EthTransactionCall call,
     String block = 'latest',
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_estimateGas',
-      'params': [call.toJson(), block],
-    });
+    final result = await client.request(
+      method: 'eth_estimateGas',
+      params: [call.toJson(), block],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<EthFeeHistory>>> feeHistory({
+  Future<Either<RPCErrorData, EthFeeHistory>> feeHistory({
     required int blockCount,
     String block = 'latest',
     List<int> rewardPercentiles = const [],
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_feeHistory',
-      'params': [blockCount, block, rewardPercentiles],
-    });
+    final result = await client.request(
+      method: 'eth_feeHistory',
+      params: [blockCount, block, rewardPercentiles],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<EthFeeHistory>.fromJson(response.data)),
+      (response) => Right(EthFeeHistory.fromJson(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> chainId() async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_chainId',
-      'params': [],
-    });
+  Future<Either<RPCErrorData, String>> chainId() async {
+    final result = await client.request(
+      method: 'eth_chainId',
+      params: [],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<EthBlockResult>>>
-      getUncleByBlockNumberAndIndex({
+  Future<Either<RPCErrorData, EthBlockResult>> getUncleByBlockNumberAndIndex({
     String block = 'latest',
     required String index,
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getUncleByBlockNumberAndIndex',
-      'params': [block, index],
-    });
+    final result = await client.request(
+      method: 'eth_getUncleByBlockNumberAndIndex',
+      params: [block, index],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<EthBlockResult>.fromJson(response.data)),
+      (response) => Right(EthBlockResult.fromJson(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<EthBlockResult>>>
-      getUncleByBlockHashAndIndex({
+  Future<Either<RPCErrorData, EthBlockResult>> getUncleByBlockHashAndIndex({
     String block = 'latest',
     required String index,
   }) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getUncleByBlockHashAndIndex',
-      'params': [block, index],
-    });
+    final result = await client.request(
+      method: 'eth_getUncleByBlockHashAndIndex',
+      params: [block, index],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<EthBlockResult>.fromJson(response.data)),
+      (response) => Right(EthBlockResult.fromJson(response)),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> getUncleCountByBlockHash(
+  Future<Either<RPCErrorData, String>> getUncleCountByBlockHash(
       {required String hash}) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getUncleCountByBlockHash',
-      'params': [hash],
-    });
+    final result = await client.request(
+      method: 'eth_getUncleCountByBlockHash',
+      params: [hash],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> getUncleCountByBlockNumber(
+  Future<Either<RPCErrorData, String>> getUncleCountByBlockNumber(
       {required String block}) async {
-    final result = await client.request(data: {
-      'id': 1,
-      'method': 'eth_getUncleCountByBlockNumber',
-      'params': [block],
-    });
+    final result = await client.request(
+      method: 'eth_getUncleCountByBlockNumber',
+      params: [block],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<List<EthTransactionLog>>>>
-      getFilterChanges({required String filterId}) async {
-    final result = await client.request(data: {
-      'id': 73,
-      'method': 'eth_getFilterChanges',
-      'params': [filterId],
-    });
+  Future<Either<RPCErrorData, List<EthTransactionLog>>> getFilterChanges(
+      {required String filterId}) async {
+    final result = await client.request(
+      method: 'eth_getFilterChanges',
+      params: [filterId],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) =>
-          Right(EthResponse<List<EthTransactionLog>>.fromJson(response.data)),
+      (response) => Right(
+        List<EthTransactionLog>.from(
+          response.map((x) => EthTransactionLog.fromJson(x)),
+        ),
+      ),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<List<EthTransactionLog>>>>
-      getFilterLogs({required String filterId}) async {
-    final result = await client.request(data: {
-      'id': 74,
-      'method': 'eth_getFilterLogs',
-      'params': [filterId],
-    });
+  Future<Either<RPCErrorData, List<EthTransactionLog>>> getFilterLogs(
+      {required String filterId}) async {
+    final result = await client.request(
+      method: 'eth_getFilterLogs',
+      params: [filterId],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) =>
-          Right(EthResponse<List<EthTransactionLog>>.fromJson(response.data)),
+      (response) => Right(
+        List<EthTransactionLog>.from(
+          response.map((x) => EthTransactionLog.fromJson(x)),
+        ),
+      ),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> newBlockFilter() async {
-    final result = await client.request(data: {
-      'id': 73,
-      'method': 'eth_newBlockFilter',
-      'params': [],
-    });
+  Future<Either<RPCErrorData, String>> newBlockFilter() async {
+    final result = await client.request(
+      method: 'eth_newBlockFilter',
+      params: [],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>> newFilter({
+  Future<Either<RPCErrorData, String>> newFilter({
     required List<EthFilterOptions> options,
   }) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_newFilter',
-      'params': List<dynamic>.from(options.map((x) => x.toJson())),
-    });
+    final result = await client.request(
+      method: 'eth_newFilter',
+      params: List<dynamic>.from(options.map((x) => x.toJson())),
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<String>>>
-      newPendingTransactionFilter() async {
-    final result = await client.request(data: {
-      'id': 73,
-      'method': 'eth_newPendingTransactionFilter',
-      'params': [],
-    });
+  Future<Either<RPCErrorData, String>> newPendingTransactionFilter() async {
+    final result = await client.request(
+      method: 'eth_newPendingTransactionFilter',
+      params: [],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<String>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 
-  Future<Either<AlchemyError, EthResponse<bool>>> uninstallFilter(
+  Future<Either<RPCErrorData, bool>> uninstallFilter(
       {required String filterId}) async {
-    final result = await client.request(data: {
-      'id': 0,
-      'method': 'eth_uninstallFilter',
-      'params': [filterId],
-    });
+    final result = await client.request(
+      method: 'eth_uninstallFilter',
+      params: [filterId],
+    );
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EthResponse<bool>.fromJson(response.data)),
+      (response) => Right(response),
     );
   }
 }

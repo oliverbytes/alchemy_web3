@@ -1,5 +1,7 @@
+import 'package:alchemy/src/enhanced_http_rpc_client.dart';
+import 'package:alchemy/src/ethereum_ws_rpc_client.dart';
+
 import 'api/api.dart' as api;
-import 'api/alchemy_client.dart';
 
 class Alchemy {
   // SINGLETON
@@ -9,7 +11,8 @@ class Alchemy {
   factory Alchemy() => _singleton;
 
   // VARIABLES
-  late AlchemyClient client;
+  late EthereumWsRpcClient _ethClient;
+  late EnhancedHttpRpcClient _enhancedClient;
 
   // APIs
   late api.EthAPI eth;
@@ -20,26 +23,47 @@ class Alchemy {
 
   // CONSTRUCTOR
   Alchemy._internal() {
-    client = AlchemyClient();
-
-    // ETH API
-    eth = api.EthAPI();
-    eth.setClient(client);
-
-    // POLYGON API
-    polygon = api.PolygonAPI();
-    polygon.setClient(client);
-
-    // ARBITRUM API
-    arbitrum = api.ArbitrumAPI();
-    arbitrum.setClient(client);
-
-    // OPTIMISM API
-    optimism = api.OptimismAPI();
-    optimism.setClient(client);
-
+    // ALCHEMY ENHANCED
+    _enhancedClient = EnhancedHttpRpcClient();
     // ENHANCED API
     enhanced = api.EnhancedAPI();
-    enhanced.setClient(client);
+    enhanced.setClient(_enhancedClient);
+
+    // ETHEREUM
+    _ethClient = EthereumWsRpcClient();
+    // ETH API
+    eth = api.EthAPI();
+    eth.setClient(_ethClient);
+    // POLYGON API
+    polygon = api.PolygonAPI();
+    polygon.setClient(_ethClient);
+    // ARBITRUM API
+    arbitrum = api.ArbitrumAPI();
+    arbitrum.setClient(_ethClient);
+    // OPTIMISM API
+    optimism = api.OptimismAPI();
+    optimism.setClient(_ethClient);
+  }
+
+  void init({
+    required String enhancedRpcUrl,
+    required String ethereumRpcUrl,
+    double? jsonRPCVersion,
+    int? receiveTimeout,
+    int? sendTimeout,
+    bool verbose = true,
+  }) {
+    _enhancedClient.init(
+      url: enhancedRpcUrl,
+      jsonRPCVersion: jsonRPCVersion,
+      receiveTimeout: receiveTimeout,
+      sendTimeout: sendTimeout,
+      verbose: verbose,
+    );
+
+    _ethClient.init(
+      url: ethereumRpcUrl,
+      verbose: verbose,
+    );
   }
 }

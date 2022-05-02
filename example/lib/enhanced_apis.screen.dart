@@ -74,7 +74,7 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
               ),
             ),
             const SizedBox(height: 15),
-            Text(alchemy.client.baseUrl),
+            Text(alchemy.enhanced.client.url),
           ],
         ),
       ),

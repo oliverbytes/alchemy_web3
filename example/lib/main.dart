@@ -1,4 +1,5 @@
 import 'package:alchemy/alchemy.dart';
+import 'package:console_mixin/console_mixin.dart';
 import 'package:example/chain_apis.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,16 +11,16 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget with ConsoleMixin {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final alchemy = Alchemy();
 
-    alchemy.client.init(
-      subDomain: 'polygon-mumbai.g',
-      apiKey: dotenv.env['API_KEY']!, // YOUR API KEY
+    alchemy.init(
+      enhancedRpcUrl: dotenv.env['HTTP_URL']!,
+      ethereumRpcUrl: dotenv.env['WS_URL']!,
       verbose: true,
     );
 
@@ -39,6 +40,19 @@ class MyApp extends StatelessWidget {
       EnhancedAPIsScreen(),
     ];
 
+    final actions = [
+      IconButton(
+        onPressed: () {
+          alchemy.init(
+            enhancedRpcUrl: dotenv.env['HTTP_URL2']!,
+            ethereumRpcUrl: dotenv.env['WS_URL2']!,
+            verbose: true,
+          );
+        },
+        icon: const Icon(Icons.bug_report),
+      ),
+    ];
+
     return MaterialApp(
       theme: ThemeData.dark(),
       home: DefaultTabController(
@@ -47,9 +61,8 @@ class MyApp extends StatelessWidget {
           body: const TabBarView(children: screens),
           appBar: AppBar(
             title: const Text('Alchemy Playground'),
-            bottom: const TabBar(
-              tabs: tabs,
-            ),
+            actions: actions,
+            bottom: const TabBar(tabs: tabs),
           ),
         ),
       ),
