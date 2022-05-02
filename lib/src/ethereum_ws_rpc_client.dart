@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:json_rpc_2/json_rpc_2.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'model/error.model.dart';
 
@@ -67,16 +66,19 @@ class EthereumWsRpcClient with ConsoleMixin implements Client {
     if (wsStatus != WsStatus.running) await restart();
     if (verbose) console.verbose('Requesting... $url -> $method: $params');
 
-    // STOP SOCKET
+    // RESTART IF NECESSARY
     if (isClosed) {
-      stop();
+      await restart();
 
-      return Left(RPCErrorData(
-        code: 0,
-        message: 'No Internet Connection',
-      ));
+      if (isClosed) {
+        return Left(RPCErrorData(
+          code: 0,
+          message: 'No Internet Connection',
+        ));
+      }
     }
 
+    // SEND REQUEST
     try {
       final response = await sendRequest(method, params);
       if (verbose) console.info('Response: $response');
