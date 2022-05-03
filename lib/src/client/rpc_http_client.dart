@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:alchemy/alchemy.dart';
 import 'package:console_mixin/console_mixin.dart';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 
-class EnhancedHttpRpcClient with ConsoleMixin {
+class RpcHttpClient with ConsoleMixin {
   // PROPERTIES
   String url;
   double jsonRPCVersion;
@@ -14,7 +15,7 @@ class EnhancedHttpRpcClient with ConsoleMixin {
   int sendTimeout;
 
   // CONSTRUCTOR
-  EnhancedHttpRpcClient({
+  RpcHttpClient({
     this.url = '',
     this.jsonRPCVersion = 2.0,
     this.receiveTimeout = 10000,
@@ -40,10 +41,11 @@ class EnhancedHttpRpcClient with ConsoleMixin {
     this.sendTimeout = sendTimeout ?? this.sendTimeout;
     this.receiveTimeout = receiveTimeout ?? this.receiveTimeout;
     this.verbose = verbose ?? this.verbose;
+    // set base url
     _dio.options.baseUrl = url;
   }
 
-  Future<Either<EnhancedHTTPError, Response<dynamic>>> request({
+  Future<Either<RpcResponse, Map<String, dynamic>>> request({
     Map<String, dynamic>? parameters,
     String endpoint = '',
     HTTPMethod method = HTTPMethod.post,
@@ -55,61 +57,49 @@ class EnhancedHttpRpcClient with ConsoleMixin {
 
     if (verbose) {
       console.verbose(
-        '${method.name.toUpperCase()}: $url/$endpoint, Parameters: $parameters',
+        'Requesting... ${method.name.toUpperCase()}: $url/$endpoint\n$parameters',
       );
     }
 
-    final options = Options(
-      method: method.name.toUpperCase(),
-      receiveTimeout: receiveTimeout,
-      sendTimeout: sendTimeout,
-    );
+    Response<String> response;
 
     try {
-      final response = await _dio.request(
+      response = await _dio.request<String>(
         '/$endpoint',
         queryParameters: parameters,
-        options: options,
+        options: Options(
+          method: method.name.toUpperCase(),
+          receiveTimeout: receiveTimeout,
+          sendTimeout: sendTimeout,
+          responseType: ResponseType.plain,
+        ),
       );
-
-      if (verbose) {
-        console.info(
-          '${response.statusCode}: ${Uri.decodeFull(response.realUri.toString())}\n${response.data}',
-        );
-      }
-
-      return Right(response);
     } on DioError catch (e) {
-      if (e.response == null) {
-        return Left(
-          EnhancedHTTPError(
-            id: 0,
-            jsonrpc: 'local',
-            error: RPCError(
-              code: 0,
-              message: 'Local Error: ${e.type}: ${e.message}',
-            ),
-          ),
-        );
-      }
-
       if (verbose) {
         console.error(
-          '${e.response!.statusCode}: ${Uri.decodeFull(e.response!.realUri.toString())}, Data: ${e.response!.data}, Status Message: ${e.response!.statusMessage}',
+          '${e.type}! ${e.response?.statusCode} : ${e.response?.realUri}\n${e.response?.data}',
         );
       }
 
-      return Left(EnhancedHTTPError.fromJson(e.response!.data));
-    } catch (e) {
-      // different error
       return Left(
-        EnhancedHTTPError(
+        RpcResponse(
           id: 0,
-          jsonrpc: 'unknown',
-          error: RPCError(code: 0, message: 'Unknown Error: $e'),
+          jsonrpc: jsonRPCVersion.toString(),
+          error: RPCError(
+            code: e.response?.statusCode ?? 0,
+            message: e.response?.data ?? e.message,
+          ),
         ),
       );
     }
+
+    if (verbose) {
+      console.info(
+        '${response.statusCode} : ${response.realUri}\n${response.data}',
+      );
+    }
+
+    return Right(jsonDecode(response.data!));
   }
 }
 

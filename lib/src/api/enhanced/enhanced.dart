@@ -1,17 +1,30 @@
-import 'package:alchemy/src/enhanced_http_rpc_client.dart';
+import 'package:alchemy/src/api/enhanced/token.dart';
+import 'package:alchemy/src/client/rpc_http_client.dart';
 import 'package:alchemy/src/api/enhanced/nft.dart';
+import 'package:alchemy/src/client/rpc_ws_client.dart';
 
 class EnhancedAPI {
   // VARIABLES
-  late EnhancedHttpRpcClient client;
+  late RpcHttpClient httpClient;
+  late RpcWsClient wsClient;
 
   // APIs
-  late NFTAPI nft;
+  late EnhancedNFTAPI nft;
+  late EnhancedTokenAPI token;
 
-  void setClient(EnhancedHttpRpcClient client) {
-    this.client = client;
+  void setHttpClient(RpcHttpClient client) {
+    httpClient = client;
 
-    nft = NFTAPI();
-    nft.setClient(client);
+    // NFT
+    nft = EnhancedNFTAPI();
+    nft.setClient(httpClient);
+  }
+
+  void setWsClient(RpcWsClient client) {
+    wsClient = client;
+
+    // TOKEN
+    token = EnhancedTokenAPI();
+    token.setClient(client);
   }
 }

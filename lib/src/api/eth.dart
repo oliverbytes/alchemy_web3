@@ -1,26 +1,21 @@
-import 'package:alchemy/src/ethereum_ws_rpc_client.dart';
-import 'package:alchemy/src/model/eth/eth_account_proof.model.dart';
-import 'package:alchemy/src/model/eth/eth_block.model.dart';
-import 'package:alchemy/src/model/eth/eth_fee_history.model.dart';
-import 'package:alchemy/src/model/eth/eth_transaction.model.dart';
-import 'package:alchemy/src/model/eth/eth_transaction_log.model.dart';
-import 'package:alchemy/src/model/eth/eth_transaction_receipt.model.dart';
+import 'package:alchemy/src/client/rpc_ws_client.dart';
 import 'package:console_mixin/console_mixin.dart';
 import 'package:either_dart/either.dart';
 
 import '../../alchemy.dart';
 
 class EthAPI with ConsoleMixin {
-  late EthereumWsRpcClient client;
+  late RpcWsClient wsClient;
 
-  void setClient(EthereumWsRpcClient client) {
-    this.client = client;
+  void setClient(RpcWsClient client) {
+    wsClient = client;
   }
 
   // FUNCTIONS
 
   Future<Either<RPCErrorData, String>> blockNumber() async {
-    final result = await client.request(method: 'eth_blockNumber', params: []);
+    final result =
+        await wsClient.request(method: 'eth_blockNumber', params: []);
 
     return result.fold(
       (error) => Left(error),
@@ -32,7 +27,7 @@ class EthAPI with ConsoleMixin {
     required String hash,
     bool asObject = true, // return as object or hash only
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getBlockByHash',
       params: [hash, asObject],
     );
@@ -47,7 +42,7 @@ class EthAPI with ConsoleMixin {
     required String block,
     bool asObject = true, // return as object or hash only
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getBlockByNumber',
       params: [block, asObject],
     );
@@ -60,7 +55,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, EthTransaction>> getTransactionByHash(
       {required String hash}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getTransactionByHash',
       params: [hash],
     );
@@ -75,7 +70,7 @@ class EthAPI with ConsoleMixin {
     required String address,
     String block = 'latest',
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getTransactionCount',
       params: [address, block],
     );
@@ -88,7 +83,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, EthTransactionReceipt>> getTransactionReceipt(
       {required String hash}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getTransactionReceipt',
       params: [hash],
     );
@@ -101,7 +96,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, String>> getBlockTransactionCountByHash(
       {required String hash}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getBlockTransactionCountByHash',
       params: [hash],
     );
@@ -114,7 +109,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, String>> getBlockTransactionCountByNumber(
       {required String block}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getBlockTransactionCountByNumber',
       params: [block],
     );
@@ -129,7 +124,7 @@ class EthAPI with ConsoleMixin {
     required String block,
     required String index,
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getTransactionByBlockNumberAndIndex',
       params: [block, index],
     );
@@ -144,7 +139,7 @@ class EthAPI with ConsoleMixin {
     required int from,
     required int to,
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getRootHash',
       params: [from, to],
     );
@@ -157,7 +152,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, List<String>>> getSignersAtHash(
       {required String hash}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getSignersAtHash',
       params: [hash],
     );
@@ -170,7 +165,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, List<EthTransactionReceipt>>>
       getTransactionReceiptsByBlock({required String block}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getTransactionReceiptsByBlock',
       params: [block],
     );
@@ -190,7 +185,7 @@ class EthAPI with ConsoleMixin {
     required String hash,
     required String index,
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getTransactionByBlockHashAndIndex',
       params: [hash, index],
     );
@@ -204,7 +199,7 @@ class EthAPI with ConsoleMixin {
   Future<Either<RPCErrorData, String>> sendRawTransaction({
     required String signedData,
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_sendRawTransaction',
       params: [signedData],
     );
@@ -219,7 +214,7 @@ class EthAPI with ConsoleMixin {
     required String address,
     String block = 'latest',
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getBalance',
       params: [address, block],
     );
@@ -234,7 +229,7 @@ class EthAPI with ConsoleMixin {
     required String address,
     String block = 'latest',
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getCode',
       params: [address, block],
     );
@@ -250,7 +245,7 @@ class EthAPI with ConsoleMixin {
     required String index,
     String block = 'latest',
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getStorageAt',
       params: [address, index, block],
     );
@@ -262,7 +257,7 @@ class EthAPI with ConsoleMixin {
   }
 
   Future<Either<RPCErrorData, List<String>>> accounts() async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_accounts',
       params: [],
     );
@@ -278,7 +273,7 @@ class EthAPI with ConsoleMixin {
     required List<String> storageKeys,
     String block = 'latest',
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getProof',
       params: [],
     );
@@ -293,7 +288,7 @@ class EthAPI with ConsoleMixin {
     required EthTransactionCall call,
     String block = 'latest',
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getProof',
       params: [call.toJson(), block],
     );
@@ -307,7 +302,7 @@ class EthAPI with ConsoleMixin {
   Future<Either<RPCErrorData, List<EthTransactionLog>>> getLogs({
     required List<EthFilterOptions> options,
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getLogs',
       params: List<dynamic>.from(options.map((x) => x.toJson())),
     );
@@ -323,7 +318,7 @@ class EthAPI with ConsoleMixin {
   }
 
   Future<Either<RPCErrorData, String>> protocolVersion() async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_protocolVersion',
       params: [],
     );
@@ -335,7 +330,7 @@ class EthAPI with ConsoleMixin {
   }
 
   Future<Either<RPCErrorData, String>> gasPrice() async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_gasPrice',
       params: [],
     );
@@ -350,7 +345,7 @@ class EthAPI with ConsoleMixin {
     required EthTransactionCall call,
     String block = 'latest',
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_estimateGas',
       params: [call.toJson(), block],
     );
@@ -366,7 +361,7 @@ class EthAPI with ConsoleMixin {
     String block = 'latest',
     List<int> rewardPercentiles = const [],
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_feeHistory',
       params: [blockCount, block, rewardPercentiles],
     );
@@ -378,7 +373,7 @@ class EthAPI with ConsoleMixin {
   }
 
   Future<Either<RPCErrorData, String>> chainId() async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_chainId',
       params: [],
     );
@@ -393,7 +388,7 @@ class EthAPI with ConsoleMixin {
     String block = 'latest',
     required String index,
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getUncleByBlockNumberAndIndex',
       params: [block, index],
     );
@@ -408,7 +403,7 @@ class EthAPI with ConsoleMixin {
     String block = 'latest',
     required String index,
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getUncleByBlockHashAndIndex',
       params: [block, index],
     );
@@ -421,7 +416,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, String>> getUncleCountByBlockHash(
       {required String hash}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getUncleCountByBlockHash',
       params: [hash],
     );
@@ -434,7 +429,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, String>> getUncleCountByBlockNumber(
       {required String block}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getUncleCountByBlockNumber',
       params: [block],
     );
@@ -447,7 +442,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, List<EthTransactionLog>>> getFilterChanges(
       {required String filterId}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getFilterChanges',
       params: [filterId],
     );
@@ -464,7 +459,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, List<EthTransactionLog>>> getFilterLogs(
       {required String filterId}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_getFilterLogs',
       params: [filterId],
     );
@@ -480,7 +475,7 @@ class EthAPI with ConsoleMixin {
   }
 
   Future<Either<RPCErrorData, String>> newBlockFilter() async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_newBlockFilter',
       params: [],
     );
@@ -494,7 +489,7 @@ class EthAPI with ConsoleMixin {
   Future<Either<RPCErrorData, String>> newFilter({
     required List<EthFilterOptions> options,
   }) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_newFilter',
       params: List<dynamic>.from(options.map((x) => x.toJson())),
     );
@@ -506,7 +501,7 @@ class EthAPI with ConsoleMixin {
   }
 
   Future<Either<RPCErrorData, String>> newPendingTransactionFilter() async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_newPendingTransactionFilter',
       params: [],
     );
@@ -519,7 +514,7 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, bool>> uninstallFilter(
       {required String filterId}) async {
-    final result = await client.request(
+    final result = await wsClient.request(
       method: 'eth_uninstallFilter',
       params: [filterId],
     );

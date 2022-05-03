@@ -124,17 +124,19 @@ import 'package:alchemy/alchemy.dart';
 final alchemy = Alchemy();
 
 // Configuration
-alchemy.client.init(
-    subDomain: 'polygon-mumbai.g', // network
-    apiKey: <Your-API-Key>,
-    verbose: true,
+alchemy.init(
+  httpRpcUrl: <Alchemy-HTTP-API-URL>,
+  wsRpcUrl: <Alchemy-WS-API-URL>,
+  verbose: true,
 );
 
+// Making requests
 debugPrint('requesting...');
 final result = await alchemy.polygon.getBalance(
     address: '0x0ef2e86a73c7be7f767d7abe53b1d4cbfbccbf3a',
 );
 
+// handling results
 result.fold(
     (error) { // ERROR
         debugPrint(error.toJson().toString());
@@ -151,6 +153,8 @@ debugPrint('request done');
 ## Roadmap
 
 * Complete API
+* Improved Error Handling
+* Built in wallet management and signer
 * Unit Testing
 
 See the [open issues](https://github.com/oliverbytes/alchemy/issues) for a list of proposed features (and known issues).

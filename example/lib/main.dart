@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget with ConsoleMixin {
     final alchemy = Alchemy();
 
     alchemy.init(
-      enhancedRpcUrl: dotenv.env['HTTP_URL']!,
-      ethereumRpcUrl: dotenv.env['WS_URL']!,
+      httpRpcUrl: dotenv.env['HTTP_URL']!,
+      wsRpcUrl: dotenv.env['WS_URL']!,
       verbose: true,
     );
 
@@ -43,9 +43,11 @@ class MyApp extends StatelessWidget with ConsoleMixin {
     final actions = [
       IconButton(
         onPressed: () {
+          // SWITCH NETWORK
+
           alchemy.init(
-            enhancedRpcUrl: dotenv.env['HTTP_URL2']!,
-            ethereumRpcUrl: dotenv.env['WS_URL2']!,
+            httpRpcUrl: dotenv.env['HTTP_URL2']!,
+            wsRpcUrl: dotenv.env['WS_URL2']!,
             verbose: true,
           );
         },

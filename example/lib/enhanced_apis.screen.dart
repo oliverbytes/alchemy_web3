@@ -74,7 +74,7 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
               ),
             ),
             const SizedBox(height: 15),
-            Text(alchemy.enhanced.client.url),
+            // Text(alchemy.enhanced.client.url),
           ],
         ),
       ),
@@ -85,9 +85,8 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getNFTs'),
+              ElevatedButton(
+                child: const Text('getNFTs'),
                 onPressed: () => call(
                   alchemy.enhanced.nft.getNFTs(
                     owner: '0x8888f1f195afa192cfee860698584c030f4c9db1',
@@ -95,9 +94,8 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
                 ),
               ),
               const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getNFTMetadata'),
+              ElevatedButton(
+                child: const Text('getNFTMetadata'),
                 onPressed: () => call(
                   alchemy.enhanced.nft.getNFTMetadata(
                     contractAddress:
@@ -107,9 +105,8 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
                 ),
               ),
               const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getNFTsForCollection'),
+              ElevatedButton(
+                child: const Text('getNFTsForCollection'),
                 onPressed: () => call(
                   alchemy.enhanced.nft.getNFTsForCollection(
                     contractAddress:
@@ -120,9 +117,8 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
                 ),
               ),
               const Divider(),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.send),
-                label: const Text('getOwnersForToken'),
+              ElevatedButton(
+                child: const Text('getOwnersForToken'),
                 onPressed: () => call(
                   alchemy.enhanced.nft.getOwnersForToken(
                     contractAddress:
@@ -130,6 +126,29 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
                     tokenId: '867',
                   ),
                 ),
+              ),
+              const Divider(),
+              ElevatedButton(
+                child: const Text('getTokenAllowance'),
+                onPressed: () => call(alchemy.enhanced.token.getTokenAllowance(
+                  contract: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
+                  owner: '0xe8095A54C83b069316521835408736269bfb389C',
+                  spender: '0x3Bcc5bD4abBc853395eBE5103b7DbA20411E38db',
+                )),
+              ),
+              const Divider(),
+              ElevatedButton(
+                child: const Text('getTokenBalances'),
+                onPressed: () => call(alchemy.enhanced.token.getTokenBalances(
+                  address: '0x3f5ce5fbfe3e9af3971dd833d26ba9b5c936f0be',
+                )),
+              ),
+              const Divider(),
+              ElevatedButton(
+                child: const Text('getTokenMetadata'),
+                onPressed: () => call(alchemy.enhanced.token.getTokenMetadata(
+                  address: '0x1985365e9f78359a9B6AD760e32412f4a445E862',
+                )),
               ),
             ],
           ),

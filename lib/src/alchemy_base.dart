@@ -1,5 +1,5 @@
-import 'package:alchemy/src/enhanced_http_rpc_client.dart';
-import 'package:alchemy/src/ethereum_ws_rpc_client.dart';
+import 'package:alchemy/src/client/rpc_http_client.dart';
+import 'package:alchemy/src/client/rpc_ws_client.dart';
 
 import 'api/api.dart' as api;
 
@@ -11,8 +11,8 @@ class Alchemy {
   factory Alchemy() => _singleton;
 
   // VARIABLES
-  late EthereumWsRpcClient _ethClient;
-  late EnhancedHttpRpcClient _enhancedClient;
+  late RpcWsClient _wsClient;
+  late RpcHttpClient _httpClient;
 
   // APIs
   late api.EthAPI eth;
@@ -23,46 +23,49 @@ class Alchemy {
 
   // CONSTRUCTOR
   Alchemy._internal() {
-    // ALCHEMY ENHANCED
-    _enhancedClient = EnhancedHttpRpcClient();
+    // CLIENTS
+    _httpClient = RpcHttpClient();
+    _wsClient = RpcWsClient();
+
     // ENHANCED API
     enhanced = api.EnhancedAPI();
-    enhanced.setClient(_enhancedClient);
+    enhanced.setHttpClient(_httpClient);
+    enhanced.setWsClient(_wsClient);
 
-    // ETHEREUM
-    _ethClient = EthereumWsRpcClient();
     // ETH API
     eth = api.EthAPI();
-    eth.setClient(_ethClient);
+    eth.setClient(_wsClient);
     // POLYGON API
     polygon = api.PolygonAPI();
-    polygon.setClient(_ethClient);
+    polygon.setClient(_wsClient);
     // ARBITRUM API
     arbitrum = api.ArbitrumAPI();
-    arbitrum.setClient(_ethClient);
+    arbitrum.setClient(_wsClient);
     // OPTIMISM API
     optimism = api.OptimismAPI();
-    optimism.setClient(_ethClient);
+    optimism.setClient(_wsClient);
   }
 
   void init({
-    required String enhancedRpcUrl,
-    required String ethereumRpcUrl,
+    required String httpRpcUrl,
+    required String wsRpcUrl,
     double? jsonRPCVersion,
     int? receiveTimeout,
     int? sendTimeout,
     bool verbose = true,
   }) {
-    _enhancedClient.init(
-      url: enhancedRpcUrl,
+    // HTTP
+    _httpClient.init(
+      url: httpRpcUrl,
       jsonRPCVersion: jsonRPCVersion,
       receiveTimeout: receiveTimeout,
       sendTimeout: sendTimeout,
       verbose: verbose,
     );
 
-    _ethClient.init(
-      url: ethereumRpcUrl,
+    // WEB SOCKET
+    _wsClient.init(
+      url: wsRpcUrl,
       verbose: verbose,
     );
   }

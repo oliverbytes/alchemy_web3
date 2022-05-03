@@ -70,7 +70,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
               ),
             ),
             const SizedBox(height: 15),
-            Text(alchemy.eth.client.url),
           ],
         ),
       ),
@@ -85,7 +84,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                 child: const Text('blockNumber'),
                 onPressed: () => call(alchemy.polygon.blockNumber()),
               ),
-
               ElevatedButton(
                 child: const Text('getBlockByHash'),
                 onPressed: () => call(
@@ -95,7 +93,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getBlockByNumber'),
                 onPressed: () => call(
@@ -104,7 +101,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getTransactionByHash'),
                 onPressed: () => call(
@@ -114,7 +110,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getTransactionCount'),
                 onPressed: () => call(
@@ -123,7 +118,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getTransactionReceipt'),
                 onPressed: () => call(
@@ -133,7 +127,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getBlockTransactionCountByHash'),
                 onPressed: () => call(
@@ -143,7 +136,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getBlockTransactionCountByNumber'),
                 onPressed: () => call(
@@ -152,7 +144,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getTransactionByBlockNumberAndIndex'),
                 onPressed: () => call(
@@ -162,7 +153,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getRootHash'),
                 onPressed: () => call(
@@ -181,7 +171,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getTransactionReceiptsByBlock'),
                 onPressed: () => call(
@@ -190,7 +179,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getTransactionByBlockHashAndIndex'),
                 onPressed: () => call(
@@ -201,7 +189,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('sendRawTransaction'),
                 onPressed: () => call(
@@ -211,14 +198,12 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getBalance'),
                 onPressed: () => call(alchemy.polygon.getBalance(
                   address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
                 )),
               ),
-
               ElevatedButton(
                 child: const Text('getCode'),
                 onPressed: () => call(
@@ -228,7 +213,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getStorageAt'),
                 onPressed: () => call(
@@ -239,12 +223,10 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('accounts'),
                 onPressed: () => call(alchemy.polygon.accounts()),
               ),
-
               ElevatedButton(
                 child: const Text('getProof'),
                 onPressed: () => call(
@@ -257,7 +239,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('call'),
                 onPressed: () => call(
@@ -275,7 +256,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getLogs'),
                 onPressed: () => call(
@@ -298,18 +278,15 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               // works for Ethereum only
               ElevatedButton(
                 child: const Text('protocolVersion'),
                 onPressed: () => call(alchemy.eth.protocolVersion()),
               ),
-
               ElevatedButton(
                 child: const Text('gasPrice'),
                 onPressed: () => call(alchemy.polygon.gasPrice()),
               ),
-
               ElevatedButton(
                 child: const Text('estimateGas'),
                 onPressed: () => call(
@@ -327,7 +304,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               // works for Ethereum only
               ElevatedButton(
                 child: const Text('feeHistory'),
@@ -339,12 +315,10 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('chainId'),
                 onPressed: () => call(alchemy.polygon.chainId()),
               ),
-
               ElevatedButton(
                 child: const Text('getUncleByBlockNumberAndIndex'),
                 onPressed: () => call(
@@ -353,7 +327,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                   ),
                 ),
               ),
-
               ElevatedButton(
                 child: const Text('getUncleByBlockHashAndIndex'),
                 onPressed: () => call(

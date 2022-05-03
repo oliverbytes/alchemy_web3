@@ -1,0 +1,9 @@
+export 'eth_account_proof.model.dart';
+export 'eth_block.model.dart';
+export 'eth_fee_history.model.dart';
+export 'eth_filter_options.model.dart';
+export 'eth_response.model.dart';
+export 'eth_transaction_call.model.dart';
+export 'eth_transaction_log.model.dart';
+export 'eth_transaction_receipt.model.dart';
+export 'eth_transaction.model.dart';

@@ -8,54 +8,45 @@ import 'package:either_dart/either.dart';
 import 'package:json_rpc_2/json_rpc_2.dart';
 import 'package:web_socket_channel/io.dart';
 
-import 'model/error.model.dart';
+import '../model/rpc/rpc_error_data.model.dart';
 
-enum WsStatus { uninitialized, connecting, running, stopped }
+enum WsStatus {
+  uninitialized,
+  connecting,
+  running,
+  stopped,
+}
 
-class EthereumWsRpcClient with ConsoleMixin implements Client {
+class RpcWsClient with ConsoleMixin implements Client {
   // PROPERTIES
   String url;
   bool verbose;
 
   // CONSTRUCTOR
-  EthereumWsRpcClient({
+  RpcWsClient({
     this.url = '',
     this.verbose = false,
-  }) {
-    wsStatus = WsStatus.uninitialized;
-  }
+  });
 
   // GETTERS
 
   // VARIABLES
   Client? wsClient;
-  WsStatus? wsStatus;
+  WsStatus wsStatus = WsStatus.uninitialized;
   bool? lastRestarted;
   var timeOutDuration = Duration(seconds: 5);
 
   // FUNCTIONS
-  Future<void> init({
+  void init({
     required String url,
     Duration timeOutDuration = const Duration(seconds: 5),
     bool verbose = false,
-  }) async {
+  }) {
     this.url = url;
     this.verbose = verbose;
     this.timeOutDuration = timeOutDuration;
 
-    wsStatus = WsStatus.connecting;
-    console.info('Socket Connecting...');
-
-    try {
-      final socket = await WebSocket.connect(url).timeout(timeOutDuration);
-      wsStatus = WsStatus.running;
-      console.info('Socket Connected');
-
-      wsClient = Client(IOWebSocketChannel(socket).cast<String>());
-      wsClient!.listen().then((_) => restart);
-    } catch (e) {
-      console.warning('$e');
-    }
+    start();
   }
 
   Future<Either<RPCErrorData, dynamic>> request({
@@ -64,7 +55,7 @@ class EthereumWsRpcClient with ConsoleMixin implements Client {
   }) async {
     if (url.isEmpty) throw 'Client URL is empty';
     if (wsStatus != WsStatus.running) await restart();
-    if (verbose) console.verbose('Requesting... $url -> $method: $params');
+    if (verbose) console.verbose('Requesting... $url -> $method\n$params');
 
     // RESTART IF NECESSARY
     if (isClosed) {
@@ -84,10 +75,13 @@ class EthereumWsRpcClient with ConsoleMixin implements Client {
       if (verbose) console.info('Response: $response');
 
       if (response == null) {
-        //
+        return Left(RPCErrorData(
+          code: 200,
+          message: 'Null Response',
+        ));
       }
 
-      return Right(response);
+      return Right(response ?? '');
     } on DioError catch (e) {
       if (e.response == null) {
         return Left(
@@ -108,9 +102,27 @@ class EthereumWsRpcClient with ConsoleMixin implements Client {
     }
   }
 
+  Future<void> start() async {
+    if (!isClosed) await stop();
+
+    wsStatus = WsStatus.connecting;
+    console.info('Socket Connecting...');
+
+    try {
+      final socket = await WebSocket.connect(url).timeout(timeOutDuration);
+      wsStatus = WsStatus.running;
+      console.info('Socket Connected');
+
+      wsClient = Client(IOWebSocketChannel(socket).cast<String>());
+      wsClient!.listen().then((_) => restart);
+    } catch (e) {
+      console.warning('$e');
+    }
+  }
+
   Future<void> restart() async {
     console.info('Socket Restarting...');
-    await init(url: url, verbose: verbose);
+    await start();
     console.info('Socket Restarted');
   }
 
