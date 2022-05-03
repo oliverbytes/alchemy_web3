@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:alchemy_web3/alchemy.dart';
+import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:console_mixin/console_mixin.dart';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';

@@ -2,7 +2,7 @@ import 'package:alchemy_web3/src/client/rpc_http_client.dart';
 import 'package:console_mixin/console_mixin.dart';
 import 'package:either_dart/either.dart';
 
-import '../../../alchemy.dart';
+import '../../../alchemy_web3.dart';
 
 class EnhancedNFTAPI with ConsoleMixin {
   late RpcHttpClient httpClient;
