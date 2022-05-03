@@ -199,9 +199,23 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
               ),
               ElevatedButton(
                 child: const Text('getBalance'),
-                onPressed: () => call(alchemy.polygon.getBalance(
-                  address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
-                )),
+                // onPressed: () => call(alchemy.polygon.getBalance(
+                //   address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
+                // )),
+                onPressed: () async {
+                  final result = await alchemy.polygon.getBalance(
+                    address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
+                  );
+
+                  result.fold(
+                    (error) => debugPrint(
+                      'Error: ${error.code} : ${error.message}',
+                    ),
+                    (response) => debugPrint(
+                      'Response: ${response.getInEther} : ${response.toString()}',
+                    ),
+                  );
+                },
               ),
               ElevatedButton(
                 child: const Text('getCode'),

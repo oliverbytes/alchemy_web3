@@ -66,14 +66,15 @@
 ## About The Project
 
 An Alchemy Platform client for Flutter & Dart!
-
+* Supports Ethereum and Alchemy Enhanced APIs
+* Uses Web Sockets for Ethereum-based APIs and HTTP for Alchemy NFT APIs
 
 [![Playground Desktop App][screenshots-desktop]](https://github.com/oliverbytes/alchemy_web3)
 
 ### Supported Platforms
 - iOS
 - Android
-- Mac OS
+- MacOS
 - Windows
 - Linux
 - Web
@@ -130,22 +131,19 @@ alchemy.init(
 );
 
 // Making requests
-debugPrint('requesting...');
 final result = await alchemy.polygon.getBalance(
-    address: '0x0ef2e86a73c7be7f767d7abe53b1d4cbfbccbf3a',
+  address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
 );
 
-// handling results
 result.fold(
-    (error) { // ERROR
-        debugPrint(error.toJson().toString());
-    },
-    (response) { // SUCCESS
-        debugPrint(response.toJson().toString());
-    },
+  (error) => debugPrint(
+    'Error: ${error.code} : ${error.message}',
+  ),
+  (response) => debugPrint(
+    'Response: ${response.getInEther} : ${response.toString()}',
+  ),
 );
 
-debugPrint('request done');
 ```
 
 <!-- ROADMAP -->
