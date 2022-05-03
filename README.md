@@ -43,6 +43,9 @@
     ·
     <a href="https://github.com/oliverbytes/alchemy_web3/issues">Request Feature</a>
   </p>
+  
+  <h3 align="center">Web3 development made easy</h3>
+  <p align="center">One magic line of code supercharges your development with the world’s most powerful blockchain developer platform, relied upon by the majority of the     world's top blockchain apps.</p>
 </p>
 
 

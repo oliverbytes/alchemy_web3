@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget with ConsoleMixin {
   @override
   Widget build(BuildContext context) {
     final alchemy = Alchemy();
-
+    // obtain yours at https://alchemy.com
     alchemy.init(
       httpRpcUrl: dotenv.env['HTTP_URL']!,
       wsRpcUrl: dotenv.env['WS_URL']!,
@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget with ConsoleMixin {
       IconButton(
         onPressed: () {
           // SWITCH NETWORK
-
           alchemy.init(
             httpRpcUrl: dotenv.env['HTTP_URL2']!,
             wsRpcUrl: dotenv.env['WS_URL2']!,
