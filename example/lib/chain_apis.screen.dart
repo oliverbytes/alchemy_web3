@@ -1,4 +1,4 @@
-import 'package:alchemy/alchemy.dart';
+import 'package:alchemy_web3/alchemy.dart';
 import 'package:console_mixin/console_mixin.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +46,6 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
     );
 
     setState(() {});
-    console.debug('request done');
   }
 
   @override

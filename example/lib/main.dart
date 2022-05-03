@@ -1,4 +1,4 @@
-import 'package:alchemy/alchemy.dart';
+import 'package:alchemy_web3/alchemy.dart';
 import 'package:console_mixin/console_mixin.dart';
 import 'package:example/chain_apis.screen.dart';
 import 'package:flutter/material.dart';

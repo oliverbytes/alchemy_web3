@@ -1,8 +1,8 @@
-import 'package:alchemy/src/model/eth/eth_block.model.dart';
-import 'package:alchemy/src/model/eth/eth_fee_history.model.dart';
-import 'package:alchemy/src/model/eth/eth_transaction.model.dart';
-import 'package:alchemy/src/model/eth/eth_transaction_log.model.dart';
-import 'package:alchemy/src/model/eth/eth_transaction_receipt.model.dart';
+import 'package:alchemy_web3/src/model/eth/eth_block.model.dart';
+import 'package:alchemy_web3/src/model/eth/eth_fee_history.model.dart';
+import 'package:alchemy_web3/src/model/eth/eth_transaction.model.dart';
+import 'package:alchemy_web3/src/model/eth/eth_transaction_log.model.dart';
+import 'package:alchemy_web3/src/model/eth/eth_transaction_receipt.model.dart';
 
 class EthResponse<T> {
   final String jsonrpc;

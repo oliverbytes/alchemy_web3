@@ -1,6 +1,6 @@
 // import 'package:flutter_test/flutter_test.dart';
 
-// import 'package:alchemy/alchemy.dart';
+// import 'package:alchemy_web3/alchemy.dart';
 
 // void main() {
 //   test('adds one to input values', () {

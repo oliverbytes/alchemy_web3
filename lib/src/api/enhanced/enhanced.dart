@@ -1,7 +1,7 @@
-import 'package:alchemy/src/api/enhanced/token.dart';
-import 'package:alchemy/src/client/rpc_http_client.dart';
-import 'package:alchemy/src/api/enhanced/nft.dart';
-import 'package:alchemy/src/client/rpc_ws_client.dart';
+import 'package:alchemy_web3/src/api/enhanced/token.dart';
+import 'package:alchemy_web3/src/client/rpc_http_client.dart';
+import 'package:alchemy_web3/src/api/enhanced/nft.dart';
+import 'package:alchemy_web3/src/client/rpc_ws_client.dart';
 
 class EnhancedAPI {
   // VARIABLES

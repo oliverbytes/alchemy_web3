@@ -1,5 +1,5 @@
-import 'package:alchemy/src/client/rpc_http_client.dart';
-import 'package:alchemy/src/client/rpc_ws_client.dart';
+import 'package:alchemy_web3/src/client/rpc_http_client.dart';
+import 'package:alchemy_web3/src/client/rpc_ws_client.dart';
 
 import 'api/api.dart' as api;
 

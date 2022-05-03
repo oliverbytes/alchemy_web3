@@ -1,8 +1,10 @@
-import 'package:alchemy/src/client/rpc_ws_client.dart';
+import 'package:alchemy_web3/src/client/rpc_ws_client.dart';
+import 'package:alchemy_web3/src/utils/ether_amount.dart';
 import 'package:console_mixin/console_mixin.dart';
 import 'package:either_dart/either.dart';
 
 import '../../alchemy.dart';
+import '../utils/formatting.dart';
 
 class EthAPI with ConsoleMixin {
   late RpcWsClient wsClient;
@@ -210,7 +212,7 @@ class EthAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<RPCErrorData, String>> getBalance({
+  Future<Either<RPCErrorData, EtherAmount>> getBalance({
     required String address,
     String block = 'latest',
   }) async {
@@ -221,7 +223,10 @@ class EthAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(response),
+      (response) => Right(EtherAmount.fromUnitAndValue(
+        EtherUnit.wei,
+        hexToInt(response),
+      )),
     );
   }
 
@@ -329,7 +334,7 @@ class EthAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<RPCErrorData, String>> gasPrice() async {
+  Future<Either<RPCErrorData, EtherAmount>> gasPrice() async {
     final result = await wsClient.request(
       method: 'eth_gasPrice',
       params: [],
@@ -337,7 +342,10 @@ class EthAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(response),
+      (response) => Right(EtherAmount.fromUnitAndValue(
+        EtherUnit.wei,
+        hexToInt(response),
+      )),
     );
   }
 

@@ -29,8 +29,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/oliverbytes/alchemy">
-    <img src="https://github.com/oliverbytes/alchemy/raw/master/images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/oliverbytes/alchemy_web3">
+    <img src="https://github.com/oliverbytes/alchemy_web3/raw/master/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Alchemy</h3>
@@ -39,9 +39,9 @@
     An Alchemy Platform client for Flutter & Dart
     <br />
     <br />
-    <a href="https://github.com/oliverbytes/alchemy/issues">Report Bug</a>
+    <a href="https://github.com/oliverbytes/alchemy_web3/issues">Report Bug</a>
     ·
-    <a href="https://github.com/oliverbytes/alchemy/issues">Request Feature</a>
+    <a href="https://github.com/oliverbytes/alchemy_web3/issues">Request Feature</a>
   </p>
 </p>
 
@@ -65,11 +65,10 @@
 
 ## About The Project
 
-An Alchemy Platform client for Flutter & Dart
+An Alchemy Platform client for Flutter & Dart!
 
-### EXAMPLE PROJECT SCREENSHOT
 
-[![Playground Desktop App][screenshots-desktop]](https://github.com/oliverbytes/alchemy)
+[![Playground Desktop App][screenshots-desktop]](https://github.com/oliverbytes/alchemy_web3)
 
 ### Supported Platforms
 - iOS
@@ -100,7 +99,7 @@ Google Flutter SDK
 
 1. Clone the repo
 ```sh
-git clone https://github.com/oliverbytes/alchemy.git
+git clone https://github.com/oliverbytes/alchemy_web3.git
 ```
 2. Install packages dependencies
 ```
@@ -118,7 +117,7 @@ flutter run
 
 ```dart
 // Import Package
-import 'package:alchemy/alchemy.dart';
+import 'package:alchemy_web3/alchemy.dart';
 
 // Instantiate Object
 final alchemy = Alchemy();
@@ -153,11 +152,11 @@ debugPrint('request done');
 ## Roadmap
 
 * Complete API
-* Improved Error Handling
-* Built in wallet management and signer
+* Improve Error Codes
+* Merge some web3dart functionalities
 * Unit Testing
 
-See the [open issues](https://github.com/oliverbytes/alchemy/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/oliverbytes/alchemy_web3/issues) for a list of proposed features (and known issues).
 
 
 
@@ -186,7 +185,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Oliver Martinez - [@oliverbytes](https://twitter.com/oliverbytes) - nemoryoliver@gmail.com
 
-Project Link: [https://github.com/oliverbytes/alchemy](https://github.com/oliverbytes/alchemy)
+Project Link: [https://github.com/oliverbytes/alchemy_web3](https://github.com/oliverbytes/alchemy_web3)
 
 
 
@@ -201,16 +200,16 @@ Project Link: [https://github.com/oliverbytes/alchemy](https://github.com/oliver
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/oliverbytes/alchemy.svg?style=flat-square
-[contributors-url]: https://github.com/oliverbytes/alchemy/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/oliverbytes/alchemy.svg?style=flat-square
-[forks-url]: https://github.com/oliverbytes/alchemy/network/members
-[stars-shield]: https://img.shields.io/github/stars/oliverbytes/alchemy.svg?style=flat-square
-[stars-url]: https://github.com/oliverbytes/alchemy/stargazers
-[issues-shield]: https://img.shields.io/github/issues/oliverbytes/alchemy.svg?style=flat-square
-[issues-url]: https://github.com/oliverbytes/alchemy/issues
-[license-shield]: https://img.shields.io/github/license/oliverbytes/alchemy.svg?style=flat-square
-[license-url]: https://github.com/oliverbytes/alchemy/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/oliverbytes/alchemy_web3.svg?style=flat-square
+[contributors-url]: https://github.com/oliverbytes/alchemy_web3/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/oliverbytes/alchemy_web3.svg?style=flat-square
+[forks-url]: https://github.com/oliverbytes/alchemy_web3/network/members
+[stars-shield]: https://img.shields.io/github/stars/oliverbytes/alchemy_web3.svg?style=flat-square
+[stars-url]: https://github.com/oliverbytes/alchemy_web3/stargazers
+[issues-shield]: https://img.shields.io/github/issues/oliverbytes/alchemy_web3.svg?style=flat-square
+[issues-url]: https://github.com/oliverbytes/alchemy_web3/issues
+[license-shield]: https://img.shields.io/github/license/oliverbytes/alchemy_web3.svg?style=flat-square
+[license-url]: https://github.com/oliverbytes/alchemy_web3/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/oliverbytes
 [screenshots-desktop]: images/screenshots_desktop.png
