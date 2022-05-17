@@ -133,6 +133,9 @@ alchemy.init(
   verbose: true,
 );
 
+// start web sockets
+alchemy.start();
+
 // Making requests
 final result = await alchemy.polygon.getBalance(
   address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
@@ -146,6 +149,9 @@ result.fold(
     'Response: ${response.getInEther} : ${response.toString()}',
   ),
 );
+
+// stop web sockets
+alchemy.stop();
 
 ```
 

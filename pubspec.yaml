@@ -17,6 +17,8 @@ dependencies:
   # CRYPTO
   pointycastle: ^3.6.0
   convert: ^3.0.1
+  # WEB3
+  web3dart: ^2.3.5
 
 dev_dependencies:
   lints: ^1.0.0

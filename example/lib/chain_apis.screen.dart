@@ -39,7 +39,8 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
         console.error(text);
       },
       (response) {
-        final text = response is String ? response : response.toString();
+        final text =
+            response is String ? response : response.toJson().toString();
         resultAreaController.text = text;
         resultColor = null;
       },
@@ -199,23 +200,9 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
               ),
               ElevatedButton(
                 child: const Text('getBalance'),
-                // onPressed: () => call(alchemy.polygon.getBalance(
-                //   address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
-                // )),
-                onPressed: () async {
-                  final result = await alchemy.polygon.getBalance(
-                    address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
-                  );
-
-                  result.fold(
-                    (error) => debugPrint(
-                      'Error: ${error.code} : ${error.message}',
-                    ),
-                    (response) => debugPrint(
-                      'Response: ${response.getInEther} : ${response.toString()}',
-                    ),
-                  );
-                },
+                onPressed: () => call(alchemy.polygon.getBalance(
+                  address: '0x2355Dc1f1eEAfFE537535B7B7B410E5dCCBAC3b8',
+                )),
               ),
               ElevatedButton(
                 child: const Text('getCode'),

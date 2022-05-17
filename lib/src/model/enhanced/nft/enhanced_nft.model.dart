@@ -23,6 +23,15 @@ class EnhancedNFT {
   final DateTime? timeLastUpdated;
   final String? error;
 
+  String? get imageUrl {
+    if (metadata?.image != null && metadata!.image!.contains('ipfs.io')) {
+      final cid = metadata!.image!.replaceAll('https://ipfs.io/ipfs/', '');
+      return 'https://$cid.ipfs.dweb.link';
+    }
+
+    return metadata?.image;
+  }
+
   factory EnhancedNFT.fromJson(Map<String, dynamic> json) => EnhancedNFT(
         contract: EnhancedNFTContract.fromJson(json["contract"]),
         id: EnhancedNFTId.fromJson(json["id"]),
@@ -171,7 +180,7 @@ class EnhancedNFTAttribute {
     this.traitType = '',
   });
 
-  final String value;
+  final dynamic value;
   final String traitType;
 
   factory EnhancedNFTAttribute.fromJson(Map<String, dynamic> json) =>

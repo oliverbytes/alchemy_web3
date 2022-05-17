@@ -20,6 +20,7 @@ class Alchemy {
   late api.ArbitrumAPI arbitrum;
   late api.OptimismAPI optimism;
   late api.EnhancedAPI enhanced;
+  late api.ERC20TokenAPI erc20;
 
   // CONSTRUCTOR
   Alchemy._internal() {
@@ -44,6 +45,9 @@ class Alchemy {
     // OPTIMISM API
     optimism = api.OptimismAPI();
     optimism.setClient(_wsClient);
+    // ERC20 API
+    erc20 = api.ERC20TokenAPI();
+    erc20.setClient(_wsClient);
   }
 
   void init({
@@ -68,5 +72,17 @@ class Alchemy {
       url: wsRpcUrl,
       verbose: verbose,
     );
+  }
+
+  Future<void> start() async {
+    await _wsClient.start();
+  }
+
+  Future<void> stop() async {
+    await _wsClient.stop();
+  }
+
+  Future<void> restart() async {
+    await _wsClient.restart();
   }
 }

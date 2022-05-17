@@ -45,8 +45,6 @@ class RpcWsClient with ConsoleMixin implements Client {
     this.url = url;
     this.verbose = verbose;
     this.timeOutDuration = timeOutDuration;
-
-    start();
   }
 
   Future<Either<RPCErrorData, dynamic>> request({
@@ -129,8 +127,8 @@ class RpcWsClient with ConsoleMixin implements Client {
   Future<void> stop() async {
     if (wsStatus != WsStatus.running || wsClient == null || isClosed) return;
     console.info('Socket Stopping...');
-    await wsClient!.close();
     wsStatus = WsStatus.stopped;
+    await wsClient!.close();
     console.info('Socket Stopped');
   }
 

@@ -11,7 +11,7 @@ class EthTransactionReceipt {
     this.logs = const [],
     this.logsBloom = '',
     this.status = '',
-    this.to = '',
+    this.to,
     this.transactionHash = '',
     this.transactionIndex = '',
     this.type = '',
@@ -26,7 +26,7 @@ class EthTransactionReceipt {
   final List<EthTransactionLog> logs;
   final String logsBloom;
   final String status;
-  final String to;
+  final String? to;
   final String transactionHash;
   final String transactionIndex;
   final String? type;

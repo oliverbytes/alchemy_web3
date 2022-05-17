@@ -1,19 +1,19 @@
 class EthTransactionCall {
   EthTransactionCall({
-    this.from = '',
-    this.to = '',
-    this.gas = '',
-    this.gasPrice = '',
-    this.value = '',
-    this.data = '',
+    this.from,
+    required this.to,
+    this.gas,
+    this.gasPrice,
+    this.value,
+    this.data,
   });
 
-  final String from;
+  final String? from;
   final String to;
-  final String gas;
-  final String gasPrice;
-  final String value;
-  final String data;
+  final String? gas;
+  final String? gasPrice;
+  final String? value;
+  final String? data;
 
   factory EthTransactionCall.fromJson(Map<String, dynamic> json) =>
       EthTransactionCall(
@@ -26,11 +26,11 @@ class EthTransactionCall {
       );
 
   Map<String, dynamic> toJson() => {
-        "from": from,
+        if (from != null) "from": from,
         "to": to,
-        "gas": gas,
-        "gasPrice": gasPrice,
-        "value": value,
-        "data": data,
+        if (gas != null) "gas": gas,
+        if (gasPrice != null) "gasPrice": gasPrice,
+        if (value != null) "value": value,
+        if (data != null) "data": data,
       };
 }

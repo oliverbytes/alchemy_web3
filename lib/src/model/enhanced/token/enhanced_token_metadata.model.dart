@@ -13,7 +13,7 @@ class EnhancedTokenMetadata {
 
   factory EnhancedTokenMetadata.fromJson(Map<String, dynamic> json) =>
       EnhancedTokenMetadata(
-        logo: json["logo"],
+        logo: json["logo"] ?? '',
         symbol: json["symbol"],
         decimals: json["decimals"],
         name: json["name"],
