@@ -9,14 +9,14 @@ environment:
 dependencies:
   console_mixin: ^0.0.1
   logger: ^1.1.0
-  either_dart: ^0.1.4
+  either_dart: ^0.2.0
   # NETWORK
   dio: ^4.0.3
-  json_rpc_2: ^3.0.1
+  json_rpc_2: ^3.0.2
   web_socket_channel: ^2.1.0
   # CRYPTO
-  pointycastle: ^3.6.0
-  convert: ^3.0.1
+  pointycastle: ^3.6.1
+  convert: ^3.0.2
   # WEB3
   web3dart: ^2.3.5
 
