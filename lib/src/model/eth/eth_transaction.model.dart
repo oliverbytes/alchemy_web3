@@ -42,7 +42,7 @@ class EthTransaction {
         hash: json["hash"],
         input: json["input"],
         nonce: json["nonce"],
-        to: json["to"],
+        to: json["to"] ?? '',
         transactionIndex: json["transactionIndex"],
         value: json["value"],
         type: json["type"],
