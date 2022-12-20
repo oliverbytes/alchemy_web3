@@ -207,18 +207,25 @@ class EthAPI with ConsoleMixin {
     required String fromAddress,
     String category = "external",
     String order = "desc",
+    String? contractAddress,
     bool withMetadata = true,
   }) async {
+    var params = {
+      "fromAddress": fromAddress.toString(),
+      "category": [category.toString()],
+      "order": order.toString(),
+      "withMetadata": withMetadata,
+    };
+
+    if (contractAddress != null) {
+      params.addAll({
+        'contractAddresses': [contractAddress],
+      });
+    }
+
     final result = await wsClient.request(
       method: 'alchemy_getAssetTransfers',
-      params: [
-        {
-          "fromAddress": fromAddress.toString(),
-          "category": [category.toString()],
-          "order": order.toString(),
-          "withMetadata": withMetadata,
-        }
-      ],
+      params: [params],
     );
 
     return result.fold(
@@ -235,18 +242,24 @@ class EthAPI with ConsoleMixin {
     required String toAddress,
     String category = "external",
     String order = "desc",
+    String? contractAddress,
     bool withMetadata = true,
   }) async {
+    var params = {
+      "toAddress": toAddress.toString(),
+      "category": [category.toString()],
+      "order": order.toString(),
+      "withMetadata": withMetadata,
+    };
+
+    if (contractAddress != null) {
+      params.addAll({
+        "contractAddresses": [contractAddress],
+      });
+    }
     final result = await wsClient.request(
       method: 'alchemy_getAssetTransfers',
-      params: [
-        {
-          "toAddress": toAddress.toString(),
-          "category": [category.toString()],
-          "order": order.toString(),
-          "withMetadata": withMetadata
-        }
-      ],
+      params: [params],
     );
 
     return result.fold(
