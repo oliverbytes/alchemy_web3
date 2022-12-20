@@ -320,6 +320,16 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
                 ),
               ),
               ElevatedButton(
+                child: const Text('getTokenBalance'),
+                onPressed: () => call(
+                  alchemy.erc20.getTokenBalance(
+                    address: 'tokenAddress',
+                    contractAddress: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+                  ),
+                ),
+              ),
+
+              ElevatedButton(
                 child: const Text('chainId'),
                 onPressed: () => call(alchemy.polygon.chainId()),
               ),
