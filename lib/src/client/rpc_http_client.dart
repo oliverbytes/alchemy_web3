@@ -55,6 +55,15 @@ class RpcHttpClient with ConsoleMixin {
     // remove null map property values
     parameters?.removeWhere((key, value) => value == null);
 
+    // convert the arrays so it works in the query parameters
+    if (parameters?['filters'] != null && parameters?['filters'] is List) {
+      parameters!['filters[]'] = List.filled(parameters['filters'].length, '');
+      for (int i = 0; i < parameters?['filters'].length; i++) {
+        parameters!['filters[]'][i] = parameters['filters'][i]?.toString().split('.').last;
+      }
+    }
+    parameters?.remove('filters');
+
     if (verbose) {
       console.verbose(
         'Requesting... ${method.name.toUpperCase()}: $url/$endpoint\n$parameters',
