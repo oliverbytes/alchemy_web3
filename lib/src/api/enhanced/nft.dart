@@ -131,7 +131,7 @@ class EnhancedNFTAPI with ConsoleMixin {
         'owner': owner,
         'pageKey': pageKey,
         'filters': filters,
-        'orderBy': orderBy,
+        'orderBy': orderBy.toString().split('.').last,
       },
     );
 
@@ -166,7 +166,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFT>> getContractMetadata({
+  Future<Either<RpcResponse, EnhancedNFTContractMetadata>> getContractMetadata({
     required String contractAddress,
   }) async {
     final result = await httpClient.request(
@@ -179,11 +179,11 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFT.fromJson(json)),
+      (json) => Right(EnhancedNFTContractMetadata.fromJson(json)),
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFT>> reingestContract({
+  Future<Either<RpcResponse, EnhancedNFTReingestContract>> reingestContract({
     required String contractAddress,
   }) async {
     final result = await httpClient.request(
@@ -196,11 +196,11 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFT.fromJson(json)),
+      (json) => Right(EnhancedNFTReingestContract.fromJson(json)),
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFT>> searchContractMetadata({
+  Future<Either<RpcResponse, List<dynamic>>> searchContractMetadata({
     required String query,
   }) async {
     final result = await httpClient.request(
@@ -213,7 +213,7 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFT.fromJson(json)),
+      (json) => Right(json.map((json) => EnhancedNFTContractMetadata.fromJson(json)).toList()),
     );
   }
 
@@ -240,7 +240,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFTCollection>> getSpamContracts() async {
+  Future<Either<RpcResponse, List<dynamic>>> getSpamContracts() async {
     final result = await httpClient.request(
       endpoint: 'getSpamContracts',
       method: HTTPMethod.get,
@@ -249,11 +249,11 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFTCollection.fromJson(json)),
+      (json) => Right(json),
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFTCollection>> isSpamContract({
+  Future<Either<RpcResponse, bool>> isSpamContract({
     required String contractAddress,
   }) async {
     final result = await httpClient.request(
@@ -266,11 +266,11 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFTCollection.fromJson(json)),
+      (json) => Right(json),
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFTCollection>> isAirdrop({
+  Future<Either<RpcResponse, bool>> isAirdrop({
     required String contractAddress,
     required String tokenId,
   }) async {
@@ -285,7 +285,7 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFTCollection.fromJson(json)),
+      (json) => Right(json),
     );
   }
 
@@ -306,7 +306,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFTCollection>> getFloorPrice({
+  Future<Either<RpcResponse, EnhancedNFTCollectionFloorPrice>> getFloorPrice({
     required String contractAddress,
   }) async {
     final result = await httpClient.request(
@@ -319,11 +319,11 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFTCollection.fromJson(json)),
+      (json) => Right(EnhancedNFTCollectionFloorPrice.fromJson(json)),
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFTCollection>> getNFTSales({
+  Future<Either<RpcResponse, NFTSalesResponse>> getNFTSales({
     String fromBlock = '0',
     String toBlock = 'latest',
     OrderBy order = OrderBy.desc,
@@ -342,7 +342,7 @@ class EnhancedNFTAPI with ConsoleMixin {
       parameters: {
         'fromBlock': fromBlock,
         'toBlock': toBlock,
-        'order': order,
+        'order': order.toString().split('.').last,
         'marketplace': marketplace,
         'contractAddress': contractAddress,
         'tokenId': tokenId,
@@ -356,7 +356,7 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFTCollection.fromJson(json)),
+      (json) => Right(NFTSalesResponse.fromJson(json)),
     );
   }
 

@@ -144,5 +144,135 @@ void main() {
       expect(resp.metadata!.name, 'WoW #44');
       expect(resp.contractMetadata!.openSea!.safelistRequestStatus, 'verified');
     });
+
+    test('getContractMetadata', () async {
+      var nfts = await api.getContractMetadata(
+        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      EnhancedNFTContractMetadata resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.address, '0xe785e82358879f061bc3dcac6f0444462d4b5330');
+      expect(resp.contractMetadata.tokenType, 'ERC721');
+      expect(resp.contractMetadata.openSea?.collectionName, 'World of Women');
+      expect(resp.contractMetadata.openSea?.safelistRequestStatus, 'verified');
+    });
+
+    test('reingestContract', () async {
+      var nfts = await api.reingestContract(
+        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      EnhancedNFTReingestContract resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.contractAddress, '0xe785e82358879f061bc3dcac6f0444462d4b5330');
+      expect(resp.reingestionState, isNotNull);
+      expect(resp.progress, null);
+    });
+
+    test('searchContractMetadata', () async {
+      var nfts = await api.searchContractMetadata(
+        query: 'sunglasses',
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      List resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.length, greaterThan(0));
+      expect(resp.first.address, isNotNull);
+      expect(resp.first.contractMetadata.tokenType, isNotNull);
+      expect(resp.first.contractMetadata.openSea?.collectionName, isNotNull);
+      expect(resp.first.contractMetadata.openSea?.safelistRequestStatus, isNotNull);
+    });
+
+    test('getNFTsForCollection', () async {
+      var nfts = await api.getNFTsForCollection(
+        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+        withMetadata: true,
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      EnhancedNFTCollection resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.nextToken, '0x0000000000000000000000000000000000000000000000000000000000000064');
+      expect(resp.nfts.length, greaterThan(0));
+      expect(resp.nfts.first.title, 'WoW #0');
+    });
+
+    test('getSpamContracts', () async {
+      var nfts = await api.getSpamContracts();
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      List resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.length, greaterThan(0));
+      expect(resp.first, isNotNull);
+    });
+
+    test('isSpamContract', () async {
+      var nfts = await api.isSpamContract(
+        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      bool resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp, false);
+    });
+
+    test('isAirdrop', () async {
+      var nfts = await api.isAirdrop(
+        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+        tokenId: '44',
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      bool resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp, false);
+    });
+
+    test('getFloorPrice', () async {
+      var nfts = await api.getFloorPrice(
+        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      EnhancedNFTCollectionFloorPrice resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.openSea!.floorPrice, isNonNegative);
+      expect(resp.openSea!.priceCurrency, 'ETH');
+      expect(resp.openSea!.collectionUrl, 'https://opensea.io/collection/world-of-women-nft');
+      expect(resp.looksRare!.floorPrice, isNonNegative);
+      expect(resp.looksRare!.priceCurrency, 'ETH');
+      expect(resp.looksRare!.collectionUrl, 'https://looksrare.org/collections/0xe785e82358879f061bc3dcac6f0444462d4b5330');
+    });
+
+    test('getNFTSales', () async {
+      var nfts = await api.getNFTSales(
+        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+        tokenId: '44',
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      NFTSalesResponse resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.pageKey, null);
+      expect(resp.nftSales.length, isNonNegative);
+      expect(resp.nftSales.first.marketplaceAddress, isNotEmpty);
+      expect(resp.nftSales.first.contractAddress, '0xe785e82358879f061bc3dcac6f0444462d4b5330');
+    });
+
   });
 }

@@ -1,5 +1,3 @@
-
-
 class EnhancedNFT {
   const EnhancedNFT({
     this.contract = const EnhancedNFTContract(),
@@ -45,8 +43,7 @@ class EnhancedNFT {
         description: json["description"],
         balance: json["balance"],
         tokenUri: EnhancedNFTTokenUri.fromJson(json["tokenUri"]),
-        media: List<EnhancedNFTMedia>.from(
-            json["media"].map((x) => EnhancedNFTMedia.fromJson(x))),
+        media: List<EnhancedNFTMedia>.from(json["media"].map((x) => EnhancedNFTMedia.fromJson(x))),
         metadata: EnhancedNFTMetadata.fromJson(json["metadata"]),
         timeLastUpdated: DateTime.tryParse(json["timeLastUpdated"]),
         contractMetadata: json["contractMetadata"] != null
@@ -164,7 +161,6 @@ class EnhancedNFTTokenUri {
       };
 }
 
-
 class EnhancedNFTMedia {
   EnhancedNFTMedia({
     this.raw,
@@ -181,20 +177,20 @@ class EnhancedNFTMedia {
   int? bytes;
 
   factory EnhancedNFTMedia.fromJson(Map<String, dynamic> json) => EnhancedNFTMedia(
-    raw: json["raw"],
-    gateway: json["gateway"],
-    thumbnail: json["thumbnail"],
-    format: json["format"],
-    bytes: json["bytes"],
-  );
+        raw: json["raw"],
+        gateway: json["gateway"],
+        thumbnail: json["thumbnail"],
+        format: json["format"],
+        bytes: json["bytes"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "raw": raw,
-    "gateway": gateway,
-    "thumbnail": thumbnail,
-    "format": format,
-    "bytes": bytes,
-  };
+        "raw": raw,
+        "gateway": gateway,
+        "thumbnail": thumbnail,
+        "format": format,
+        "bytes": bytes,
+      };
 }
 
 class EnhancedNFTMetadata {
@@ -291,36 +287,48 @@ class EnhancedContractMetadata {
 
 class OpenSeaMetadata {
   OpenSeaMetadata({
+    this.floorPrice,
     this.collectionName,
     this.safelistRequestStatus,
     this.imageUrl,
     this.description,
     this.externalUrl,
+    this.twitterUsername,
+    this.discordUrl,
     this.lastIngestedAt,
   });
 
+  double? floorPrice;
   String? collectionName;
   String? safelistRequestStatus;
   String? imageUrl;
   String? description;
   String? externalUrl;
+  String? twitterUsername;
+  String? discordUrl;
   DateTime? lastIngestedAt;
 
   factory OpenSeaMetadata.fromJson(Map<String, dynamic> json) => OpenSeaMetadata(
+        floorPrice: json["floorPrice"],
         collectionName: json["collectionName"],
         safelistRequestStatus: json["safelistRequestStatus"],
         imageUrl: json["imageUrl"],
         description: json["description"],
         externalUrl: json["externalUrl"],
+        twitterUsername: json["twitterUsername"],
+        discordUrl: json["discordUrl"],
         lastIngestedAt: DateTime.tryParse(json["lastIngestedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "floorPrice": floorPrice,
         "collectionName": collectionName,
         "safelistRequestStatus": safelistRequestStatus,
         "imageUrl": imageUrl,
         "description": description,
         "externalUrl": externalUrl,
+        "twitterUsername": twitterUsername,
+        "discordUrl": discordUrl,
         "lastIngestedAt": lastIngestedAt,
       };
 }

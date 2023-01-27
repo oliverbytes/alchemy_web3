@@ -45,7 +45,7 @@ class RpcHttpClient with ConsoleMixin {
     _dio.options.baseUrl = url;
   }
 
-  Future<Either<RpcResponse, Map<String, dynamic>>> request({
+  Future<Either<RpcResponse, dynamic>> request({
     Map<String, dynamic>? parameters,
     String endpoint = '',
     HTTPMethod method = HTTPMethod.post,
