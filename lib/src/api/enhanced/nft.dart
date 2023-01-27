@@ -4,21 +4,6 @@ import 'package:either_dart/either.dart';
 
 import '../../../alchemy_web3.dart';
 
-enum NFTFilters {
-  SPAM,
-  AIRDROPS,
-}
-
-enum OrderBy {
-  asc,
-  desc,
-}
-
-enum TokenType {
-  ERC721,
-  ERC1155,
-}
-
 class EnhancedNFTAPI with ConsoleMixin {
   late RpcHttpClient httpClient;
 

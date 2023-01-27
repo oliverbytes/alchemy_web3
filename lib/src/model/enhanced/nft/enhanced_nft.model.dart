@@ -1,3 +1,18 @@
+enum NFTFilters {
+  SPAM,
+  AIRDROPS,
+}
+
+enum OrderBy {
+  asc,
+  desc,
+}
+
+enum TokenType {
+  ERC721,
+  ERC1155,
+}
+
 class EnhancedNFT {
   const EnhancedNFT({
     this.contract = const EnhancedNFTContract(),
