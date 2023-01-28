@@ -274,5 +274,36 @@ void main() {
       expect(resp.nftSales.first.contractAddress, '0xe785e82358879f061bc3dcac6f0444462d4b5330');
     });
 
+    test('computeRarity', () async {
+      var nfts = await api.computeRarity(
+        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+        tokenId: '44',
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      List<NFTRarity> resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.length, isNonNegative);
+      expect(resp.first.value, isNotEmpty);
+      expect(resp.first.trait_type, isNotEmpty);
+      expect(resp.first.prevalence, isNonNegative);
+    });
+
+    test('summarizeNFTAttributes', () async {
+      var nfts = await api.summarizeNFTAttributes(
+        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      NFTAttributeSummary resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.contractAddress, '0xe785e82358879f061bc3dcac6f0444462d4b5330');
+      expect(resp.totalSupply, 10000);
+      expect(resp.summary.length, 11);
+      expect(resp.summary['Earrings']!['WoW Coins'], isNonNegative);
+    });
+
   });
 }

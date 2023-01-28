@@ -185,7 +185,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<RpcResponse, List<dynamic>>> searchContractMetadata({
+  Future<Either<RpcResponse, List<EnhancedNFTContractMetadata>>> searchContractMetadata({
     required String query,
   }) async {
     final result = await httpClient.request(
@@ -198,7 +198,8 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(json.map((json) => EnhancedNFTContractMetadata.fromJson(json)).toList()),
+      (json) => Right(List<EnhancedNFTContractMetadata>.from(
+          json.map((item) => EnhancedNFTContractMetadata.fromJson(item))?.toList())),
     );
   }
 
@@ -225,7 +226,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<RpcResponse, List<dynamic>>> getSpamContracts() async {
+  Future<Either<RpcResponse, List<String>>> getSpamContracts() async {
     final result = await httpClient.request(
       endpoint: 'getSpamContracts',
       method: HTTPMethod.get,
@@ -234,7 +235,7 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(json),
+      (json) => Right(List<String>.from(json.map((item) => item as String)?.toList())),
     );
   }
 
@@ -345,7 +346,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFTCollection>> computeRarity({
+  Future<Either<RpcResponse, List<NFTRarity>>> computeRarity({
     required String contractAddress,
     required String tokenId,
   }) async {
@@ -360,11 +361,11 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFTCollection.fromJson(json)),
+      (json) => Right(List<NFTRarity>.from(json.map((item) => NFTRarity.fromJson(item))?.toList())),
     );
   }
 
-  Future<Either<RpcResponse, EnhancedNFTCollection>> summarizeNFTAttributes({
+  Future<Either<RpcResponse, NFTAttributeSummary>> summarizeNFTAttributes({
     required String contractAddress,
   }) async {
     final result = await httpClient.request(
@@ -377,7 +378,7 @@ class EnhancedNFTAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (json) => Right(EnhancedNFTCollection.fromJson(json)),
+      (json) => Right(NFTAttributeSummary.fromJson(json)),
     );
   }
 }
