@@ -1,5 +1,3 @@
-
-
 class EnhancedNFTCollectionFloorPrice {
   EnhancedNFTCollectionFloorPrice({
     this.openSea,
@@ -11,12 +9,8 @@ class EnhancedNFTCollectionFloorPrice {
 
   factory EnhancedNFTCollectionFloorPrice.fromJson(Map<String, dynamic> json) =>
       EnhancedNFTCollectionFloorPrice(
-        openSea: json["openSea"] == null
-            ? null
-            : FloorPriceDetails.fromJson(json["openSea"]),
-        looksRare: json["looksRare"] == null
-            ? null
-            : FloorPriceDetails.fromJson(json["looksRare"]),
+        openSea: json["openSea"] == null ? null : FloorPriceDetails.fromJson(json["openSea"]),
+        looksRare: json["looksRare"] == null ? null : FloorPriceDetails.fromJson(json["looksRare"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,15 +57,14 @@ class NFTSalesResponse {
   final String? pageKey;
 
   factory NFTSalesResponse.fromJson(Map<String, dynamic> json) => NFTSalesResponse(
-    nftSales: List<NFTSales>.from(
-        json["nftSales"].map((x) => NFTSales.fromJson(x))),
-    pageKey: json["pageKey"],
-  );
+        nftSales: List<NFTSales>.from(json["nftSales"].map((x) => NFTSales.fromJson(x))),
+        pageKey: json["pageKey"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "nftSales": nftSales,
-    "pageKey": pageKey,
-  };
+        "nftSales": nftSales,
+        "pageKey": pageKey,
+      };
 }
 
 class NFTSales {
@@ -108,45 +101,39 @@ class NFTSales {
   final String? transactionHash;
 
   factory NFTSales.fromJson(Map<String, dynamic> json) => NFTSales(
-    marketplaceAddress: json["marketplaceAddress"],
-    contractAddress: json["contractAddress"],
-    tokenId: json["tokenId"],
-    quantity: json["quantity"],
-    buyerAddress: json["buyerAddress"],
-    sellerAddress: json["sellerAddress"],
-    taker: json["taker"],
-    sellerFee: json["sellerFee"] == null
-        ? null
-        : NFTSalesFee.fromJson(json["sellerFee"]),
-    protocolFee: json["protocolFee"] == null
-        ? null
-        : NFTSalesFee.fromJson(json["protocolFee"]),
-    royaltyFee: json["royaltyFee"] == null
-        ? null
-        : NFTSalesFee.fromJson(json["royaltyFee"]),
-    blockNumber: json["blockNumber"],
-    logIndex: json["logIndex"],
-    bundleIndex: json["bundleIndex"],
-    transactionHash: json["transactionHash"],
-  );
+        marketplaceAddress: json["marketplaceAddress"],
+        contractAddress: json["contractAddress"],
+        tokenId: json["tokenId"],
+        quantity: json["quantity"],
+        buyerAddress: json["buyerAddress"],
+        sellerAddress: json["sellerAddress"],
+        taker: json["taker"],
+        sellerFee: json["sellerFee"] == null ? null : NFTSalesFee.fromJson(json["sellerFee"]),
+        protocolFee: json["protocolFee"] == null ? null : NFTSalesFee.fromJson(json["protocolFee"]),
+        royaltyFee: json["royaltyFee"] == null ? null : NFTSalesFee.fromJson(json["royaltyFee"]),
+        blockNumber: json["blockNumber"],
+        logIndex: json["logIndex"],
+        bundleIndex: json["bundleIndex"],
+        transactionHash: json["transactionHash"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "marketplaceAddress": marketplaceAddress,
-    "contractAddress": contractAddress,
-    "tokenId": tokenId,
-    "quantity": quantity,
-    "quantity": quantity,
-    "buyerAddress": buyerAddress,
-    "sellerAddress": sellerAddress,
-    "taker": taker,
-    "sellerFee": sellerFee,
-    "protocolFee": protocolFee,
-    "royaltyFee": royaltyFee,
-    "blockNumber": blockNumber,
-    "logIndex": logIndex,
-    "bundleIndex": bundleIndex,
-    "transactionHash": transactionHash,
-  };
+        "marketplaceAddress": marketplaceAddress,
+        "contractAddress": contractAddress,
+        "tokenId": tokenId,
+        "quantity": quantity,
+        "quantity": quantity,
+        "buyerAddress": buyerAddress,
+        "sellerAddress": sellerAddress,
+        "taker": taker,
+        "sellerFee": sellerFee,
+        "protocolFee": protocolFee,
+        "royaltyFee": royaltyFee,
+        "blockNumber": blockNumber,
+        "logIndex": logIndex,
+        "bundleIndex": bundleIndex,
+        "transactionHash": transactionHash,
+      };
 }
 
 class NFTSalesFee {
@@ -163,16 +150,65 @@ class NFTSalesFee {
   final int? decimals;
 
   factory NFTSalesFee.fromJson(Map<String, dynamic> json) => NFTSalesFee(
-    amount: json["amount"],
-    tokenAddress: json["tokenAddress"],
-    symbol: json["symbol"],
-    decimals: json["decimals"],
-  );
+        amount: json["amount"],
+        tokenAddress: json["tokenAddress"],
+        symbol: json["symbol"],
+        decimals: json["decimals"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "amount": amount,
-    "tokenAddress": tokenAddress,
-    "symbol": symbol,
-    "decimals": decimals,
-  };
+        "amount": amount,
+        "tokenAddress": tokenAddress,
+        "symbol": symbol,
+        "decimals": decimals,
+      };
+}
+
+class NFTRarity {
+  NFTRarity({
+    required this.value,
+    required this.trait_type,
+    required this.prevalence,
+  });
+
+  final String value;
+  final String trait_type;
+  final double prevalence;
+
+  factory NFTRarity.fromJson(Map<String, dynamic> json) => NFTRarity(
+        value: json["value"],
+        trait_type: json["trait_type"],
+        prevalence: json["prevalence"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "value": value,
+        "trait_type": trait_type,
+        "prevalence": prevalence,
+      };
+}
+
+class NFTAttributeSummary {
+  NFTAttributeSummary({
+    required this.summary,
+    required this.totalSupply,
+    required this.contractAddress,
+  });
+
+  final Map<String, Map<String, int>> summary;
+  final int totalSupply;
+  final String contractAddress;
+
+  factory NFTAttributeSummary.fromJson(Map<String, dynamic> json) => NFTAttributeSummary(
+        summary: (Map<String, Map<String, dynamic>>.from(json["summary"]))
+            .map((key, value) => MapEntry(key, (Map<String, int>.from(value)))),
+        totalSupply: json["totalSupply"],
+        contractAddress: json["contractAddress"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "summary": summary,
+        "totalSupply": totalSupply,
+        "contractAddress": contractAddress,
+      };
 }
