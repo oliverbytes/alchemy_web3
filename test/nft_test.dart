@@ -34,7 +34,7 @@ void main() {
       expect(resp.ownedNfts.length, lessThanOrEqualTo(resp.totalCount));
       expect(resp.ownedNfts.first.error, null);
       expect(resp.ownedNfts.first.id.tokenId, isNotEmpty);
-      expect(resp.ownedNfts.first.contract.address, isNotEmpty);
+      expect(resp.ownedNfts.first.contract!.address, isNotEmpty);
       expect(resp.ownedNfts.first.title, isNotNull);
     });
 
@@ -58,7 +58,7 @@ void main() {
       expect(resp.ownedNfts.length, lessThanOrEqualTo(resp.totalCount));
       expect(resp.ownedNfts.first.error, null);
       expect(resp.ownedNfts.first.id.tokenId, isNotEmpty);
-      expect(resp.ownedNfts.first.contract.address, isNotEmpty);
+      expect(resp.ownedNfts.first.contract!.address, isNotEmpty);
       expect(resp.ownedNfts.first.title, isNotNull);
       for (var nft in resp.ownedNfts) {
         if (nft.spamInfo != null) {
@@ -87,7 +87,23 @@ void main() {
       EnhancedNFTOwnerAddresses resp = nfts.right;
       expect(resp, isNotNull);
       expect(resp.ownerAddresses.length, greaterThan(0));
-      expect(resp.ownerAddresses.first, isNotEmpty);
+      expect(resp.ownerAddresses.first.ownerAddress, isNotEmpty);
+      expect(resp.ownerAddresses.first.tokenBalances.length, 0);
+    });
+
+    test('getOwnersForCollectionWithTokenBalances', () async {
+      var nfts =
+          await api.getOwnersForCollection(contractAddress: address, withTokenBalances: true);
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      EnhancedNFTOwnerAddresses resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.ownerAddresses.length, greaterThan(0));
+      expect(resp.ownerAddresses.first.ownerAddress, isNotEmpty);
+      expect(resp.ownerAddresses.first.tokenBalances.length, greaterThan(0));
+      expect(resp.ownerAddresses.first.tokenBalances.first.tokenId, isNotEmpty);
+      expect(resp.ownerAddresses.first.tokenBalances.first.balance, greaterThan(0));
     });
 
     test('isHolderOfCollection', () async {
@@ -140,7 +156,7 @@ void main() {
       expect(resp.title, 'WoW #44');
       expect(resp.imageUrl, 'ipfs://QmUkdJKCsV8ixm2eDLJGosH8Bntwwx942YXxfuF9yXPBzi');
       expect(resp.tokenUri!.raw, 'ipfs://QmTNBQDbggLZdKF1fRgWnXsnRikd52zL5ciNu769g9JoUP/44');
-      expect(resp.media.first.format, 'png');
+      expect(resp.media!.first.format, 'png');
       expect(resp.metadata!.name, 'WoW #44');
       expect(resp.contractMetadata!.openSea!.safelistRequestStatus, 'verified');
     });
@@ -192,7 +208,22 @@ void main() {
 
     test('getNFTsForCollection', () async {
       var nfts = await api.getNFTsForCollection(
-        contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
+        contractAddress: '0x198478f870d97d62d640368d111b979d7ca3c38f',
+        withMetadata: false,
+      );
+      if (nfts.isLeft) {
+        fail(nfts.left.error.message);
+      }
+      EnhancedNFTCollection resp = nfts.right;
+      expect(resp, isNotNull);
+      expect(resp.nextToken, '0x0000000000000000000000000000000000000000000000000000000000000065');
+      expect(resp.nfts.length, greaterThan(0));
+      expect(resp.nfts.first.id.tokenId, '0x0000000000000000000000000000000000000000000000000000000000000001');
+    });
+
+    test('getNFTsForCollectionWithMetadata', () async {
+      var nfts = await api.getNFTsForCollection(
+        contractAddress: '0x198478f870d97d62d640368d111b979d7ca3c38f',
         withMetadata: true,
       );
       if (nfts.isLeft) {
@@ -200,9 +231,42 @@ void main() {
       }
       EnhancedNFTCollection resp = nfts.right;
       expect(resp, isNotNull);
-      expect(resp.nextToken, '0x0000000000000000000000000000000000000000000000000000000000000064');
+      expect(resp.nextToken, '0x0000000000000000000000000000000000000000000000000000000000000065');
       expect(resp.nfts.length, greaterThan(0));
-      expect(resp.nfts.first.title, 'WoW #0');
+      expect(resp.nfts.first.contract!.address, '0x198478f870d97d62d640368d111b979d7ca3c38f');
+      expect(resp.nfts.first.id.tokenId, '0x0000000000000000000000000000000000000000000000000000000000000001');
+      expect(resp.nfts.first.id.tokenMetadata!.tokenType, 'ERC721');
+      expect(resp.nfts.first.title, '8SIAN #1');
+      expect(resp.nfts.first.description, isNotEmpty);
+      expect(resp.nfts.first.tokenUri!.raw, 'https://api.8siannft.com/api/token/1');
+      expect(resp.nfts.first.tokenUri!.gateway, 'https://api.8siannft.com/api/token/1');
+      expect(resp.nfts.first.media!.first.raw, 'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
+      expect(resp.nfts.first.media!.first.gateway, 'https://nft-cdn.alchemy.com/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
+      expect(resp.nfts.first.media!.first.thumbnail, 'https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
+      expect(resp.nfts.first.media!.first.format, 'png');
+      expect(resp.nfts.first.media!.first.bytes, 8671789);
+      expect(resp.nfts.first.metadata!.name, '8SIAN #1');
+      expect(resp.nfts.first.metadata!.image, 'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
+      expect(resp.nfts.first.metadata!.description, isNotEmpty);
+      expect(resp.nfts.first.metadata!.attributes!.length, greaterThan(0));
+      expect(resp.nfts.first.metadata!.attributes!.first.value, 'jingju');
+      expect(resp.nfts.first.metadata!.attributes!.first.traitType, 'hairstyle');
+      expect(resp.nfts.first.timeLastUpdated!.millisecondsSinceEpoch, greaterThan(0));
+      expect(resp.nfts.first.contractMetadata!.name, '8SIAN');
+      expect(resp.nfts.first.contractMetadata!.symbol, '8SIAN');
+      expect(resp.nfts.first.contractMetadata!.totalSupply, '8888');
+      expect(resp.nfts.first.contractMetadata!.tokenType, 'ERC721');
+      expect(resp.nfts.first.contractMetadata!.contractDeployer, '0xff71692dca098a03e450a24270824ec3207ec932');
+      expect(resp.nfts.first.contractMetadata!.deployedBlockNumber, 13875451);
+      expect(resp.nfts.first.contractMetadata!.openSea!.floorPrice, 0.039384);
+      expect(resp.nfts.first.contractMetadata!.openSea!.collectionName, '8SIAN Main Collection');
+      expect(resp.nfts.first.contractMetadata!.openSea!.safelistRequestStatus, 'verified');
+      expect(resp.nfts.first.contractMetadata!.openSea!.imageUrl, 'https://i.seadn.io/gae/eAULPaXEuD9oufUOtA-_c1MbS71hh_s_2LUMWs_xYBQW4DFqXNU1f6IrEQcE6Zv0gnV3kUyYPPt7mIzsLRhQEEDSkraAnPv81eLi?w=500&auto=format');
+      expect(resp.nfts.first.contractMetadata!.openSea!.description, isNotEmpty);
+      expect(resp.nfts.first.contractMetadata!.openSea!.externalUrl, 'http://8sian.io');
+      expect(resp.nfts.first.contractMetadata!.openSea!.twitterUsername, '8sianNFT');
+      expect(resp.nfts.first.contractMetadata!.openSea!.discordUrl, 'https://discord.gg/8sian');
+      expect(resp.nfts.first.contractMetadata!.openSea!.lastIngestedAt!.millisecondsSinceEpoch, greaterThan(0));
     });
 
     test('getSpamContracts', () async {
@@ -255,7 +319,8 @@ void main() {
       expect(resp.openSea!.collectionUrl, 'https://opensea.io/collection/world-of-women-nft');
       expect(resp.looksRare!.floorPrice, isNonNegative);
       expect(resp.looksRare!.priceCurrency, 'ETH');
-      expect(resp.looksRare!.collectionUrl, 'https://looksrare.org/collections/0xe785e82358879f061bc3dcac6f0444462d4b5330');
+      expect(resp.looksRare!.collectionUrl,
+          'https://looksrare.org/collections/0xe785e82358879f061bc3dcac6f0444462d4b5330');
     });
 
     test('getNFTSales', () async {
@@ -304,6 +369,5 @@ void main() {
       expect(resp.summary.length, 11);
       expect(resp.summary['Earrings']!['WoW Coins'], isNonNegative);
     });
-
   });
 }
