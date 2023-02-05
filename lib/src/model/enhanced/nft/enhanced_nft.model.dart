@@ -15,13 +15,13 @@ enum TokenType {
 
 class EnhancedNFT {
   const EnhancedNFT({
-    this.contract = const EnhancedNFTContract(),
+    this.contract,
     this.id = const EnhancedNFTId(),
-    this.balance = '',
-    this.title = '',
-    this.description = '',
+    this.balance,
+    this.title,
+    this.description,
     this.tokenUri,
-    this.media = const [],
+    this.media,
     this.metadata,
     this.timeLastUpdated,
     this.contractMetadata,
@@ -29,13 +29,13 @@ class EnhancedNFT {
     this.error,
   });
 
-  final EnhancedNFTContract contract;
+  final EnhancedNFTContract? contract;
   final EnhancedNFTId id;
   final String? balance;
   final String? title;
   final String? description;
   final EnhancedNFTTokenUri? tokenUri;
-  final List<EnhancedNFTMedia> media;
+  final List<EnhancedNFTMedia>? media;
   final EnhancedNFTMetadata? metadata;
   final DateTime? timeLastUpdated;
   final EnhancedContractMetadata? contractMetadata;
@@ -52,15 +52,18 @@ class EnhancedNFT {
   }
 
   factory EnhancedNFT.fromJson(Map<String, dynamic> json) => EnhancedNFT(
-        contract: EnhancedNFTContract.fromJson(json["contract"]),
+        contract: json["contract"] != null ? EnhancedNFTContract.fromJson(json["contract"]) : null,
         id: EnhancedNFTId.fromJson(json["id"]),
         title: json["title"],
         description: json["description"],
         balance: json["balance"],
-        tokenUri: EnhancedNFTTokenUri.fromJson(json["tokenUri"]),
-        media: List<EnhancedNFTMedia>.from(json["media"].map((x) => EnhancedNFTMedia.fromJson(x))),
-        metadata: EnhancedNFTMetadata.fromJson(json["metadata"]),
-        timeLastUpdated: DateTime.tryParse(json["timeLastUpdated"]),
+        tokenUri: json["tokenUri"] != null ? EnhancedNFTTokenUri.fromJson(json["tokenUri"]) : null,
+        media: json["media"] != null
+            ? List<EnhancedNFTMedia>.from(json["media"].map((x) => EnhancedNFTMedia.fromJson(x)))
+            : null,
+        metadata: json["metadata"] != null ? EnhancedNFTMetadata.fromJson(json["metadata"]) : null,
+        timeLastUpdated:
+            json["timeLastUpdated"] != null ? DateTime.tryParse(json["timeLastUpdated"]) : null,
         contractMetadata: json["contractMetadata"] != null
             ? EnhancedContractMetadata.fromJson(json["contractMetadata"])
             : null,
@@ -69,13 +72,13 @@ class EnhancedNFT {
       );
 
   Map<String, dynamic> toJson() => {
-        "contract": contract.toJson(),
+        "contract": contract != null ? contract!.toJson() : null,
         "id": id.toJson(),
         "title": title,
         "description": description,
         "balance": balance,
         "tokenUri": tokenUri != null ? tokenUri!.toJson() : null,
-        "media": List<dynamic>.from(media.map((x) => x.toJson())),
+        "media": media != null ? List<dynamic>.from(media!.map((x) => x.toJson())) : null,
         "metadata": metadata != null ? metadata!.toJson() : null,
         "timeLastUpdated": timeLastUpdated != null ? timeLastUpdated!.toIso8601String() : null,
         "contractMetadata": contractMetadata != null ? contractMetadata!.toJson() : null,
@@ -131,7 +134,9 @@ class EnhancedNFTId {
 
   factory EnhancedNFTId.fromJson(Map<String, dynamic> json) => EnhancedNFTId(
         tokenId: json["tokenId"],
-        tokenMetadata: EnhancedNFTTokenMetadata.fromJson(json["tokenMetadata"]),
+        tokenMetadata: json["tokenMetadata"] != null
+            ? EnhancedNFTTokenMetadata.fromJson(json["tokenMetadata"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -268,6 +273,7 @@ class EnhancedContractMetadata {
   EnhancedContractMetadata({
     required this.name,
     required this.symbol,
+    required this.totalSupply,
     required this.tokenType,
     required this.contractDeployer,
     required this.deployedBlockNumber,
@@ -276,6 +282,7 @@ class EnhancedContractMetadata {
 
   final String? name;
   final String? symbol;
+  final String? totalSupply;
   final String tokenType;
   final String? contractDeployer;
   final int? deployedBlockNumber;
@@ -284,6 +291,7 @@ class EnhancedContractMetadata {
   factory EnhancedContractMetadata.fromJson(Map<String, dynamic> json) => EnhancedContractMetadata(
         name: json["name"],
         symbol: json["symbol"],
+        totalSupply: json["totalSupply"],
         tokenType: json["tokenType"],
         contractDeployer: json["contractDeployer"],
         deployedBlockNumber: json["deployedBlockNumber"],
@@ -293,6 +301,7 @@ class EnhancedContractMetadata {
   Map<String, dynamic> toJson() => {
         "name": name,
         "symbol": symbol,
+        "totalSupply": totalSupply,
         "tokenType": tokenType,
         "contractDeployer": contractDeployer,
         "deployedBlockNumber": deployedBlockNumber,

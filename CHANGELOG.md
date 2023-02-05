@@ -1,3 +1,6 @@
+## 0.1.2
+* Fixing bugs in getOwnersForCollection.
+
 ## 0.1.1
 * Fixing computeRarity and summarizeNFTAttributes.
 
