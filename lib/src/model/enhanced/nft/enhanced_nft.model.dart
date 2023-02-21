@@ -72,7 +72,7 @@ class EnhancedNFTContractMetadata {
   final String? symbol;
   final String? tokenType;
   final String? contractDeployer;
-  final String? deployedBlockNumber;
+  final int? deployedBlockNumber;
   final Map<String, Object?>? jsonData;
 
   const EnhancedNFTContractMetadata({
@@ -80,7 +80,7 @@ class EnhancedNFTContractMetadata {
     this.symbol = '',
     this.tokenType = '',
     this.contractDeployer = '',
-    this.deployedBlockNumber = '',
+    this.deployedBlockNumber = -1,
     this.jsonData,
   });
 
@@ -98,7 +98,7 @@ class EnhancedNFTContractMetadata {
         "symbol": symbol,
         "tokenType": tokenType,
         "contractDeployer": contractDeployer,
-        "deployedBlockNumber": deployedBlockNumber,
+        "deployedBlockNumber": deployedBlockNumber.toString(),
       };
 }
 
