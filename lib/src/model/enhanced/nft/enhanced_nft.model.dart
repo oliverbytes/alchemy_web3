@@ -1,6 +1,7 @@
 class EnhancedNFT {
-  const EnhancedNFT({
+  EnhancedNFT({
     this.contract = const EnhancedNFTContract(),
+    this.contractMetadata = const EnhancedNFTContractMetadata(),
     this.id = const EnhancedNFTId(),
     this.title = '',
     this.description = '',
@@ -13,6 +14,7 @@ class EnhancedNFT {
   });
 
   final EnhancedNFTContract contract;
+  final EnhancedNFTContractMetadata contractMetadata;
   final EnhancedNFTId id;
   final String? title;
   final String? description;
@@ -39,11 +41,15 @@ class EnhancedNFT {
         description: json["description"],
         balance: json["balance"],
         tokenUri: EnhancedNFTTokenUri.fromJson(json["tokenUri"]),
-        media: List<EnhancedNFTTokenUri>.from(
-            json["media"].map((x) => EnhancedNFTTokenUri.fromJson(x))),
+        media: List<EnhancedNFTTokenUri>.from(json["media"].map((x) => EnhancedNFTTokenUri.fromJson(x))),
         metadata: EnhancedNFTMetadata.fromJson(json["metadata"]),
         timeLastUpdated: DateTime.tryParse(json["timeLastUpdated"]),
         error: json["error"],
+        contractMetadata: json.containsKey("contractMetadata")
+            ? EnhancedNFTContractMetadata.fromJson(
+                json["contractMetadata"],
+              )
+            : EnhancedNFTContractMetadata(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -55,9 +61,44 @@ class EnhancedNFT {
         "tokenUri": tokenUri != null ? tokenUri!.toJson() : null,
         "media": List<dynamic>.from(media.map((x) => x.toJson())),
         "metadata": metadata != null ? metadata!.toJson() : null,
-        "timeLastUpdated":
-            timeLastUpdated != null ? timeLastUpdated!.toIso8601String() : null,
+        "timeLastUpdated": timeLastUpdated != null ? timeLastUpdated!.toIso8601String() : null,
         "error": error,
+        "contractMetadata": contractMetadata.toJson(),
+      };
+}
+
+class EnhancedNFTContractMetadata {
+  final String? name;
+  final String? symbol;
+  final String? tokenType;
+  final String? contractDeployer;
+  final String? deployedBlockNumber;
+  final Map<String, Object?>? jsonData;
+
+  const EnhancedNFTContractMetadata({
+    this.name = '',
+    this.symbol = '',
+    this.tokenType = '',
+    this.contractDeployer = '',
+    this.deployedBlockNumber = '',
+    this.jsonData,
+  });
+
+  factory EnhancedNFTContractMetadata.fromJson(Map<String, dynamic> json) => EnhancedNFTContractMetadata(
+        name: json["name"],
+        symbol: json["symbol"],
+        tokenType: json["tokenType"],
+        contractDeployer: json["contractDeployer"],
+        deployedBlockNumber: json["deployedBlockNumber"],
+        jsonData: json,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "symbol": symbol,
+        "tokenType": tokenType,
+        "contractDeployer": contractDeployer,
+        "deployedBlockNumber": deployedBlockNumber,
       };
 }
 
@@ -68,8 +109,7 @@ class EnhancedNFTContract {
 
   final String address;
 
-  factory EnhancedNFTContract.fromJson(Map<String, dynamic> json) =>
-      EnhancedNFTContract(
+  factory EnhancedNFTContract.fromJson(Map<String, dynamic> json) => EnhancedNFTContract(
         address: json["address"],
       );
 
@@ -105,8 +145,7 @@ class EnhancedNFTTokenMetadata {
 
   final String tokenType;
 
-  factory EnhancedNFTTokenMetadata.fromJson(Map<String, dynamic> json) =>
-      EnhancedNFTTokenMetadata(
+  factory EnhancedNFTTokenMetadata.fromJson(Map<String, dynamic> json) => EnhancedNFTTokenMetadata(
         tokenType: json["tokenType"],
       );
 
@@ -124,8 +163,7 @@ class EnhancedNFTTokenUri {
   final String raw;
   final String gateway;
 
-  factory EnhancedNFTTokenUri.fromJson(Map<String, dynamic> json) =>
-      EnhancedNFTTokenUri(
+  factory EnhancedNFTTokenUri.fromJson(Map<String, dynamic> json) => EnhancedNFTTokenUri(
         raw: json["raw"],
         gateway: json["gateway"],
       );
@@ -151,15 +189,13 @@ class EnhancedNFTMetadata {
   final String? externalUrl;
   final List<EnhancedNFTAttribute>? attributes;
 
-  factory EnhancedNFTMetadata.fromJson(Map<String, dynamic> json) =>
-      EnhancedNFTMetadata(
+  factory EnhancedNFTMetadata.fromJson(Map<String, dynamic> json) => EnhancedNFTMetadata(
         name: json["name"],
         description: json["description"],
         image: json["image"],
         externalUrl: json["external_url"],
         attributes: json["attributes"] != null
-            ? List<EnhancedNFTAttribute>.from(
-                json["attributes"].map((x) => EnhancedNFTAttribute.fromJson(x)))
+            ? List<EnhancedNFTAttribute>.from(json["attributes"].map((x) => EnhancedNFTAttribute.fromJson(x)))
             : null,
       );
 
@@ -168,9 +204,7 @@ class EnhancedNFTMetadata {
         "description": description,
         "image": image,
         "external_url": externalUrl,
-        "attributes": attributes != null
-            ? List<dynamic>.from(attributes!.map((x) => x.toJson()))
-            : null,
+        "attributes": attributes != null ? List<dynamic>.from(attributes!.map((x) => x.toJson())) : null,
       };
 }
 
@@ -183,8 +217,7 @@ class EnhancedNFTAttribute {
   final dynamic value;
   final String traitType;
 
-  factory EnhancedNFTAttribute.fromJson(Map<String, dynamic> json) =>
-      EnhancedNFTAttribute(
+  factory EnhancedNFTAttribute.fromJson(Map<String, dynamic> json) => EnhancedNFTAttribute(
         value: json["value"],
         traitType: json["trait_type"],
       );
