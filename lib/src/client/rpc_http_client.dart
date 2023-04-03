@@ -78,8 +78,8 @@ class RpcHttpClient with ConsoleMixin {
         queryParameters: parameters,
         options: Options(
           method: method.name.toUpperCase(),
-          receiveTimeout: receiveTimeout,
-          sendTimeout: sendTimeout,
+          receiveTimeout: Duration(milliseconds: receiveTimeout),
+          sendTimeout: Duration(milliseconds: sendTimeout),
           responseType: ResponseType.plain,
         ),
       );
