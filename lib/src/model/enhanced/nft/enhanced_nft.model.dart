@@ -1,28 +1,45 @@
+enum NFTFilters {
+  SPAM,
+  AIRDROPS,
+}
+
+enum OrderBy {
+  asc,
+  desc,
+}
+
+enum TokenType {
+  ERC721,
+  ERC1155,
+}
+
 class EnhancedNFT {
-  EnhancedNFT({
-    this.contract = const EnhancedNFTContract(),
-    this.contractMetadata = const EnhancedNFTContractMetadata(),
+  const EnhancedNFT({
+    this.contract,
     this.id = const EnhancedNFTId(),
-    this.title = '',
-    this.description = '',
-    this.balance = '',
-    this.tokenUri = const EnhancedNFTTokenUri(),
-    this.media = const [],
-    this.metadata = const EnhancedNFTMetadata(),
+    this.balance,
+    this.title,
+    this.description,
+    this.tokenUri,
+    this.media,
+    this.metadata,
     this.timeLastUpdated,
+    this.contractMetadata,
+    this.spamInfo,
     this.error,
   });
 
-  final EnhancedNFTContract contract;
-  final EnhancedNFTContractMetadata contractMetadata;
+  final EnhancedNFTContract? contract;
   final EnhancedNFTId id;
+  final String? balance;
   final String? title;
   final String? description;
-  final String? balance;
   final EnhancedNFTTokenUri? tokenUri;
-  final List<EnhancedNFTTokenUri> media;
+  final List<EnhancedNFTMedia>? media;
   final EnhancedNFTMetadata? metadata;
   final DateTime? timeLastUpdated;
+  final EnhancedContractMetadata? contractMetadata;
+  final EnhancedNFTSpam? spamInfo;
   final String? error;
 
   String? get imageUrl {
@@ -35,70 +52,58 @@ class EnhancedNFT {
   }
 
   factory EnhancedNFT.fromJson(Map<String, dynamic> json) => EnhancedNFT(
-        contract: EnhancedNFTContract.fromJson(json["contract"]),
+        contract: json["contract"] != null ? EnhancedNFTContract.fromJson(json["contract"]) : null,
         id: EnhancedNFTId.fromJson(json["id"]),
         title: json["title"],
         description: json["description"],
         balance: json["balance"],
-        tokenUri: EnhancedNFTTokenUri.fromJson(json["tokenUri"]),
-        media: List<EnhancedNFTTokenUri>.from(json["media"].map((x) => EnhancedNFTTokenUri.fromJson(x))),
-        metadata: EnhancedNFTMetadata.fromJson(json["metadata"]),
-        timeLastUpdated: DateTime.tryParse(json["timeLastUpdated"]),
+        tokenUri: json["tokenUri"] != null ? EnhancedNFTTokenUri.fromJson(json["tokenUri"]) : null,
+        media: json["media"] != null
+            ? List<EnhancedNFTMedia>.from(json["media"].map((x) => EnhancedNFTMedia.fromJson(x)))
+            : null,
+        metadata: json["metadata"] != null ? EnhancedNFTMetadata.fromJson(json["metadata"]) : null,
+        timeLastUpdated:
+            json["timeLastUpdated"] != null ? DateTime.tryParse(json["timeLastUpdated"]) : null,
+        contractMetadata: json["contractMetadata"] != null
+            ? EnhancedContractMetadata.fromJson(json["contractMetadata"])
+            : null,
+        spamInfo: json["spamInfo"] != null ? EnhancedNFTSpam.fromJson(json["spamInfo"]) : null,
         error: json["error"],
-        contractMetadata: json.containsKey("contractMetadata")
-            ? EnhancedNFTContractMetadata.fromJson(
-                json["contractMetadata"],
-              )
-            : EnhancedNFTContractMetadata(),
       );
 
   Map<String, dynamic> toJson() => {
-        "contract": contract.toJson(),
+        "contract": contract != null ? contract!.toJson() : null,
         "id": id.toJson(),
         "title": title,
         "description": description,
         "balance": balance,
         "tokenUri": tokenUri != null ? tokenUri!.toJson() : null,
-        "media": List<dynamic>.from(media.map((x) => x.toJson())),
+        "media": media != null ? List<dynamic>.from(media!.map((x) => x.toJson())) : null,
         "metadata": metadata != null ? metadata!.toJson() : null,
         "timeLastUpdated": timeLastUpdated != null ? timeLastUpdated!.toIso8601String() : null,
+        "contractMetadata": contractMetadata != null ? contractMetadata!.toJson() : null,
+        "spamInfo": spamInfo != null ? spamInfo!.toJson() : null,
         "error": error,
-        "contractMetadata": contractMetadata.toJson(),
       };
 }
 
-class EnhancedNFTContractMetadata {
-  final String? name;
-  final String? symbol;
-  final String? tokenType;
-  final String? contractDeployer;
-  final int? deployedBlockNumber;
-  final Map<String, Object?>? jsonData;
-
-  const EnhancedNFTContractMetadata({
-    this.name = '',
-    this.symbol = '',
-    this.tokenType = '',
-    this.contractDeployer = '',
-    this.deployedBlockNumber = -1,
-    this.jsonData,
+class EnhancedNFTSpam {
+  const EnhancedNFTSpam({
+    this.isSpam = '',
+    this.classifications = const [],
   });
 
-  factory EnhancedNFTContractMetadata.fromJson(Map<String, dynamic> json) => EnhancedNFTContractMetadata(
-        name: json["name"],
-        symbol: json["symbol"],
-        tokenType: json["tokenType"],
-        contractDeployer: json["contractDeployer"],
-        deployedBlockNumber: json["deployedBlockNumber"],
-        jsonData: json,
+  final String isSpam;
+  final List<String> classifications;
+
+  factory EnhancedNFTSpam.fromJson(Map<String, dynamic> json) => EnhancedNFTSpam(
+        isSpam: json["isSpam"],
+        classifications: List<String>.from(json["classifications"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
-        "name": name,
-        "symbol": symbol,
-        "tokenType": tokenType,
-        "contractDeployer": contractDeployer,
-        "deployedBlockNumber": deployedBlockNumber.toString(),
+        "isSpam": isSpam,
+        "classifications": List<dynamic>.from(classifications.map((x) => x)),
       };
 }
 
@@ -107,7 +112,7 @@ class EnhancedNFTContract {
     this.address = '',
   });
 
-  final String address;
+  final String? address;
 
   factory EnhancedNFTContract.fromJson(Map<String, dynamic> json) => EnhancedNFTContract(
         address: json["address"],
@@ -129,7 +134,9 @@ class EnhancedNFTId {
 
   factory EnhancedNFTId.fromJson(Map<String, dynamic> json) => EnhancedNFTId(
         tokenId: json["tokenId"],
-        tokenMetadata: EnhancedNFTTokenMetadata.fromJson(json["tokenMetadata"]),
+        tokenMetadata: json["tokenMetadata"] != null
+            ? EnhancedNFTTokenMetadata.fromJson(json["tokenMetadata"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -174,6 +181,38 @@ class EnhancedNFTTokenUri {
       };
 }
 
+class EnhancedNFTMedia {
+  EnhancedNFTMedia({
+    this.raw,
+    this.gateway,
+    this.thumbnail,
+    this.format,
+    this.bytes,
+  });
+
+  String? raw;
+  String? gateway;
+  String? thumbnail;
+  String? format;
+  int? bytes;
+
+  factory EnhancedNFTMedia.fromJson(Map<String, dynamic> json) => EnhancedNFTMedia(
+        raw: json["raw"],
+        gateway: json["gateway"],
+        thumbnail: json["thumbnail"],
+        format: json["format"],
+        bytes: json["bytes"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "raw": raw,
+        "gateway": gateway,
+        "thumbnail": thumbnail,
+        "format": format,
+        "bytes": bytes,
+      };
+}
+
 class EnhancedNFTMetadata {
   const EnhancedNFTMetadata({
     this.name = '',
@@ -195,7 +234,8 @@ class EnhancedNFTMetadata {
         image: json["image"],
         externalUrl: json["external_url"],
         attributes: json["attributes"] != null
-            ? List<EnhancedNFTAttribute>.from(json["attributes"].map((x) => EnhancedNFTAttribute.fromJson(x)))
+            ? List<EnhancedNFTAttribute>.from(
+                json["attributes"].map((x) => EnhancedNFTAttribute.fromJson(x)))
             : null,
       );
 
@@ -204,7 +244,8 @@ class EnhancedNFTMetadata {
         "description": description,
         "image": image,
         "external_url": externalUrl,
-        "attributes": attributes != null ? List<dynamic>.from(attributes!.map((x) => x.toJson())) : null,
+        "attributes":
+            attributes != null ? List<dynamic>.from(attributes!.map((x) => x.toJson())) : null,
       };
 }
 
@@ -215,7 +256,7 @@ class EnhancedNFTAttribute {
   });
 
   final dynamic value;
-  final String traitType;
+  final String? traitType;
 
   factory EnhancedNFTAttribute.fromJson(Map<String, dynamic> json) => EnhancedNFTAttribute(
         value: json["value"],
@@ -225,5 +266,93 @@ class EnhancedNFTAttribute {
   Map<String, dynamic> toJson() => {
         "value": value,
         "trait_type": traitType,
+      };
+}
+
+class EnhancedContractMetadata {
+  EnhancedContractMetadata({
+    required this.name,
+    required this.symbol,
+    required this.totalSupply,
+    required this.tokenType,
+    required this.contractDeployer,
+    required this.deployedBlockNumber,
+    required this.openSea,
+  });
+
+  final String? name;
+  final String? symbol;
+  final String? totalSupply;
+  final String tokenType;
+  final String? contractDeployer;
+  final int? deployedBlockNumber;
+  final OpenSeaMetadata? openSea;
+
+  factory EnhancedContractMetadata.fromJson(Map<String, dynamic> json) => EnhancedContractMetadata(
+        name: json["name"],
+        symbol: json["symbol"],
+        totalSupply: json["totalSupply"],
+        tokenType: json["tokenType"],
+        contractDeployer: json["contractDeployer"],
+        deployedBlockNumber: json["deployedBlockNumber"],
+        openSea: json["openSea"] != null ? OpenSeaMetadata.fromJson(json["openSea"]) : null,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "symbol": symbol,
+        "totalSupply": totalSupply,
+        "tokenType": tokenType,
+        "contractDeployer": contractDeployer,
+        "deployedBlockNumber": deployedBlockNumber,
+        "openSea": openSea?.toJson(),
+      };
+}
+
+class OpenSeaMetadata {
+  OpenSeaMetadata({
+    this.floorPrice,
+    this.collectionName,
+    this.safelistRequestStatus,
+    this.imageUrl,
+    this.description,
+    this.externalUrl,
+    this.twitterUsername,
+    this.discordUrl,
+    this.lastIngestedAt,
+  });
+
+  double? floorPrice;
+  String? collectionName;
+  String? safelistRequestStatus;
+  String? imageUrl;
+  String? description;
+  String? externalUrl;
+  String? twitterUsername;
+  String? discordUrl;
+  DateTime? lastIngestedAt;
+
+  factory OpenSeaMetadata.fromJson(Map<String, dynamic> json) => OpenSeaMetadata(
+        floorPrice: json["floorPrice"],
+        collectionName: json["collectionName"],
+        safelistRequestStatus: json["safelistRequestStatus"],
+        imageUrl: json["imageUrl"],
+        description: json["description"],
+        externalUrl: json["externalUrl"],
+        twitterUsername: json["twitterUsername"],
+        discordUrl: json["discordUrl"],
+        lastIngestedAt: DateTime.tryParse(json["lastIngestedAt"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "floorPrice": floorPrice,
+        "collectionName": collectionName,
+        "safelistRequestStatus": safelistRequestStatus,
+        "imageUrl": imageUrl,
+        "description": description,
+        "externalUrl": externalUrl,
+        "twitterUsername": twitterUsername,
+        "discordUrl": discordUrl,
+        "lastIngestedAt": lastIngestedAt,
       };
 }
