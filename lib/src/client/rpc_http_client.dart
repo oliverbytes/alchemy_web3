@@ -45,7 +45,7 @@ class RpcHttpClient with ConsoleMixin {
     _dio.options.baseUrl = url;
   }
 
-  Future<Either<RpcResponse, Map<String, dynamic>>> request({
+  Future<Either<RpcResponse, dynamic>> request({
     Map<String, dynamic>? parameters,
     String endpoint = '',
     HTTPMethod method = HTTPMethod.post,
@@ -54,6 +54,15 @@ class RpcHttpClient with ConsoleMixin {
 
     // remove null map property values
     parameters?.removeWhere((key, value) => value == null);
+
+    // convert the arrays so it works in the query parameters
+    if (parameters?['filters'] != null && parameters?['filters'] is List) {
+      parameters!['filters[]'] = List.filled(parameters['filters'].length, '');
+      for (int i = 0; i < parameters?['filters'].length; i++) {
+        parameters!['filters[]'][i] = parameters['filters'][i]?.toString().split('.').last;
+      }
+    }
+    parameters?.remove('filters');
 
     if (verbose) {
       console.verbose(
@@ -69,8 +78,8 @@ class RpcHttpClient with ConsoleMixin {
         queryParameters: parameters,
         options: Options(
           method: method.name.toUpperCase(),
-          receiveTimeout: receiveTimeout,
-          sendTimeout: sendTimeout,
+          receiveTimeout: Duration(milliseconds: receiveTimeout),
+          sendTimeout: Duration(milliseconds: sendTimeout),
           responseType: ResponseType.plain,
         ),
       );

@@ -2,12 +2,12 @@ import 'package:alchemy_web3/src/model/enhanced/nft/enhanced_nft.model.dart';
 
 class EnhancedNFTCollection {
   EnhancedNFTCollection({
-    this.nfts = const [],
-    this.nextToken = '',
+    required this.nfts,
+    this.nextToken,
   });
 
   final List<EnhancedNFT> nfts;
-  final String nextToken;
+  final String? nextToken;
 
   factory EnhancedNFTCollection.fromJson(Map<String, dynamic> json) =>
       EnhancedNFTCollection(
