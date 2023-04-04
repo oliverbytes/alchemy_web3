@@ -7,3 +7,4 @@ export 'eth_transaction_call.model.dart';
 export 'eth_transaction_log.model.dart';
 export 'eth_transaction_receipt.model.dart';
 export 'eth_transaction.model.dart';
+export 'eth_transfer.model.dart';

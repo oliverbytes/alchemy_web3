@@ -3,6 +3,7 @@ import 'eth_transaction.model.dart';
 class EthBlockResult {
   EthBlockResult({
     this.difficulty = '',
+    this.baseFeePerGas = '',
     this.extraData = '',
     this.gasLimit = '',
     this.gasUsed = '',
@@ -25,6 +26,7 @@ class EthBlockResult {
   });
 
   final String difficulty;
+  final String baseFeePerGas;
   final String extraData;
   final String gasLimit;
   final String gasUsed;
@@ -47,14 +49,15 @@ class EthBlockResult {
 
   factory EthBlockResult.fromJson(Map<String, dynamic> json) => EthBlockResult(
         difficulty: json["difficulty"],
+        baseFeePerGas: json["baseFeePerGas"],
         extraData: json["extraData"],
         gasLimit: json["gasLimit"],
         gasUsed: json["gasUsed"],
-        hash: json["hash"],
+        hash: json["hash"] ?? '',
         logsBloom: json["logsBloom"],
-        miner: json["miner"],
+        miner: json["miner"] ?? '',
         mixHash: json["mixHash"],
-        nonce: json["nonce"],
+        nonce: json["nonce"] ?? '',
         number: json["number"],
         parentHash: json["parentHash"],
         receiptsRoot: json["receiptsRoot"],
@@ -62,17 +65,16 @@ class EthBlockResult {
         size: json["size"],
         stateRoot: json["stateRoot"],
         timestamp: json["timestamp"],
-        totalDifficulty: json["totalDifficulty"],
-        transactions: List<EthTransaction>.from(
-            json["transactions"].map((x) => EthTransaction.fromJson(x))),
+        totalDifficulty: json["totalDifficulty"] ?? '',
+        transactions: List<EthTransaction>.from(json["transactions"].map((x) => EthTransaction.fromJson(x))),
         transactionsRoot: json["transactionsRoot"],
-        uncles: List<EthBlockResult>.from(
-            json["uncles"].map((x) => EthBlockResult.fromJson(x))),
+        uncles: List<EthBlockResult>.from(json["uncles"].map((x) => EthBlockResult.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "difficulty": difficulty,
         "extraData": extraData,
+        "baseFeePerGas": baseFeePerGas,
         "gasLimit": gasLimit,
         "gasUsed": gasUsed,
         "hash": hash,
