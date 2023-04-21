@@ -4,28 +4,30 @@ class EthTransfer {
   String hash;
   String from;
   String to;
-  double value;
-  String? erc721TokenId;
-  String? erc1155Metadata;
+
+  ///for erc erc721 and erc1155 value can be null
+  double? value;
   String? tokenId;
+  String? erc721TokenId;
+  List<Erc1155Metadata>? erc1155Metadata;
   String asset;
   String category;
   EthTransferRawContract? rawContract;
   EthTransferMetadata metadata;
 
   EthTransfer({
-    this.value = 0,
+    this.value,
     this.blockNum = '',
     this.uniqueId = '',
     this.hash = '',
     this.from = '',
     this.to = '',
     this.erc721TokenId = '',
-    this.erc1155Metadata = '',
     this.tokenId = '',
     this.asset = '',
     this.category = '',
     this.rawContract,
+    this.erc1155Metadata,
     required this.metadata,
   });
 
@@ -36,9 +38,13 @@ class EthTransfer {
       hash: json['hash'],
       from: json['from'],
       to: json['to'],
-      value: double.parse(json['value'].toString()),
+      value: (json.containsKey('value') && json['value'] != null) ? double.parse(json['value'].toString()) : null,
       erc721TokenId: json['erc721TokenId'],
-      erc1155Metadata: json['erc1155Metadata'],
+      erc1155Metadata: (json.containsKey('erc1155Metadata') && json['erc1155Metadata'] != null)
+          ? List<Erc1155Metadata>.from(
+        json['erc1155Metadata'].map((x) => Erc1155Metadata.fromJson(x)).toList(),
+      )
+          : null,
       tokenId: json['tokenId'],
       asset: json['asset'],
       category: json['category'],
@@ -56,7 +62,11 @@ class EthTransfer {
     data['to'] = to;
     data['value'] = value;
     data['erc721TokenId'] = erc721TokenId;
-    data['erc1155Metadata'] = erc1155Metadata;
+    data['erc1155Metadata'] = erc1155Metadata == null
+        ? null
+        : List<dynamic>.from(
+      erc1155Metadata!.map((x) => x.toJson()),
+    );
     data['tokenId'] = tokenId;
     data['asset'] = asset;
     data['category'] = category;
@@ -98,6 +108,11 @@ class EthTransferRawContract {
     data['decimal'] = decimal;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'EthTransferRawContract{value: $value, address: $address, decimal: $decimal}';
+  }
 }
 
 class EthTransferMetadata {
@@ -115,5 +130,39 @@ class EthTransferMetadata {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['blockTimestamp'] = blockTimestamp;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'EthTransferMetadata{blockTimestamp: $blockTimestamp}';
+  }
+}
+
+class Erc1155Metadata {
+  String tokenId;
+  String value;
+
+  Erc1155Metadata({
+    required this.tokenId,
+    required this.value,
+  });
+
+  factory Erc1155Metadata.fromJson(Map<String, dynamic> json) {
+    return Erc1155Metadata(
+      tokenId: json['tokenId'] as String,
+      value: json['value'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'tokenId': tokenId,
+      'value': value,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Erc1155Metadata{tokenId: $tokenId, value: $value}';
   }
 }

@@ -20,4 +20,6 @@ class EnhancedNFTCollection {
         "nfts": List<dynamic>.from(nfts.map((x) => x.toJson())),
         "nextToken": nextToken,
       };
+
+
 }
