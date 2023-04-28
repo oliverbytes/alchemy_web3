@@ -205,21 +205,23 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, List<EthTransfer>>> getAssetTransfersFromAddress({
     required String fromAddress,
-    String category = "external",
+    List<String> categories = const [
+      "external",
+    ],
+    List<String> contractAddresses = const [],
     String order = "desc",
-    String? contractAddress,
     bool withMetadata = true,
   }) async {
     var params = {
       "fromAddress": fromAddress.toString(),
-      "category": [category.toString()],
+      "category": categories.toString(),
       "order": order.toString(),
       "withMetadata": withMetadata,
     };
 
-    if (contractAddress != null) {
+    if (contractAddresses.isNotEmpty) {
       params.addAll({
-        'contractAddresses': [contractAddress],
+        'contractAddresses': contractAddresses.toString(),
       });
     }
 
@@ -240,21 +242,23 @@ class EthAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, List<EthTransfer>>> getAssetTransfersToAddress({
     required String toAddress,
-    String category = "external",
+    List<String> categories = const [
+      "external",
+    ],
+    List<String> contractAddresses = const [],
     String order = "desc",
-    String? contractAddress,
     bool withMetadata = true,
   }) async {
     var params = {
       "toAddress": toAddress.toString(),
-      "category": [category.toString()],
+      "category": categories.toString(),
       "order": order.toString(),
       "withMetadata": withMetadata,
     };
 
-    if (contractAddress != null) {
+    if (contractAddresses.isNotEmpty) {
       params.addAll({
-        "contractAddresses": [contractAddress],
+        "contractAddresses": contractAddresses.toString(),
       });
     }
     final result = await wsClient.request(
