@@ -214,14 +214,14 @@ class EthAPI with ConsoleMixin {
   }) async {
     var params = {
       "fromAddress": fromAddress.toString(),
-      "category": categories.toString(),
+      "category": categories,
       "order": order.toString(),
       "withMetadata": withMetadata,
     };
 
     if (contractAddresses.isNotEmpty) {
       params.addAll({
-        'contractAddresses': contractAddresses.toString(),
+        'contractAddresses': contractAddresses,
       });
     }
 
@@ -251,14 +251,14 @@ class EthAPI with ConsoleMixin {
   }) async {
     var params = {
       "toAddress": toAddress.toString(),
-      "category": categories.toString(),
+      "category": categories,
       "order": order.toString(),
       "withMetadata": withMetadata,
     };
 
     if (contractAddresses.isNotEmpty) {
       params.addAll({
-        "contractAddresses": contractAddresses.toString(),
+        "contractAddresses": contractAddresses,
       });
     }
     final result = await wsClient.request(
