@@ -11,15 +11,15 @@ class RpcHttpClient with ConsoleMixin {
   String url;
   double jsonRPCVersion;
   bool verbose;
-  int receiveTimeout;
-  int sendTimeout;
+  Duration receiveTimeout;
+  Duration sendTimeout;
 
   // CONSTRUCTOR
   RpcHttpClient({
     this.url = '',
     this.jsonRPCVersion = 2.0,
-    this.receiveTimeout = 10000,
-    this.sendTimeout = 10000,
+    this.receiveTimeout = const Duration(seconds: 10),
+    this.sendTimeout = const Duration(seconds: 10),
     this.verbose = false,
   });
 
@@ -32,8 +32,8 @@ class RpcHttpClient with ConsoleMixin {
   void init({
     required String url,
     double? jsonRPCVersion,
-    int? receiveTimeout,
-    int? sendTimeout,
+    Duration? receiveTimeout,
+    Duration? sendTimeout,
     bool? verbose,
   }) {
     this.url = url;
@@ -58,8 +58,9 @@ class RpcHttpClient with ConsoleMixin {
     // convert the arrays so it works in the query parameters
     if (parameters?['filters'] != null && parameters?['filters'] is List) {
       parameters!['filters[]'] = List.filled(parameters['filters'].length, '');
-      for (int i = 0; i < parameters?['filters'].length; i++) {
-        parameters!['filters[]'][i] = parameters['filters'][i]?.toString().split('.').last;
+      for (int i = 0; i < parameters['filters'].length; i++) {
+        parameters['filters[]'][i] =
+            parameters['filters'][i]?.toString().split('.').last;
       }
     }
     parameters?.remove('filters');
@@ -78,8 +79,8 @@ class RpcHttpClient with ConsoleMixin {
         queryParameters: parameters,
         options: Options(
           method: method.name.toUpperCase(),
-          receiveTimeout: Duration(milliseconds: receiveTimeout),
-          sendTimeout: Duration(milliseconds: sendTimeout),
+          receiveTimeout: receiveTimeout,
+          sendTimeout: sendTimeout,
           responseType: ResponseType.plain,
         ),
       );

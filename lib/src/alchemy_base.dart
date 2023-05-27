@@ -54,8 +54,8 @@ class Alchemy {
     required String httpRpcUrl,
     required String wsRpcUrl,
     double? jsonRPCVersion,
-    int? receiveTimeout,
-    int? sendTimeout,
+    Duration? receiveTimeout,
+    Duration? sendTimeout,
     bool verbose = true,
   }) {
     // HTTP
