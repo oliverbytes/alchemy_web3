@@ -62,11 +62,9 @@ class EnhancedNFT {
             ? List<EnhancedNFTMedia>.from(json["media"].map((x) => EnhancedNFTMedia.fromJson(x)))
             : null,
         metadata: json["metadata"] != null ? EnhancedNFTMetadata.fromJson(json["metadata"]) : null,
-        timeLastUpdated:
-            json["timeLastUpdated"] != null ? DateTime.tryParse(json["timeLastUpdated"]) : null,
-        contractMetadata: json["contractMetadata"] != null
-            ? EnhancedContractMetadata.fromJson(json["contractMetadata"])
-            : null,
+        timeLastUpdated: json["timeLastUpdated"] != null ? DateTime.tryParse(json["timeLastUpdated"]) : null,
+        contractMetadata:
+            json["contractMetadata"] != null ? EnhancedContractMetadata.fromJson(json["contractMetadata"]) : null,
         spamInfo: json["spamInfo"] != null ? EnhancedNFTSpam.fromJson(json["spamInfo"]) : null,
         error: json["error"],
       );
@@ -134,9 +132,7 @@ class EnhancedNFTId {
 
   factory EnhancedNFTId.fromJson(Map<String, dynamic> json) => EnhancedNFTId(
         tokenId: json["tokenId"],
-        tokenMetadata: json["tokenMetadata"] != null
-            ? EnhancedNFTTokenMetadata.fromJson(json["tokenMetadata"])
-            : null,
+        tokenMetadata: json["tokenMetadata"] != null ? EnhancedNFTTokenMetadata.fromJson(json["tokenMetadata"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -234,8 +230,7 @@ class EnhancedNFTMetadata {
         image: json["image"],
         externalUrl: json["external_url"],
         attributes: json["attributes"] != null
-            ? List<EnhancedNFTAttribute>.from(
-                json["attributes"].map((x) => EnhancedNFTAttribute.fromJson(x)))
+            ? List<EnhancedNFTAttribute>.from(json["attributes"].map((x) => EnhancedNFTAttribute.fromJson(x)))
             : null,
       );
 
@@ -244,8 +239,7 @@ class EnhancedNFTMetadata {
         "description": description,
         "image": image,
         "external_url": externalUrl,
-        "attributes":
-            attributes != null ? List<dynamic>.from(attributes!.map((x) => x.toJson())) : null,
+        "attributes": attributes != null ? List<dynamic>.from(attributes!.map((x) => x.toJson())) : null,
       };
 }
 
@@ -288,15 +282,19 @@ class EnhancedContractMetadata {
   final int? deployedBlockNumber;
   final OpenSeaMetadata? openSea;
 
-  factory EnhancedContractMetadata.fromJson(Map<String, dynamic> json) => EnhancedContractMetadata(
-        name: json["name"],
-        symbol: json["symbol"],
-        totalSupply: json["totalSupply"],
-        tokenType: json["tokenType"],
-        contractDeployer: json["contractDeployer"],
-        deployedBlockNumber: json["deployedBlockNumber"],
-        openSea: json["openSea"] != null ? OpenSeaMetadata.fromJson(json["openSea"]) : null,
-      );
+  factory EnhancedContractMetadata.fromJson(Map<String, dynamic> json) {
+    Map<String, dynamic>? openseaMap = json.containsKey('openSea') ? json['openSea'] as Map<String, dynamic> : null;
+
+    return EnhancedContractMetadata(
+      name: json["name"],
+      symbol: json["symbol"],
+      totalSupply: json["totalSupply"],
+      tokenType: json["tokenType"],
+      contractDeployer: json["contractDeployer"],
+      deployedBlockNumber: json["deployedBlockNumber"],
+      openSea: (openseaMap?.isEmpty ?? true) ? null : OpenSeaMetadata.fromJson(json["openSea"]),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "name": name,
