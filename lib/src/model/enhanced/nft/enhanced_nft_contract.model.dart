@@ -33,22 +33,25 @@ class EnhancedContract {
   final OpenSeaMetadata? openSea;
   final List<EnhancedNFTMedia> media;
 
-  factory EnhancedContract.fromJson(Map<String, dynamic> json) => EnhancedContract(
-        address: json["address"],
-        totalBalance: json["totalBalance"],
-        numDistinctTokensOwned: json["numDistinctTokensOwned"],
-        isSpam: json["isSpam"],
-        tokenId: json["tokenId"],
-        name: json["name"],
-        title: json["title"],
-        symbol: json["symbol"],
-        totalSupply: json["totalSupply"],
-        tokenType: json["tokenType"],
-        contractDeployer: json["contractDeployer"],
-        deployedBlockNumber: json["deployedBlockNumber"],
-        openSea: json["openSea"] != null ? OpenSeaMetadata.fromJson(json["openSea"]) : null,
-        media: List<EnhancedNFTMedia>.from(json["media"].map((x) => EnhancedNFTMedia.fromJson(x))),
-      );
+  factory EnhancedContract.fromJson(Map<String, dynamic> json) {
+    Map<String, dynamic>? openseaMap = json.containsKey('openSea') ? json['openSea'] as Map<String, dynamic> : null;
+    return EnhancedContract(
+      address: json["address"],
+      totalBalance: json["totalBalance"],
+      numDistinctTokensOwned: json["numDistinctTokensOwned"],
+      isSpam: json["isSpam"],
+      tokenId: json["tokenId"],
+      name: json["name"],
+      title: json["title"],
+      symbol: json["symbol"],
+      totalSupply: json["totalSupply"],
+      tokenType: json["tokenType"],
+      contractDeployer: json["contractDeployer"],
+      deployedBlockNumber: json["deployedBlockNumber"],
+      openSea: (openseaMap?.isEmpty ?? true) ? null : OpenSeaMetadata.fromJson(json["openSea"]),
+      media: List<EnhancedNFTMedia>.from(json["media"].map((x) => EnhancedNFTMedia.fromJson(x))),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "address": address,
