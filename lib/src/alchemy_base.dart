@@ -10,6 +10,10 @@ class Alchemy {
   // FACTORY
   factory Alchemy() => _singleton;
 
+  factory Alchemy.newInstance() {
+    return Alchemy._internal();
+  }
+
   // VARIABLES
   late RpcWsClient _wsClient;
   late RpcHttpClient _httpClient;
