@@ -3,14 +3,20 @@ class EthTransfer {
   String uniqueId;
   String hash;
   String from;
-  String to;
 
-  ///for erc erc721 and erc1155 value can be null
+  /// To address of transfer (hex string). null if contract creation.
+  String? to;
+
+  /// Converted asset transfer value as a number (raw value divided by contract decimal). null if ERC721 transfer or contract decimal not available.
   double? value;
+
+  ///(Deprecated) Legacy token ID field for ERC721 tokens (hex string). The tokenId field should be used instead.
   String? tokenId;
   String? erc721TokenId;
   List<Erc1155Metadata>? erc1155Metadata;
-  String asset;
+
+  /// ETH or the token's symbol. null if not defined in the contract and not available from other sources.
+  String? asset;
   String category;
   EthTransferRawContract? rawContract;
   EthTransferMetadata metadata;
@@ -37,16 +43,16 @@ class EthTransfer {
       uniqueId: json['uniqueId'],
       hash: json['hash'],
       from: json['from'],
-      to: json['to'],
+      to: (json.containsKey('to') && json['to'] != null) != null ? json['to'] : null,
       value: (json.containsKey('value') && json['value'] != null) ? double.parse(json['value'].toString()) : null,
       erc721TokenId: json['erc721TokenId'],
       erc1155Metadata: (json.containsKey('erc1155Metadata') && json['erc1155Metadata'] != null)
           ? List<Erc1155Metadata>.from(
-        json['erc1155Metadata'].map((x) => Erc1155Metadata.fromJson(x)).toList(),
-      )
+              json['erc1155Metadata'].map((x) => Erc1155Metadata.fromJson(x)).toList(),
+            )
           : null,
       tokenId: json['tokenId'],
-      asset: json['asset'],
+      asset: (json.containsKey('asset') && json['asset'] != null) != null ? json['asset'] : null,
       category: json['category'],
       rawContract: json['rawContract'] != null ? EthTransferRawContract.fromJson(json['rawContract']) : null,
       metadata: EthTransferMetadata.fromJson(json['metadata']),
@@ -65,8 +71,8 @@ class EthTransfer {
     data['erc1155Metadata'] = erc1155Metadata == null
         ? null
         : List<dynamic>.from(
-      erc1155Metadata!.map((x) => x.toJson()),
-    );
+            erc1155Metadata!.map((x) => x.toJson()),
+          );
     data['tokenId'] = tokenId;
     data['asset'] = asset;
     data['category'] = category;
