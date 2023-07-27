@@ -37,13 +37,14 @@ class EnhancedTokenAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, EnhancedTokenBalances>> getTokenBalances({
     required String address,
+    String tokensSpecification = 'DEFAULT_TOKENS',
     List<String> contractAddresses = const [],
   }) async {
     final result = await wsClient.request(
       method: 'alchemy_getTokenBalances',
       params: [
         address,
-        contractAddresses.isNotEmpty ? contractAddresses : 'DEFAULT_TOKENS',
+        contractAddresses.isNotEmpty ? contractAddresses : tokensSpecification,
       ],
     );
 
