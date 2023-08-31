@@ -224,15 +224,31 @@ class EnhancedNFTMetadata {
   final String? externalUrl;
   final List<EnhancedNFTAttribute>? attributes;
 
-  factory EnhancedNFTMetadata.fromJson(Map<String, dynamic> json) => EnhancedNFTMetadata(
-        name: json["name"],
-        description: json["description"],
-        image: json["image"],
-        externalUrl: json["external_url"],
-        attributes: json["attributes"] != null
-            ? List<EnhancedNFTAttribute>.from(json["attributes"].map((x) => EnhancedNFTAttribute.fromJson(x)))
-            : null,
-      );
+  factory EnhancedNFTMetadata.fromJson(Map<String, dynamic> json) {
+    List<EnhancedNFTAttribute> attributes = [];
+
+    var attributesJson = json['attributes'];
+
+    if (attributesJson is Map<String, dynamic>) {
+      attributes = (json["attributes"] as Map<String, dynamic>)
+          .entries
+          .map((i) => EnhancedNFTAttribute(
+                value: i.value,
+                traitType: i.key,
+              ))
+          .toList();
+    } else if (attributesJson is List) {
+      attributesJson = List<dynamic>.from(attributes.map((x) => x.toJson()));
+    }
+
+    return EnhancedNFTMetadata(
+      name: json["name"],
+      description: json["description"],
+      image: json["image"],
+      externalUrl: json["external_url"],
+      attributes: attributes,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "name": name,
