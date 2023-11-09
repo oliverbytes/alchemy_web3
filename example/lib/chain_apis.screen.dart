@@ -280,11 +280,11 @@ class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
               ElevatedButton(
                 child: const Text('getAssetTransfersFromAddress'),
                 onPressed: () => call(alchemy.eth
-                    .getAssetTransfersFromAddress(fromAddress: '0x41FF25960D47AEA98D6113E30E4431C7A33250E7')),
+                    .getAssetTransfers(fromAddress: '0x41FF25960D47AEA98D6113E30E4431C7A33250E7')),
               ),
               ElevatedButton(
                 child: const Text('getAssetTransfersToAddress'),
-                onPressed: () => call(alchemy.eth.getAssetTransfersToAddress(
+                onPressed: () => call(alchemy.eth.getAssetTransfers(
                   toAddress: '0x41FF25960D47AEA98D6113E30E4431C7A33250E7',
                 )),
               ),
