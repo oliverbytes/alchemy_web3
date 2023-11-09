@@ -226,10 +226,10 @@ class EthAPI with ConsoleMixin {
 
     var params = {
       "category": categories,
-      "order": order.toString(),
+      "order": order,
       "withMetadata": withMetadata,
-      "toAddress": toAddress.toString(),
-      "fromAddress": fromAddress.toString(),
+      "toAddress": toAddress,
+      "fromAddress": fromAddress,
       'contractAddresses': contractAddresses,
       'fromBlock': fromBlock,
       'toBlock': toBlock,
