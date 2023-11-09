@@ -37,15 +37,35 @@ class EnhancedTokenAPI with ConsoleMixin {
 
   Future<Either<RPCErrorData, EnhancedTokenBalances>> getTokenBalances({
     required String address,
-    String tokensSpecification = 'DEFAULT_TOKENS',
+
+    ///One of the following token specifications, defaults to erc20
+    ///The String erc20 - denotes the set of erc20 tokens that the address has ever held.
+    ///The String DEFAULT_TOKENS(DEPRECATED) - denotes a query for the top 100 tokens by 24 hour volume - only available on Mainnet for Ethereum, Polygon, and Arbitrum. [deprecated, please use erc20 instead]
+    ///           DEFAULT_TOKENS was used to fetch the top 100 tokens by volume and show their balances for a given address.
+    ///Array - A list of contract addresses
+    ///
+    dynamic tokensSpecification = 'DEFAULT_TOKENS',
     List<String> contractAddresses = const [],
+
+    ///pageKey: Applies only to the erc20 request type. A string address used for pagination. If more results are available, a pageKey will be returned in the response.
+    // maxCount: Applies only to the erc20 request type. Specifies the maximum count of token balances to return per call. This value defaults to 100 and is currently capped at 100.
+    (String pageKey, String maxCount)? pageInfo,
   }) async {
+    var params = [
+      address,
+      contractAddresses.isNotEmpty ? contractAddresses : tokensSpecification,
+    ];
+
+    if (pageInfo != null) {
+      params.add({
+        "pageKey": pageInfo.$1,
+        "maxCount": pageInfo.$2,
+      });
+    }
+
     final result = await wsClient.request(
       method: 'alchemy_getTokenBalances',
-      params: [
-        address,
-        contractAddresses.isNotEmpty ? contractAddresses : tokensSpecification,
-      ],
+      params: params,
     );
 
     return result.fold(
