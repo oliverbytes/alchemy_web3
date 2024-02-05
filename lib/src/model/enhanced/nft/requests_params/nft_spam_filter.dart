@@ -1,0 +1,4 @@
+enum NFTSpamFilter {
+  SPAM,
+  AIRDROPS,
+}

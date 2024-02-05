@@ -1,4 +1,4 @@
-import 'package:alchemy_web3/src/model/enhanced/nft/enhanced_nft.model.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/nft.model.dart';
 
 class EnhancedNFTCollection {
   EnhancedNFTCollection({

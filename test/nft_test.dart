@@ -1,6 +1,14 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:alchemy_web3/src/api/enhanced/nft.dart';
 import 'package:alchemy_web3/src/client/rpc_http_client.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/common_models/enhanced_nft_contract_meta.model.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/enhanced_nft_collection_floor_price/enhanced_nft_collection_floor_price.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/enhanced_nft_reingest_contract/enhanced_nft_reingest_contract.model.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/nft_attribute_summary/nft_attribute_summary.model.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/nft_rarity/nft_rarity.model.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/requests_params/nft_spam_filter.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/requests_params/nft_token_type.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/requests_params/order_by.dart';
 import 'package:test/test.dart';
 
 const String key = '<your key>';
@@ -42,7 +50,7 @@ void main() {
       var nfts = await api.getNFTs(
           owner: owner,
           withMetadata: true,
-          filters: [NFTFilters.AIRDROPS, NFTFilters.SPAM],
+          filters: [NFTSpamFilter.AIRDROPS, NFTSpamFilter.SPAM],
           orderBy: OrderBy.asc,
           contractAddresses: ['0x000386e3f7559d9b6a2f5c46b4ad1a9587d59dc3']);
       if (nfts.isLeft) {
@@ -92,8 +100,7 @@ void main() {
     });
 
     test('getOwnersForCollectionWithTokenBalances', () async {
-      var nfts =
-          await api.getOwnersForCollection(contractAddress: address, withTokenBalances: true);
+      var nfts = await api.getOwnersForCollection(contractAddress: address, withTokenBalances: true);
       if (nfts.isLeft) {
         fail(nfts.left.error.message);
       }
@@ -122,7 +129,7 @@ void main() {
     test('getContractsForOwner', () async {
       var nfts = await api.getContractsForOwner(
         owner: owner,
-        filters: [NFTFilters.AIRDROPS, NFTFilters.SPAM],
+        filters: [NFTSpamFilter.AIRDROPS, NFTSpamFilter.SPAM],
       );
       if (nfts.isLeft) {
         fail(nfts.left.error.message);
@@ -145,7 +152,7 @@ void main() {
       var nfts = await api.getNFTMetadata(
         contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
         tokenId: '44',
-        tokenType: TokenType.ERC721,
+        tokenType: NFTTokenType.ERC721,
         refreshCache: false,
       );
       if (nfts.isLeft) {
@@ -240,13 +247,17 @@ void main() {
       expect(resp.nfts.first.description, isNotEmpty);
       expect(resp.nfts.first.tokenUri!.raw, 'https://api.8siannft.com/api/token/1');
       expect(resp.nfts.first.tokenUri!.gateway, 'https://api.8siannft.com/api/token/1');
-      expect(resp.nfts.first.media!.first.raw, 'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
-      expect(resp.nfts.first.media!.first.gateway, 'https://nft-cdn.alchemy.com/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
-      expect(resp.nfts.first.media!.first.thumbnail, 'https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
+      expect(resp.nfts.first.media!.first.raw,
+          'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
+      expect(resp.nfts.first.media!.first.gateway,
+          'https://nft-cdn.alchemy.com/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
+      expect(resp.nfts.first.media!.first.thumbnail,
+          'https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
       expect(resp.nfts.first.media!.first.format, 'png');
       expect(resp.nfts.first.media!.first.bytes, 8671789);
       expect(resp.nfts.first.metadata!.name, '8SIAN #1');
-      expect(resp.nfts.first.metadata!.image, 'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
+      expect(resp.nfts.first.metadata!.image,
+          'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
       expect(resp.nfts.first.metadata!.description, isNotEmpty);
       expect(resp.nfts.first.metadata!.attributes!.length, greaterThan(0));
       expect(resp.nfts.first.metadata!.attributes!.first.value, 'jingju');
@@ -261,7 +272,8 @@ void main() {
       expect(resp.nfts.first.contractMetadata!.openSea!.floorPrice, 0.039384);
       expect(resp.nfts.first.contractMetadata!.openSea!.collectionName, '8SIAN Main Collection');
       expect(resp.nfts.first.contractMetadata!.openSea!.safelistRequestStatus, 'verified');
-      expect(resp.nfts.first.contractMetadata!.openSea!.imageUrl, 'https://i.seadn.io/gae/eAULPaXEuD9oufUOtA-_c1MbS71hh_s_2LUMWs_xYBQW4DFqXNU1f6IrEQcE6Zv0gnV3kUyYPPt7mIzsLRhQEEDSkraAnPv81eLi?w=500&auto=format');
+      expect(resp.nfts.first.contractMetadata!.openSea!.imageUrl,
+          'https://i.seadn.io/gae/eAULPaXEuD9oufUOtA-_c1MbS71hh_s_2LUMWs_xYBQW4DFqXNU1f6IrEQcE6Zv0gnV3kUyYPPt7mIzsLRhQEEDSkraAnPv81eLi?w=500&auto=format');
       expect(resp.nfts.first.contractMetadata!.openSea!.description, isNotEmpty);
       expect(resp.nfts.first.contractMetadata!.openSea!.externalUrl, 'http://8sian.io');
       expect(resp.nfts.first.contractMetadata!.openSea!.twitterUsername, '8sianNFT');
@@ -351,7 +363,7 @@ void main() {
       expect(resp, isNotNull);
       expect(resp.length, isNonNegative);
       expect(resp.first.value, isNotEmpty);
-      expect(resp.first.trait_type, isNotEmpty);
+      expect(resp.first.traitType, isNotEmpty);
       expect(resp.first.prevalence, isNonNegative);
     });
 

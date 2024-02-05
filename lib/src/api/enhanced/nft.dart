@@ -1,8 +1,16 @@
 import 'package:alchemy_web3/src/client/rpc_http_client.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/common_models/enhanced_nft_contract_meta.model.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/enhanced_nft_collection_floor_price/enhanced_nft_collection_floor_price.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/enhanced_nft_reingest_contract/enhanced_nft_reingest_contract.model.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/nft_rarity/nft_rarity.model.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/requests_params/nft_spam_filter.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/requests_params/nft_token_type.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/requests_params/order_by.dart';
 import 'package:console_mixin/console_mixin.dart';
 import 'package:either_dart/either.dart';
 
 import '../../../alchemy_web3.dart';
+import '../../model/enhanced/nft/nft_attribute_summary/nft_attribute_summary.model.dart';
 
 class EnhancedNFTAPI with ConsoleMixin {
   late RpcHttpClient httpClient;
@@ -19,7 +27,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     List<String> contractAddresses = const [],
     bool withMetadata = true,
     int? tokenUriTimeoutInMs,
-    List<NFTFilters> filters = const [],
+    List<NFTSpamFilter> filters = const [],
     OrderBy orderBy = OrderBy.desc,
   }) async {
     final result = await httpClient.request(
@@ -106,7 +114,7 @@ class EnhancedNFTAPI with ConsoleMixin {
   Future<Either<RpcResponse, EnhancedNFTContracts>> getContractsForOwner({
     required String owner,
     String? pageKey,
-    List<NFTFilters> filters = const [],
+    List<NFTSpamFilter> filters = const [],
     OrderBy orderBy = OrderBy.desc,
   }) async {
     final result = await httpClient.request(
@@ -129,7 +137,7 @@ class EnhancedNFTAPI with ConsoleMixin {
   Future<Either<RpcResponse, EnhancedNFT>> getNFTMetadata({
     required String contractAddress,
     required String tokenId,
-    TokenType? tokenType,
+    NFTTokenType? tokenType,
     int? tokenUriTimeoutInMs,
     bool? refreshCache,
   }) async {

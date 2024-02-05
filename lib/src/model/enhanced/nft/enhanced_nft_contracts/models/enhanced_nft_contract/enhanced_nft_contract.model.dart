@@ -1,4 +1,5 @@
-import '../../../../alchemy_web3.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/common_models/opensea_metadata.model.dart';
+import 'package:alchemy_web3/src/model/enhanced/nft/common_models/enhanced_nft_media.model.dart';
 
 class EnhancedContract {
   EnhancedContract({
