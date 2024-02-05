@@ -5,7 +5,19 @@ enum NFTFilters {
 
 enum OrderBy {
   asc,
-  desc,
+  transferTime,
+  desc;
+
+  String toParam() {
+    switch (this) {
+      case OrderBy.asc:
+        return 'asc';
+      case OrderBy.desc:
+        return 'desc';
+      case OrderBy.transferTime:
+        return 'transferTime';
+    }
+  }
 }
 
 enum TokenType {
@@ -26,6 +38,7 @@ class EnhancedNFT {
     this.timeLastUpdated,
     this.contractMetadata,
     this.spamInfo,
+    this.acquiredAt,
     this.error,
   });
 
@@ -42,6 +55,9 @@ class EnhancedNFT {
   final EnhancedNFTSpam? spamInfo;
   final String? error;
 
+  //Only present if the request specified orderBy=transferTime.
+  final EnhancedNFTAcquiredAt? acquiredAt;
+
   String? get imageUrl {
     if (metadata?.image != null && metadata!.image!.contains('ipfs.io')) {
       final cid = metadata!.image!.replaceAll('https://ipfs.io/ipfs/', '');
@@ -57,6 +73,7 @@ class EnhancedNFT {
         title: json["title"],
         description: json["description"],
         balance: json["balance"],
+        acquiredAt: json["acquiredAt"] != null ? EnhancedNFTAcquiredAt.fromJson(json["acquiredAt"]) : null,
         tokenUri: json["tokenUri"] != null ? EnhancedNFTTokenUri.fromJson(json["tokenUri"]) : null,
         media: json["media"] != null
             ? List<EnhancedNFTMedia>.from(json["media"].map((x) => EnhancedNFTMedia.fromJson(x)))
@@ -82,6 +99,29 @@ class EnhancedNFT {
         "contractMetadata": contractMetadata != null ? contractMetadata!.toJson() : null,
         "spamInfo": spamInfo != null ? spamInfo!.toJson() : null,
         "error": error,
+      };
+}
+
+class EnhancedNFTAcquiredAt {
+  // Block timestamp of the block where the NFT was most recently acquired.
+  final String? blockTimestamp;
+
+  // Block number of the block where the NFT was most recently acquired.
+  final String? blockNumber;
+
+  const EnhancedNFTAcquiredAt({
+    this.blockTimestamp,
+    this.blockNumber,
+  });
+
+  factory EnhancedNFTAcquiredAt.fromJson(Map<String, dynamic> json) => EnhancedNFTAcquiredAt(
+        blockTimestamp: json["blockTimestamp"],
+        blockNumber: json["blockNumber"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "blockTimestamp": blockTimestamp,
+        "blockNumber": blockNumber,
       };
 }
 

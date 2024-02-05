@@ -32,7 +32,7 @@ class EnhancedNFTAPI with ConsoleMixin {
         'withMetadata': withMetadata,
         'tokenUriTimeoutInMs': tokenUriTimeoutInMs,
         'filters': filters,
-        'orderBy': orderBy.toString().split('.').last,
+        'orderBy': orderBy.toParam(),
       },
     );
 
@@ -116,7 +116,7 @@ class EnhancedNFTAPI with ConsoleMixin {
         'owner': owner,
         'pageKey': pageKey,
         'filters': filters,
-        'orderBy': orderBy.toString().split('.').last,
+        'orderBy': orderBy.toParam(),
       },
     );
 
@@ -328,7 +328,7 @@ class EnhancedNFTAPI with ConsoleMixin {
       parameters: {
         'fromBlock': fromBlock,
         'toBlock': toBlock,
-        'order': order.toString().split('.').last,
+        'order': order.toParam(),
         'marketplace': marketplace,
         'contractAddress': contractAddress,
         'tokenId': tokenId,
