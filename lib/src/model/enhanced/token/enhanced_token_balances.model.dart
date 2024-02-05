@@ -1,5 +1,4 @@
 class EnhancedTokenBalances {
-  ///pageKey: String - Applies only to the erc20 request type. An address to be passed into the pageKey of the next request in order to paginate through all of an owner's tokens.
   EnhancedTokenBalances({
     this.address = '',
     this.tokenBalances = const [],
@@ -8,6 +7,8 @@ class EnhancedTokenBalances {
 
   final String address;
   final List<EnhancedTokenBalance> tokenBalances;
+
+  ///pageKey: String - Applies only to the erc20 request type. An address to be passed into the pageKey of the next request in order to paginate through all of an owner's tokens.
   final String? pageKey;
 
   factory EnhancedTokenBalances.fromJson(Map<String, dynamic> json) => EnhancedTokenBalances(
