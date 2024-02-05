@@ -29,19 +29,25 @@ class EnhancedNFTAPI with ConsoleMixin {
     int? tokenUriTimeoutInMs,
     List<NFTSpamFilter> filters = const [],
     OrderBy orderBy = OrderBy.desc,
+    SpamConfidenceLevel? spamConfidenceLevel,
   }) async {
+    var parameters = {
+      'owner': owner,
+      'pageKey': pageKey,
+      'contractAddresses': contractAddresses,
+      'withMetadata': withMetadata,
+      'tokenUriTimeoutInMs': tokenUriTimeoutInMs,
+      'filters': filters,
+      'orderBy': orderBy.toParam(),
+    };
+
+    if (spamConfidenceLevel != null) {
+      parameters['spamConfidenceLevel'] = spamConfidenceLevel.toParam();
+    }
     final result = await httpClient.request(
       endpoint: 'getNFTs',
       method: HTTPMethod.get,
-      parameters: {
-        'owner': owner,
-        'pageKey': pageKey,
-        'contractAddresses': contractAddresses,
-        'withMetadata': withMetadata,
-        'tokenUriTimeoutInMs': tokenUriTimeoutInMs,
-        'filters': filters,
-        'orderBy': orderBy.toParam(),
-      },
+      parameters: parameters,
     );
 
     return result.fold(
