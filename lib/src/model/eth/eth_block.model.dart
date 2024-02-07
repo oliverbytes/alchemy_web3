@@ -68,7 +68,19 @@ class EthBlockResult {
         totalDifficulty: json["totalDifficulty"] ?? '',
         transactions: List<EthTransaction>.from(json["transactions"].map((x) => EthTransaction.fromJson(x))),
         transactionsRoot: json["transactionsRoot"],
-        uncles: List<EthBlockResult>.from(json["uncles"].map((x) => EthBlockResult.fromJson(x))),
+        uncles: () {
+          var uncles = <EthBlockResult>[];
+
+          for (var uncle in json["uncles"]) {
+            try {
+              uncles.add(EthBlockResult.fromJson(uncle));
+            } catch (e) {
+              print(e);
+            }
+          }
+
+          return uncles;
+        }(),
       );
 
   Map<String, dynamic> toJson() => {
