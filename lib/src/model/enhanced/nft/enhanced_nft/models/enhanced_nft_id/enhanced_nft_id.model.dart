@@ -16,6 +16,6 @@ class EnhancedNFTId {
 
   Map<String, dynamic> toJson() => {
         "tokenId": tokenId,
-        "tokenMetadata": tokenMetadata != null ? tokenMetadata!.toJson() : null,
+        "tokenMetadata": tokenMetadata?.toJson(),
       };
 }

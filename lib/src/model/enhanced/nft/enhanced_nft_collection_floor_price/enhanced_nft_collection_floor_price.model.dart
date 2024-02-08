@@ -15,7 +15,7 @@ class EnhancedNFTCollectionFloorPrice {
       );
 
   Map<String, dynamic> toJson() => {
-        "openSea": openSea != null ? openSea!.toJson() : null,
-        "looksRare": looksRare != null ? looksRare!.toJson() : null,
+        "openSea": openSea?.toJson(),
+        "looksRare": looksRare!.toJson(),
       };
 }

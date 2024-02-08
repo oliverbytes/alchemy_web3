@@ -127,18 +127,18 @@ class EnhancedNFT {
       );
 
   Map<String, dynamic> toJson() => {
-        "contract": contract != null ? contract!.toJson() : null,
+        "contract": contract?.toJson(),
         "id": id.toJson(),
         "title": title,
         "description": description,
         "balance": balance,
-        "collection": collectionInfo != null ? collectionInfo!.toJson() : null,
-        "tokenUri": tokenUri != null ? tokenUri!.toJson() : null,
-        "media": media != null ? List<dynamic>.from(media!.map((x) => x.toJson())) : null,
-        "metadata": metadata != null ? metadata!.toJson() : null,
-        "timeLastUpdated": timeLastUpdated != null ? timeLastUpdated!.toIso8601String() : null,
-        "contractMetadata": contractMetadata != null ? contractMetadata!.toJson() : null,
-        "spamInfo": spamInfo != null ? spamInfo!.toJson() : null,
+        "collection": collectionInfo?.toJson(),
+        "tokenUri": tokenUri?.toJson(),
+        "media": media?.map((x) => x.toJson()),
+        "metadata": metadata?.toJson(),
+        "timeLastUpdated": timeLastUpdated?.toIso8601String(),
+        "contractMetadata": contractMetadata?.toJson(),
+        "spamInfo": spamInfo?.toJson(),
         "error": error,
       };
 }

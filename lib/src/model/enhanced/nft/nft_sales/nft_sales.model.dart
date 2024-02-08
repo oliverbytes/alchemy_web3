@@ -55,7 +55,6 @@ class NFTSales {
         "contractAddress": contractAddress,
         "tokenId": tokenId,
         "quantity": quantity,
-        "quantity": quantity,
         "buyerAddress": buyerAddress,
         "sellerAddress": sellerAddress,
         "taker": taker,
