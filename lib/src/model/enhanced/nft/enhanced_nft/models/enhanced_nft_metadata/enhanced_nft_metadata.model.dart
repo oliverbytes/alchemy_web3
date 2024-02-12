@@ -3,6 +3,7 @@ import 'package:alchemy_web3/alchemy_web3.dart';
 class EnhancedNFTMetadata {
   const EnhancedNFTMetadata({
     this.name = '',
+    this.backgroundColor = '',
     this.description = '',
     this.image = '',
     this.externalUrl = '',
@@ -11,6 +12,7 @@ class EnhancedNFTMetadata {
 
   final String? name;
   final String? description;
+  final String? backgroundColor;
   final String? image;
   final String? externalUrl;
   final List<EnhancedNFTAttribute>? attributes;
@@ -23,13 +25,17 @@ class EnhancedNFTMetadata {
     if (attributesJson is Map<String, dynamic>) {
       attributes = (json["attributes"] as Map<String, dynamic>)
           .entries
-          .map((i) => EnhancedNFTAttribute(
-                value: i.value,
-                traitType: i.key,
-              ))
+          .map(
+            (i) => EnhancedNFTAttribute.fromJson(i.value),
+          )
           .toList();
     } else if (attributesJson is List) {
-      attributesJson = List<dynamic>.from(attributes.map((x) => x.toJson()));
+      var attributesJsonList = attributesJson as List<dynamic>;
+      attributes = attributesJsonList.map(
+        (e) {
+          return EnhancedNFTAttribute.fromJson(e);
+        },
+      ).toList();
     }
 
     return EnhancedNFTMetadata(
@@ -37,6 +43,7 @@ class EnhancedNFTMetadata {
       description: json["description"],
       image: json["image"],
       externalUrl: json["external_url"],
+      backgroundColor: json["background_color"],
       attributes: attributes,
     );
   }

@@ -1,9 +1,10 @@
 import 'package:alchemy_web3/src/model/enhanced/nft/enhanced_nft/common_models/enhanced_nft_spam.model.dart';
 import 'package:alchemy_web3/src/model/enhanced/nft/nft.model.dart';
 
+/// we use v2 info https://docs.alchemy.com/reference/getnftmetadata
 class EnhancedNFT {
   const EnhancedNFT({
-    this.contract,
+    this.contractAddress,
     this.collectionInfo,
     this.id = const EnhancedNFTId(),
     this.balance,
@@ -19,11 +20,11 @@ class EnhancedNFT {
     this.error,
   });
 
-  final EnhancedNFTContract? contract;
   final EnhancedNFTId id;
   final String? balance;
   final String? title;
   final String? description;
+  final String? contractAddress;
   final EnhancedNFTTokenUri? tokenUri;
   final List<EnhancedNFTMedia>? media;
   final EnhancedNFTMetadata? metadata;
@@ -33,7 +34,7 @@ class EnhancedNFT {
   final String? error;
   final EnhancedNFTCollectionInfo? collectionInfo;
 
-  //Only present if the request specified orderBy=transferTime.
+//Only present if the request specified orderBy=transferTime.
   final EnhancedNFTAcquiredAt? acquiredAt;
 
   String? get imageUrl {
@@ -46,9 +47,11 @@ class EnhancedNFT {
   }
 
   factory EnhancedNFT.fromJson(Map<String, dynamic> json) => EnhancedNFT(
-        contract: () {
+        contractAddress: () {
           try {
-            return json["contract"] != null ? EnhancedNFTContract.fromJson(json["contract"]) : null;
+            if (json["contract"]["address"] != null) {
+              return json["contract"]["address"].toString();
+            }
           } catch (e) {
             print(e);
           }
@@ -92,7 +95,7 @@ class EnhancedNFT {
           }
         }(),
         metadata: () {
-          //for each with try catch to add
+//for each with try catch to add
           try {
             return json["metadata"] != null ? EnhancedNFTMetadata.fromJson(json["metadata"]) : null;
           } catch (e) {
@@ -127,7 +130,6 @@ class EnhancedNFT {
       );
 
   Map<String, dynamic> toJson() => {
-        "contract": contract?.toJson(),
         "id": id.toJson(),
         "title": title,
         "description": description,

@@ -3,13 +3,14 @@ import 'package:alchemy_web3/src/api/enhanced/nft.dart';
 import 'package:alchemy_web3/src/client/rpc_http_client.dart';
 import 'package:test/test.dart';
 
-const String key = '<your key>';
+const String _key = '<your key>';
+var _url = 'https://eth-mainnet.g.alchemy.com/nft/v2/$_key';
 
 void main() {
   group('NFTs', () {
     RpcHttpClient client = RpcHttpClient();
     client.init(
-      url: 'https://eth-mainnet.g.alchemy.com/nft/v2/$key',
+      url: _url,
       verbose: true,
     );
     EnhancedNFTAPI api = EnhancedNFTAPI();
@@ -34,7 +35,7 @@ void main() {
       expect(resp.ownedNfts.length, lessThanOrEqualTo(resp.totalCount));
       expect(resp.ownedNfts.first.error, null);
       expect(resp.ownedNfts.first.id.tokenId, isNotEmpty);
-      expect(resp.ownedNfts.first.contract!.address, isNotEmpty);
+      expect(resp.ownedNfts.first.contractAddress!, isNotEmpty);
       expect(resp.ownedNfts.first.title, isNotNull);
     });
 
@@ -58,7 +59,7 @@ void main() {
       expect(resp.ownedNfts.length, lessThanOrEqualTo(resp.totalCount));
       expect(resp.ownedNfts.first.error, null);
       expect(resp.ownedNfts.first.id.tokenId, isNotEmpty);
-      expect(resp.ownedNfts.first.contract!.address, isNotEmpty);
+      expect(resp.ownedNfts.first.contractAddress, isNotEmpty);
       expect(resp.ownedNfts.first.title, isNotNull);
       for (var nft in resp.ownedNfts) {
         if (nft.spamInfo != null) {
@@ -232,7 +233,7 @@ void main() {
       expect(resp, isNotNull);
       expect(resp.nextToken, '0x0000000000000000000000000000000000000000000000000000000000000065');
       expect(resp.nfts.length, greaterThan(0));
-      expect(resp.nfts.first.contract!.address, '0x198478f870d97d62d640368d111b979d7ca3c38f');
+      expect(resp.nfts.first.contractAddress, '0x198478f870d97d62d640368d111b979d7ca3c38f');
       expect(resp.nfts.first.id.tokenId, '0x0000000000000000000000000000000000000000000000000000000000000001');
       expect(resp.nfts.first.id.tokenMetadata!.tokenType, 'ERC721');
       expect(resp.nfts.first.title, '8SIAN #1');
