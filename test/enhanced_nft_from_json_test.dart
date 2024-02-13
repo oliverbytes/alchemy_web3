@@ -14,7 +14,6 @@ main() {
       //contract info
       expect(enhancedNFT.contractAddress, '0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258');
       expect(enhancedNFT.contractMetadata!.name, 'Otherdeed');
-      expect(enhancedNFT.contractMetadata!.name, 'Otherdeed');
       expect(enhancedNFT.contractMetadata!.symbol, 'OTHR');
       expect(enhancedNFT.contractMetadata!.totalSupply, '100000');
       expect(enhancedNFT.contractMetadata!.tokenType, 'ERC721');
