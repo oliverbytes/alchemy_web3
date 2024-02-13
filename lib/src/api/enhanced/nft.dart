@@ -29,7 +29,7 @@ class EnhancedNFTAPI with ConsoleMixin {
       'contractAddresses': contractAddresses,
       'withMetadata': withMetadata,
       'tokenUriTimeoutInMs': tokenUriTimeoutInMs,
-      'includeFilters': filters,
+      'includeFilters': filters.map((e) => e.toParam()).toList(),
       'orderBy': orderBy.toParam(),
     };
 
