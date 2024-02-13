@@ -11,12 +11,12 @@ class EnhancedNFTAcquiredAt {
   });
 
   factory EnhancedNFTAcquiredAt.fromJson(Map<String, dynamic> json) => EnhancedNFTAcquiredAt(
-    blockTimestamp: json["blockTimestamp"],
-    blockNumber: json["blockNumber"],
-  );
+        blockTimestamp: json["blockTimestamp"]?.toString(),
+        blockNumber: json["blockNumber"]?.toString(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "blockTimestamp": blockTimestamp,
-    "blockNumber": blockNumber,
-  };
+        "blockTimestamp": blockTimestamp,
+        "blockNumber": blockNumber,
+      };
 }

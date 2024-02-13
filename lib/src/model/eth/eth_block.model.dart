@@ -1,3 +1,5 @@
+import 'package:alchemy_web3/src/utils/my_logger.dart';
+
 import 'eth_transaction.model.dart';
 
 class EthBlockResult {
@@ -74,8 +76,8 @@ class EthBlockResult {
           for (var uncle in json["uncles"]) {
             try {
               uncles.add(EthBlockResult.fromJson(uncle));
-            } catch (e) {
-              print(e);
+            } catch (e, st) {
+              globalLogger.error('Error parsing uncle', e, st);
             }
           }
 
