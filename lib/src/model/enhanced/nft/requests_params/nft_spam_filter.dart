@@ -6,9 +6,9 @@ enum NFTSpamFilter {
   String toParam() {
     switch (this) {
       case NFTSpamFilter.SPAM:
-        return 'spam';
+        return 'SPAM';
       case NFTSpamFilter.AIRDROPS:
-        return 'airdrops';
+        return 'AIRDROPS';
     }
     return '';
   }
