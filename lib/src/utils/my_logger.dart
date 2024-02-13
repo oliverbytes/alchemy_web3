@@ -1,7 +1,11 @@
 import 'package:logger/logger.dart';
 
 final Logger _logger = Logger(
-  printer: SimplePrinter(),
+  printer: PrettyPrinter(
+    methodCount: 0,
+    errorMethodCount: 1,
+    noBoxingByDefault: true,
+  ),
   output: _SplitConsoleOutput(),
   filter: _LogFilter(),
 );
@@ -13,20 +17,20 @@ class _LogFilter extends LogFilter {
   }
 }
 
-class AppLogger {
+class MyLogger {
   /// class name
   final String _loggerTag;
 
   /// Level of logging we want to see, this can be useful to run tests in terminal without too much logs
-  const AppLogger(
+  const MyLogger(
     this._loggerTag,
   );
 
   void error(dynamic event, [dynamic error, StackTrace? stackTrace]) {
     _logger.e(
       '$_loggerTag: $event',
-      error,
-      stackTrace ?? StackTrace.current,
+      error: error,
+      stackTrace: stackTrace ?? StackTrace.current,
     );
   }
 
@@ -60,14 +64,14 @@ class _SplitConsoleOutput extends LogOutput {
   @override
   void output(OutputEvent event) {
     if (enable && event.lines.any(_isTooLong)) {
-      event.lines.forEach((line) {
+      for (var line in event.lines) {
         if (_isTooLong(line)) {
           final split = splitByLength(line, splitLength);
           split.forEach(_print);
         } else {
           _print(line);
         }
-      });
+      }
     } else {
       event.lines.forEach(_print);
     }
@@ -99,4 +103,4 @@ class _SplitConsoleOutput extends LogOutput {
   bool _isTooLong(String line) => line.length > splitLength;
 }
 
-final globalLogger = AppLogger('AlchemyGlobalLogger');
+final globalLogger = MyLogger('AlchemyGlobalLogger');

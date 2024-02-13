@@ -1,10 +1,10 @@
 import 'package:alchemy_web3/src/client/rpc_ws_client.dart';
-import 'package:console_mixin/console_mixin.dart';
+import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:either_dart/either.dart';
 
 import '../../../alchemy_web3.dart';
 
-class EnhancedTokenAPI with ConsoleMixin {
+class EnhancedTokenAPI with AlchemyConsoleMixin {
   late RpcWsClient wsClient;
 
   void setClient(RpcWsClient client) {

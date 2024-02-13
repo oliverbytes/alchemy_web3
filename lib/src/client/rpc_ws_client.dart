@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:console_mixin/console_mixin.dart';
+import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:json_rpc_2/json_rpc_2.dart';
@@ -17,7 +17,7 @@ enum WsStatus {
   stopped,
 }
 
-class RpcWsClient with ConsoleMixin implements Client {
+class RpcWsClient with AlchemyConsoleMixin implements Client {
   // PROPERTIES
   String url;
   bool verbose;
@@ -53,7 +53,7 @@ class RpcWsClient with ConsoleMixin implements Client {
   }) async {
     if (url.isEmpty) throw 'Client URL is empty';
     if (wsStatus != WsStatus.running) await restart();
-    if (verbose) console.verbose('Requesting... $url -> $method\n$params');
+    if (verbose) console.trace('Requesting... $url -> $method\n$params');
 
     // RESTART IF NECESSARY
     if (isClosed) {
@@ -70,7 +70,7 @@ class RpcWsClient with ConsoleMixin implements Client {
     // SEND REQUEST
     try {
       final response = await sendRequest(method, params);
-      if (verbose) console.info('Response: $response');
+      if (verbose) console.debug('Response: $response');
 
       if (response == null) {
         return Left(RPCErrorData(
@@ -104,12 +104,12 @@ class RpcWsClient with ConsoleMixin implements Client {
     if (!isClosed) await stop();
 
     wsStatus = WsStatus.connecting;
-    console.info('Socket Connecting...');
+    console.debug('Socket Connecting...');
 
     try {
       final socket = await WebSocket.connect(url).timeout(timeOutDuration);
       wsStatus = WsStatus.running;
-      console.info('Socket Connected');
+      console.debug('Socket Connected');
 
       wsClient = Client(IOWebSocketChannel(socket).cast<String>());
       wsClient!.listen().then((_) => restart);
@@ -119,17 +119,17 @@ class RpcWsClient with ConsoleMixin implements Client {
   }
 
   Future<void> restart() async {
-    console.info('Socket Restarting...');
+    console.debug('Socket Restarting...');
     await start();
-    console.info('Socket Restarted');
+    console.debug('Socket Restarted');
   }
 
   Future<void> stop() async {
     if (wsStatus != WsStatus.running || wsClient == null || isClosed) return;
-    console.info('Socket Stopping...');
+    console.debug('Socket Stopping...');
     wsStatus = WsStatus.stopped;
     await wsClient!.close();
-    console.info('Socket Stopped');
+    console.debug('Socket Stopped');
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:console_mixin/console_mixin.dart';
 import 'package:flutter/material.dart';
 
 class ChainAPIsScreen extends StatefulWidget {
@@ -9,7 +8,7 @@ class ChainAPIsScreen extends StatefulWidget {
   State<ChainAPIsScreen> createState() => _ChainAPIsScreenState();
 }
 
-class _ChainAPIsScreenState extends State<ChainAPIsScreen> with ConsoleMixin {
+class _ChainAPIsScreenState extends State<ChainAPIsScreen> with AlchemyConsoleMixin {
   final alchemy = Alchemy();
 
   // Result TextEditingController

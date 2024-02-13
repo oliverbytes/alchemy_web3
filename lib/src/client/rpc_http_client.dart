@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:console_mixin/console_mixin.dart';
+import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 
-class RpcHttpClient with ConsoleMixin {
+class RpcHttpClient with AlchemyConsoleMixin {
   // PROPERTIES
   String url;
   double jsonRPCVersion;
@@ -59,14 +59,13 @@ class RpcHttpClient with ConsoleMixin {
     if (parameters?['filters'] != null && parameters?['filters'] is List) {
       parameters!['filters[]'] = List.filled(parameters['filters'].length, '');
       for (int i = 0; i < parameters['filters'].length; i++) {
-        parameters['filters[]'][i] =
-            parameters['filters'][i]?.toString().split('.').last;
+        parameters['filters[]'][i] = parameters['filters'][i]?.toString().split('.').last;
       }
     }
     parameters?.remove('filters');
 
     if (verbose) {
-      console.verbose(
+      console.trace(
         'Requesting... ${method.name.toUpperCase()}: $url/$endpoint\n$parameters',
       );
     }
@@ -104,7 +103,7 @@ class RpcHttpClient with ConsoleMixin {
     }
 
     if (verbose) {
-      console.info(
+      console.debug(
         '${response.statusCode} : ${response.realUri}\n${response.data}',
       );
     }

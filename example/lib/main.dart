@@ -1,5 +1,4 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:console_mixin/console_mixin.dart';
 import 'package:example/chain_apis.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -11,7 +10,7 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget with ConsoleMixin {
+class MyApp extends StatelessWidget with AlchemyConsoleMixin {
   const MyApp({Key? key}) : super(key: key);
 
   @override

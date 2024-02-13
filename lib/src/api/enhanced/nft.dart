@@ -1,10 +1,10 @@
+import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:alchemy_web3/src/client/rpc_http_client.dart';
-import 'package:console_mixin/console_mixin.dart';
+import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:either_dart/either.dart';
 
-import '../../../alchemy_web3.dart';
 
-class EnhancedNFTAPI with ConsoleMixin {
+class EnhancedNFTAPI with AlchemyConsoleMixin {
   late RpcHttpClient httpClient;
 
   void setClient(RpcHttpClient client) {
