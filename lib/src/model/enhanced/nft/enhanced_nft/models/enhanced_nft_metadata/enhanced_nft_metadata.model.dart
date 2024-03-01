@@ -17,7 +17,7 @@ class EnhancedNFTMetadata {
   final String? backgroundColor;
   final String? image;
   final String? externalUrl;
-  final String animationUrl;
+  final String? animationUrl;
   final List<EnhancedNFTAttribute>? attributes;
 
   factory EnhancedNFTMetadata.fromJson(Map<String, dynamic> json) {
