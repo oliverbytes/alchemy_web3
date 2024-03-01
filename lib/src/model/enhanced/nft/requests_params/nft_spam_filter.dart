@@ -10,6 +10,5 @@ enum NFTSpamFilter {
       case NFTSpamFilter.AIRDROPS:
         return 'AIRDROPS';
     }
-    return '';
   }
 }
