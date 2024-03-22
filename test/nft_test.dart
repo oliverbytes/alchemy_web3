@@ -4,7 +4,7 @@ import 'package:alchemy_web3/src/client/rpc_http_client.dart';
 import 'package:test/test.dart';
 
 const String _key = '<your key>';
-var _url = 'https://eth-mainnet.g.alchemy.com/nft/v2/$_key';
+var _url = 'your_url';
 
 void main() {
   group('NFTs', () {
@@ -16,16 +16,24 @@ void main() {
     EnhancedNFTAPI api = EnhancedNFTAPI();
     api.setClient(client);
 
-    String owner = 'vitalik.eth';
-    String address = '0x000386e3f7559d9b6a2f5c46b4ad1a9587d59dc3';
+    String owner = '0x4da4a81105965EC8cA43d8c9435C3681B59f17DC';
+    String address = '0x4da4a81105965EC8cA43d8c9435C3681B59f17DC';
     String token = '0x0000000000000000000000000000000000000000000000000000000000000003';
 
     test('getNFTs', () async {
-      var nfts = await api.getNFTs(owner: owner);
+      var nfts = await api.getNFTs(
+        owner: owner,
+      );
       if (nfts.isLeft) {
         fail(nfts.left.error.message);
       }
       EnhancedNFTResponse resp = nfts.right;
+      var spamNfts = resp.ownedNfts.where((element) => element.spamInfo != null).where((element) {
+        return element.spamInfo!.classifications.isNotEmpty;
+      }).toList();
+
+      expect(spamNfts, isNotEmpty);
+
       expect(resp, isNotNull);
       expect(resp.blockHash, isNotEmpty);
       expect(resp.pageKey, isNotEmpty);
@@ -39,17 +47,37 @@ void main() {
       expect(resp.ownedNfts.first.title, isNotNull);
     });
 
+    test('invalidateContract', () async {
+      var result = await api.invalidateContract(
+        contractAddress: '0x000386e3f7559d9b6a2f5c46b4ad1a9587d59dc3',
+      );
+      if (result.isLeft) {
+        fail(result.left.error.message);
+      }
+
+      print(result.right);
+    });
+
     test('getNFTsParameters', () async {
       var nfts = await api.getNFTs(
           owner: owner,
           withMetadata: true,
           filters: [NFTSpamFilter.AIRDROPS, NFTSpamFilter.SPAM],
-          orderBy: OrderBy.asc,
+          spamConfidenceLevel: SpamConfidenceLevel.VERY_HIGH,
+          orderBy: OrderBy.transferTime,
           contractAddresses: ['0x000386e3f7559d9b6a2f5c46b4ad1a9587d59dc3']);
       if (nfts.isLeft) {
         fail(nfts.left.error.message);
       }
+
       EnhancedNFTResponse resp = nfts.right;
+
+      var spamNfts = resp.ownedNfts.where((element) => element.spamInfo != null).where((element) {
+        return element.spamInfo!.classifications.isNotEmpty;
+      }).toList();
+
+      expect(spamNfts, isEmpty);
+
       expect(resp, isNotNull);
       expect(resp.blockHash, isNotEmpty);
       expect(resp.pageKey, isNotEmpty);

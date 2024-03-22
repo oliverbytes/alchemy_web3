@@ -3,7 +3,6 @@ import 'package:alchemy_web3/src/client/rpc_http_client.dart';
 import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:either_dart/either.dart';
 
-
 class EnhancedNFTAPI with AlchemyConsoleMixin {
   late RpcHttpClient httpClient;
 
@@ -12,6 +11,24 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
   }
 
   // FUNCTIONS
+
+  ///Marks all cached tokens for the particular contract as stale. So the next time the endpoint is queried it fetches live data instead of fetching from cache.
+  Future<Either<RpcResponse, bool>> invalidateContract({
+    required String contractAddress,
+  }) async {
+    var result = await httpClient.request(
+      endpoint: 'invalidateContract',
+      method: HTTPMethod.get,
+      parameters: {
+        'contractAddress': contractAddress,
+      },
+    );
+
+    return result.fold(
+      (error) => Left(error),
+      (json) => Right(json['success']),
+    );
+  }
 
   Future<Either<RpcResponse, EnhancedNFTResponse>> getNFTs({
     required String owner,
