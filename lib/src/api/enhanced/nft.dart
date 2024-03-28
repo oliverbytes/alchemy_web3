@@ -1,6 +1,4 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:alchemy_web3/src/client/rpc_http_client.dart';
-import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:either_dart/either.dart';
 
 class EnhancedNFTAPI with AlchemyConsoleMixin {

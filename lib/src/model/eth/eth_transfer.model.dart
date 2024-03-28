@@ -43,7 +43,7 @@ class EthTransfer {
       uniqueId: json['uniqueId'],
       hash: json['hash'],
       from: json['from'],
-      to: (json.containsKey('to') && json['to'] != null) != null ? json['to'] : null,
+      to: (json.containsKey('to') && json['to'] != null) ? json['to'] : null,
       value: (json.containsKey('value') && json['value'] != null) ? double.parse(json['value'].toString()) : null,
       erc721TokenId: json['erc721TokenId'],
       erc1155Metadata: (json.containsKey('erc1155Metadata') && json['erc1155Metadata'] != null)
@@ -52,7 +52,7 @@ class EthTransfer {
             )
           : null,
       tokenId: json['tokenId'],
-      asset: (json.containsKey('asset') && json['asset'] != null) != null ? json['asset'] : null,
+      asset: (json.containsKey('asset') && json['asset'] != null) ? json['asset'] : null,
       category: json['category'],
       rawContract: json['rawContract'] != null ? EthTransferRawContract.fromJson(json['rawContract']) : null,
       metadata: EthTransferMetadata.fromJson(json['metadata']),

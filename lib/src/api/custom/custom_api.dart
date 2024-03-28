@@ -1,6 +1,4 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:alchemy_web3/src/client/rpc_http_client.dart';
-import 'package:alchemy_web3/src/client/rpc_ws_client.dart';
 import 'package:either_dart/either.dart';
 
 /// class to make custom api calls

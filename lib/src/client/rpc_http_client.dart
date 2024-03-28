@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 
@@ -83,7 +82,7 @@ class RpcHttpClient with AlchemyConsoleMixin {
           responseType: ResponseType.plain,
         ),
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (verbose) {
         console.error(
           '${e.type}! ${e.response?.statusCode} : ${e.response?.realUri}\n${e.response?.data}',

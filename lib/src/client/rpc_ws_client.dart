@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:json_rpc_2/json_rpc_2.dart';
@@ -78,7 +77,7 @@ class RpcWsClient with AlchemyConsoleMixin implements Client {
       }
 
       return Right(response ?? '');
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response == null) {
         return Left(
           RPCErrorData(

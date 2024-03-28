@@ -1,5 +1,3 @@
-import 'package:alchemy_web3/src/client/rpc_ws_client.dart';
-import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:either_dart/either.dart';
 
 import '../../../alchemy_web3.dart';

@@ -1,11 +1,8 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:alchemy_web3/src/client/rpc_ws_client.dart';
-import 'package:alchemy_web3/src/utils/alchemy_console_mixin.dart';
 import 'package:alchemy_web3/src/utils/extensions/map_extensions.dart';
 import 'package:alchemy_web3/src/utils/formatting.dart';
 import 'package:either_dart/either.dart';
 import 'package:web3dart/web3dart.dart';
-
 
 class EthAPI with AlchemyConsoleMixin {
   late RpcWsClient wsClient;
@@ -275,8 +272,7 @@ class EthAPI with AlchemyConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EtherAmount.fromUnitAndValue(
-        EtherUnit.wei,
+      (response) => Right(EtherAmount.inWei(
         hexToInt(response),
       )),
     );
@@ -394,8 +390,7 @@ class EthAPI with AlchemyConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EtherAmount.fromUnitAndValue(
-        EtherUnit.wei,
+      (response) => Right(EtherAmount.inWei(
         hexToInt(response),
       )),
     );

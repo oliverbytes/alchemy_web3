@@ -1,6 +1,5 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:alchemy_web3/src/api/enhanced/nft.dart';
-import 'package:alchemy_web3/src/client/rpc_http_client.dart';
 import 'package:test/test.dart';
 
 const String _key = '<your key>';
