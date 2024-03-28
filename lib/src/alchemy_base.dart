@@ -25,6 +25,7 @@ class Alchemy {
   late api.OptimismAPI optimism;
   late api.EnhancedAPI enhanced;
   late api.ERC20TokenAPI erc20;
+  late api.CustomApi custom;
 
   // CONSTRUCTOR
   Alchemy._internal() {
@@ -52,6 +53,10 @@ class Alchemy {
     // ERC20 API
     erc20 = api.ERC20TokenAPI();
     erc20.setClient(_wsClient);
+
+    custom = api.CustomApi();
+    custom.setWsClient(_wsClient);
+    custom.setHttpClient(_httpClient);
   }
 
   void init({
