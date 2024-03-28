@@ -7,12 +7,12 @@ class CustomApi {
   late RpcWsClient wsClient;
   late RpcHttpClient httpClient;
 
-  void setWsClient(RpcWsClient rpcClient) {
-    wsClient = rpcClient;
+  void setWsClient(RpcWsClient wsClient) {
+    this.wsClient = wsClient;
   }
 
   void setHttpClient(RpcHttpClient httpClient) {
-    httpClient = httpClient;
+    this.httpClient = httpClient;
   }
 
   Future<Either<RPCErrorData, dynamic>> wsRequest({
@@ -28,14 +28,16 @@ class CustomApi {
   }
 
   Future<Either<RpcResponse, dynamic>> httpRequest({
-    required String endpoint,
-    required Map<String, dynamic> params,
+    required String method,
     required HTTPMethod httpMethod,
+    Map<String, dynamic> parameters = const {},
+    List<dynamic> bodyParameters = const [],
   }) async {
     final result = await httpClient.request(
-      endpoint: endpoint,
+      endpoint: method,
       method: httpMethod,
-      parameters: params,
+      queryParameters: parameters,
+      bodyParameters: bodyParameters,
     );
 
     return result.fold(

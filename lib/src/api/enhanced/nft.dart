@@ -17,7 +17,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     var result = await httpClient.request(
       endpoint: 'invalidateContract',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
@@ -54,7 +54,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getNFTs',
       method: HTTPMethod.get,
-      parameters: parameters,
+      queryParameters: parameters,
     );
 
     return result.fold(
@@ -70,7 +70,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getOwnersForToken',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'tokenId': tokenId,
       },
@@ -91,7 +91,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getOwnersForCollection',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'withTokenBalances': withTokenBalances,
         'block': block,
@@ -112,7 +112,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'isHolderOfCollection',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'wallet': wallet,
         'contractAddress': contractAddress,
       },
@@ -133,7 +133,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getContractsForOwner',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'owner': owner,
         'pageKey': pageKey,
         'includeFilters[]': filters.map((e) => e.toParam()).toList(),
@@ -157,7 +157,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getNFTMetadata',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'tokenId': tokenId,
         'tokenType': tokenType?.toString().split('.').last,
@@ -178,7 +178,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getContractMetadata',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
@@ -195,7 +195,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'reingestContract',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
@@ -212,7 +212,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'searchContractMetadata',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'query': query,
       },
     );
@@ -234,7 +234,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getNFTsForCollection',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'withMetadata': withMetadata,
         'startToken': startToken,
@@ -251,7 +251,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getSpamContracts',
       method: HTTPMethod.get,
-      parameters: {},
+      queryParameters: {},
     );
 
     return result.fold(
@@ -266,7 +266,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'isSpamContract',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
@@ -284,7 +284,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'isAirdrop',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'tokenId': tokenId,
       },
@@ -302,7 +302,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'reportSpam',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'address': address,
       },
     );
@@ -319,7 +319,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getFloorPrice',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
@@ -346,7 +346,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getNFTSales',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'fromBlock': fromBlock,
         'toBlock': toBlock,
         'order': order.toParam(),
@@ -374,7 +374,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'computeRarity',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'tokenId': tokenId,
       },
@@ -392,7 +392,7 @@ class EnhancedNFTAPI with AlchemyConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'summarizeNFTAttributes',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );

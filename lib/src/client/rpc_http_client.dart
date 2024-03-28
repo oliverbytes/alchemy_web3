@@ -22,6 +22,8 @@ class RpcHttpClient with AlchemyConsoleMixin {
     this.verbose = false,
   });
 
+  static int _requestId = 0;
+
   // GETTERS
 
   // VARIABLES
@@ -45,43 +47,63 @@ class RpcHttpClient with AlchemyConsoleMixin {
   }
 
   Future<Either<RpcResponse, dynamic>> request({
-    Map<String, dynamic>? parameters,
+    Map<String, dynamic>? queryParameters,
     String endpoint = '',
     HTTPMethod method = HTTPMethod.post,
+    List<dynamic> bodyParameters = const [],
   }) async {
     if (url.isEmpty) throw 'Client URL is empty';
 
+    var updatedParametersMap = Map<String, dynamic>.from(queryParameters ?? {});
     // remove null map property values
-    parameters?.removeWhere((key, value) => value == null);
+    updatedParametersMap.removeWhere((key, value) => value == null);
 
     // convert the arrays so it works in the query parameters
-    if (parameters?['filters'] != null && parameters?['filters'] is List) {
-      parameters!['filters[]'] = List.filled(parameters['filters'].length, '');
-      for (int i = 0; i < parameters['filters'].length; i++) {
-        parameters['filters[]'][i] = parameters['filters'][i]?.toString().split('.').last;
+    if (updatedParametersMap['filters'] != null && queryParameters?['filters'] is List) {
+      updatedParametersMap['filters[]'] = List.filled(updatedParametersMap['filters'].length, '');
+      for (int i = 0; i < updatedParametersMap['filters'].length; i++) {
+        updatedParametersMap['filters[]'][i] = updatedParametersMap['filters'][i]?.toString().split('.').last;
       }
     }
-    parameters?.remove('filters');
+    updatedParametersMap.remove('filters');
 
     if (verbose) {
       console.trace(
-        'Requesting... ${method.name.toUpperCase()}: $url/$endpoint\n$parameters',
+        'Requesting... ${method.name.toUpperCase()}: $url/$endpoint\n$updatedParametersMap',
       );
     }
 
     Response<String> response;
 
     try {
-      response = await _dio.request<String>(
-        '/$endpoint',
-        queryParameters: parameters,
-        options: Options(
-          method: method.name.toUpperCase(),
-          receiveTimeout: receiveTimeout,
-          sendTimeout: sendTimeout,
-          responseType: ResponseType.plain,
-        ),
-      );
+      if (method == HTTPMethod.post) {
+        response = await _dio.post<String>(
+          url,
+          queryParameters: updatedParametersMap,
+          data: jsonEncode({
+            'method': endpoint,
+            'params': bodyParameters,
+            'jsonrpc': jsonRPCVersion.toString(),
+            'id': _requestId = _requestId + 1,
+          }),
+          options: Options(
+            receiveTimeout: receiveTimeout,
+            sendTimeout: sendTimeout,
+            responseType: ResponseType.plain,
+          ),
+        );
+      } else {
+        response = await _dio.get<String>(
+          '/$endpoint',
+          queryParameters: updatedParametersMap,
+          options: Options(
+            method: method.name.toUpperCase(),
+            receiveTimeout: receiveTimeout,
+            sendTimeout: sendTimeout,
+            responseType: ResponseType.plain,
+          ),
+        );
+      }
     } on DioException catch (e) {
       if (verbose) {
         console.error(
