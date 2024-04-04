@@ -67,9 +67,16 @@ class RpcHttpClient with AlchemyConsoleMixin {
     }
     updatedParametersMap.remove('filters');
 
+    var bodyData = {
+      'method': endpoint,
+      'params': bodyParameters,
+      'jsonrpc': jsonRPCVersion.toString(),
+      'id': _requestId = _requestId + 1,
+    };
+
     if (verbose) {
       console.trace(
-        'Requesting... ${method.name.toUpperCase()}: $url/$endpoint\n$updatedParametersMap',
+        'Requesting... ${method.name.toUpperCase()}: $url, method: $endpoint, queryParameters: \n$updatedParametersMap, bodyParameters: $bodyParameters}',
       );
     }
 
@@ -80,12 +87,7 @@ class RpcHttpClient with AlchemyConsoleMixin {
         response = await _dio.post<String>(
           url,
           queryParameters: updatedParametersMap,
-          data: jsonEncode({
-            'method': endpoint,
-            'params': bodyParameters,
-            'jsonrpc': jsonRPCVersion.toString(),
-            'id': _requestId = _requestId + 1,
-          }),
+          data: jsonEncode(bodyData),
           options: Options(
             receiveTimeout: receiveTimeout,
             sendTimeout: sendTimeout,
