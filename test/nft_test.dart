@@ -1,30 +1,38 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:alchemy_web3/src/api/enhanced/nft.dart';
-import 'package:alchemy_web3/src/client/rpc_http_client.dart';
 import 'package:test/test.dart';
 
-const String key = '<your key>';
+const String _key = '<your key>';
+var _url = 'your_url';
 
 void main() {
   group('NFTs', () {
     RpcHttpClient client = RpcHttpClient();
     client.init(
-      url: 'https://eth-mainnet.g.alchemy.com/nft/v2/$key',
+      url: _url,
       verbose: true,
     );
     EnhancedNFTAPI api = EnhancedNFTAPI();
     api.setClient(client);
 
-    String owner = 'vitalik.eth';
-    String address = '0x000386e3f7559d9b6a2f5c46b4ad1a9587d59dc3';
+    String owner = '0x4da4a81105965EC8cA43d8c9435C3681B59f17DC';
+    String address = '0x4da4a81105965EC8cA43d8c9435C3681B59f17DC';
     String token = '0x0000000000000000000000000000000000000000000000000000000000000003';
 
     test('getNFTs', () async {
-      var nfts = await api.getNFTs(owner: owner);
+      var nfts = await api.getNFTs(
+        owner: owner,
+      );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTResponse resp = nfts.right;
+      var spamNfts = resp.ownedNfts.where((element) => element.spamInfo != null).where((element) {
+        return element.spamInfo!.classifications.isNotEmpty;
+      }).toList();
+
+      expect(spamNfts, isNotEmpty);
+
       expect(resp, isNotNull);
       expect(resp.blockHash, isNotEmpty);
       expect(resp.pageKey, isNotEmpty);
@@ -34,21 +42,41 @@ void main() {
       expect(resp.ownedNfts.length, lessThanOrEqualTo(resp.totalCount));
       expect(resp.ownedNfts.first.error, null);
       expect(resp.ownedNfts.first.id.tokenId, isNotEmpty);
-      expect(resp.ownedNfts.first.contract!.address, isNotEmpty);
+      expect(resp.ownedNfts.first.contractAddress!, isNotEmpty);
       expect(resp.ownedNfts.first.title, isNotNull);
+    });
+
+    test('invalidateContract', () async {
+      var result = await api.invalidateContract(
+        contractAddress: '0x000386e3f7559d9b6a2f5c46b4ad1a9587d59dc3',
+      );
+      if (result.isLeft) {
+        fail(result.left.error.message!);
+      }
+
+      print(result.right);
     });
 
     test('getNFTsParameters', () async {
       var nfts = await api.getNFTs(
           owner: owner,
           withMetadata: true,
-          filters: [NFTFilters.AIRDROPS, NFTFilters.SPAM],
-          orderBy: OrderBy.asc,
+          filters: [NFTSpamFilter.AIRDROPS, NFTSpamFilter.SPAM],
+          spamConfidenceLevel: SpamConfidenceLevel.VERY_HIGH,
+          orderBy: OrderBy.transferTime,
           contractAddresses: ['0x000386e3f7559d9b6a2f5c46b4ad1a9587d59dc3']);
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
+
       EnhancedNFTResponse resp = nfts.right;
+
+      var spamNfts = resp.ownedNfts.where((element) => element.spamInfo != null).where((element) {
+        return element.spamInfo!.classifications.isNotEmpty;
+      }).toList();
+
+      expect(spamNfts, isEmpty);
+
       expect(resp, isNotNull);
       expect(resp.blockHash, isNotEmpty);
       expect(resp.pageKey, isNotEmpty);
@@ -58,7 +86,7 @@ void main() {
       expect(resp.ownedNfts.length, lessThanOrEqualTo(resp.totalCount));
       expect(resp.ownedNfts.first.error, null);
       expect(resp.ownedNfts.first.id.tokenId, isNotEmpty);
-      expect(resp.ownedNfts.first.contract!.address, isNotEmpty);
+      expect(resp.ownedNfts.first.contractAddress, isNotEmpty);
       expect(resp.ownedNfts.first.title, isNotNull);
       for (var nft in resp.ownedNfts) {
         if (nft.spamInfo != null) {
@@ -71,7 +99,7 @@ void main() {
     test('getOwnersForToken', () async {
       var nfts = await api.getOwnersForToken(contractAddress: address, tokenId: token);
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTOwners resp = nfts.right;
       expect(resp, isNotNull);
@@ -82,7 +110,7 @@ void main() {
     test('getOwnersForCollection', () async {
       var nfts = await api.getOwnersForCollection(contractAddress: address);
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTOwnerAddresses resp = nfts.right;
       expect(resp, isNotNull);
@@ -92,10 +120,9 @@ void main() {
     });
 
     test('getOwnersForCollectionWithTokenBalances', () async {
-      var nfts =
-          await api.getOwnersForCollection(contractAddress: address, withTokenBalances: true);
+      var nfts = await api.getOwnersForCollection(contractAddress: address, withTokenBalances: true);
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTOwnerAddresses resp = nfts.right;
       expect(resp, isNotNull);
@@ -112,7 +139,7 @@ void main() {
         contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       bool resp = nfts.right;
       expect(resp, isNotNull);
@@ -122,10 +149,10 @@ void main() {
     test('getContractsForOwner', () async {
       var nfts = await api.getContractsForOwner(
         owner: owner,
-        filters: [NFTFilters.AIRDROPS, NFTFilters.SPAM],
+        filters: [NFTSpamFilter.AIRDROPS, NFTSpamFilter.SPAM],
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTContracts resp = nfts.right;
       expect(resp, isNotNull);
@@ -145,11 +172,11 @@ void main() {
       var nfts = await api.getNFTMetadata(
         contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
         tokenId: '44',
-        tokenType: TokenType.ERC721,
+        tokenType: NFTTokenType.ERC721,
         refreshCache: false,
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFT resp = nfts.right;
       expect(resp, isNotNull);
@@ -166,7 +193,7 @@ void main() {
         contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTContractMetadata resp = nfts.right;
       expect(resp, isNotNull);
@@ -181,7 +208,7 @@ void main() {
         contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTReingestContract resp = nfts.right;
       expect(resp, isNotNull);
@@ -195,7 +222,7 @@ void main() {
         query: 'sunglasses',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       List resp = nfts.right;
       expect(resp, isNotNull);
@@ -212,7 +239,7 @@ void main() {
         withMetadata: false,
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTCollection resp = nfts.right;
       expect(resp, isNotNull);
@@ -227,26 +254,30 @@ void main() {
         withMetadata: true,
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTCollection resp = nfts.right;
       expect(resp, isNotNull);
       expect(resp.nextToken, '0x0000000000000000000000000000000000000000000000000000000000000065');
       expect(resp.nfts.length, greaterThan(0));
-      expect(resp.nfts.first.contract!.address, '0x198478f870d97d62d640368d111b979d7ca3c38f');
+      expect(resp.nfts.first.contractAddress, '0x198478f870d97d62d640368d111b979d7ca3c38f');
       expect(resp.nfts.first.id.tokenId, '0x0000000000000000000000000000000000000000000000000000000000000001');
       expect(resp.nfts.first.id.tokenMetadata!.tokenType, 'ERC721');
       expect(resp.nfts.first.title, '8SIAN #1');
       expect(resp.nfts.first.description, isNotEmpty);
       expect(resp.nfts.first.tokenUri!.raw, 'https://api.8siannft.com/api/token/1');
       expect(resp.nfts.first.tokenUri!.gateway, 'https://api.8siannft.com/api/token/1');
-      expect(resp.nfts.first.media!.first.raw, 'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
-      expect(resp.nfts.first.media!.first.gateway, 'https://nft-cdn.alchemy.com/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
-      expect(resp.nfts.first.media!.first.thumbnail, 'https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
+      expect(resp.nfts.first.media!.first.raw,
+          'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
+      expect(resp.nfts.first.media!.first.gateway,
+          'https://nft-cdn.alchemy.com/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
+      expect(resp.nfts.first.media!.first.thumbnail,
+          'https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/43d036e9218fb10d6ca1e8186a75e4d9');
       expect(resp.nfts.first.media!.first.format, 'png');
       expect(resp.nfts.first.media!.first.bytes, 8671789);
       expect(resp.nfts.first.metadata!.name, '8SIAN #1');
-      expect(resp.nfts.first.metadata!.image, 'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
+      expect(resp.nfts.first.metadata!.image,
+          'https://gateway.pinata.cloud/ipfs/QmeRYM57K1h4Hi9aD9R22svjNJpbQF5qqPVoqYgzmCJrzH');
       expect(resp.nfts.first.metadata!.description, isNotEmpty);
       expect(resp.nfts.first.metadata!.attributes!.length, greaterThan(0));
       expect(resp.nfts.first.metadata!.attributes!.first.value, 'jingju');
@@ -261,7 +292,8 @@ void main() {
       expect(resp.nfts.first.contractMetadata!.openSea!.floorPrice, 0.039384);
       expect(resp.nfts.first.contractMetadata!.openSea!.collectionName, '8SIAN Main Collection');
       expect(resp.nfts.first.contractMetadata!.openSea!.safelistRequestStatus, 'verified');
-      expect(resp.nfts.first.contractMetadata!.openSea!.imageUrl, 'https://i.seadn.io/gae/eAULPaXEuD9oufUOtA-_c1MbS71hh_s_2LUMWs_xYBQW4DFqXNU1f6IrEQcE6Zv0gnV3kUyYPPt7mIzsLRhQEEDSkraAnPv81eLi?w=500&auto=format');
+      expect(resp.nfts.first.contractMetadata!.openSea!.imageUrl,
+          'https://i.seadn.io/gae/eAULPaXEuD9oufUOtA-_c1MbS71hh_s_2LUMWs_xYBQW4DFqXNU1f6IrEQcE6Zv0gnV3kUyYPPt7mIzsLRhQEEDSkraAnPv81eLi?w=500&auto=format');
       expect(resp.nfts.first.contractMetadata!.openSea!.description, isNotEmpty);
       expect(resp.nfts.first.contractMetadata!.openSea!.externalUrl, 'http://8sian.io');
       expect(resp.nfts.first.contractMetadata!.openSea!.twitterUsername, '8sianNFT');
@@ -272,7 +304,7 @@ void main() {
     test('getSpamContracts', () async {
       var nfts = await api.getSpamContracts();
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       List resp = nfts.right;
       expect(resp, isNotNull);
@@ -285,7 +317,7 @@ void main() {
         contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       bool resp = nfts.right;
       expect(resp, isNotNull);
@@ -298,7 +330,7 @@ void main() {
         tokenId: '44',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       bool resp = nfts.right;
       expect(resp, isNotNull);
@@ -310,7 +342,7 @@ void main() {
         contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       EnhancedNFTCollectionFloorPrice resp = nfts.right;
       expect(resp, isNotNull);
@@ -329,7 +361,7 @@ void main() {
         tokenId: '44',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       NFTSalesResponse resp = nfts.right;
       expect(resp, isNotNull);
@@ -345,13 +377,13 @@ void main() {
         tokenId: '44',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       List<NFTRarity> resp = nfts.right;
       expect(resp, isNotNull);
       expect(resp.length, isNonNegative);
       expect(resp.first.value, isNotEmpty);
-      expect(resp.first.trait_type, isNotEmpty);
+      expect(resp.first.traitType, isNotEmpty);
       expect(resp.first.prevalence, isNonNegative);
     });
 
@@ -360,7 +392,7 @@ void main() {
         contractAddress: '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
       );
       if (nfts.isLeft) {
-        fail(nfts.left.error.message);
+        fail(nfts.left.error.message!);
       }
       NFTAttributeSummary resp = nfts.right;
       expect(resp, isNotNull);

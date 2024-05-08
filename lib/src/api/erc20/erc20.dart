@@ -1,12 +1,10 @@
+import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:alchemy_web3/src/api/eth.dart';
-import 'package:console_mixin/console_mixin.dart';
 import 'package:either_dart/either.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../../../alchemy_web3.dart';
-
-class ERC20TokenAPI extends EthAPI with ConsoleMixin {
+class ERC20TokenAPI extends EthAPI with AlchemyConsoleMixin {
   // FUNCTIONS
 
   Future<Either<RPCErrorData, EtherAmount>> balanceOf({
@@ -21,8 +19,7 @@ class ERC20TokenAPI extends EthAPI with ConsoleMixin {
       (response) {
         if (response == '0x') return Right(EtherAmount.zero());
 
-        return Right(EtherAmount.fromUnitAndValue(
-          EtherUnit.wei,
+        return Right(EtherAmount.inWei(
           hexToInt(response),
         ));
       },

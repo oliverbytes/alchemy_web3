@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:console_mixin/console_mixin.dart';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 
-class RpcHttpClient with ConsoleMixin {
+class RpcHttpClient with AlchemyConsoleMixin {
   // PROPERTIES
   String url;
   double jsonRPCVersion;
@@ -22,6 +21,8 @@ class RpcHttpClient with ConsoleMixin {
     this.sendTimeout = const Duration(seconds: 10),
     this.verbose = false,
   });
+
+  static int _requestId = 0;
 
   // GETTERS
 
@@ -46,45 +47,66 @@ class RpcHttpClient with ConsoleMixin {
   }
 
   Future<Either<RpcResponse, dynamic>> request({
-    Map<String, dynamic>? parameters,
+    Map<String, dynamic>? queryParameters,
     String endpoint = '',
     HTTPMethod method = HTTPMethod.post,
+    List<dynamic> bodyParameters = const [],
   }) async {
     if (url.isEmpty) throw 'Client URL is empty';
 
+    var updatedParametersMap = Map<String, dynamic>.from(queryParameters ?? {});
     // remove null map property values
-    parameters?.removeWhere((key, value) => value == null);
+    updatedParametersMap.removeWhere((key, value) => value == null);
 
     // convert the arrays so it works in the query parameters
-    if (parameters?['filters'] != null && parameters?['filters'] is List) {
-      parameters!['filters[]'] = List.filled(parameters['filters'].length, '');
-      for (int i = 0; i < parameters['filters'].length; i++) {
-        parameters['filters[]'][i] =
-            parameters['filters'][i]?.toString().split('.').last;
+    if (updatedParametersMap['filters'] != null && queryParameters?['filters'] is List) {
+      updatedParametersMap['filters[]'] = List.filled(updatedParametersMap['filters'].length, '');
+      for (int i = 0; i < updatedParametersMap['filters'].length; i++) {
+        updatedParametersMap['filters[]'][i] = updatedParametersMap['filters'][i]?.toString().split('.').last;
       }
     }
-    parameters?.remove('filters');
+    updatedParametersMap.remove('filters');
+
+    var bodyData = {
+      'method': endpoint,
+      'params': bodyParameters,
+      'jsonrpc': jsonRPCVersion.toString(),
+      'id': _requestId = _requestId + 1,
+    };
 
     if (verbose) {
-      console.verbose(
-        'Requesting... ${method.name.toUpperCase()}: $url/$endpoint\n$parameters',
+      console.trace(
+        'Requesting... ${method.name.toUpperCase()}: $url, method: $endpoint, queryParameters: \n$updatedParametersMap, bodyParameters: $bodyParameters}',
       );
     }
 
     Response<String> response;
 
     try {
-      response = await _dio.request<String>(
-        '/$endpoint',
-        queryParameters: parameters,
-        options: Options(
-          method: method.name.toUpperCase(),
-          receiveTimeout: receiveTimeout,
-          sendTimeout: sendTimeout,
-          responseType: ResponseType.plain,
-        ),
-      );
-    } on DioError catch (e) {
+      if (method == HTTPMethod.post) {
+        response = await _dio.post<String>(
+          url,
+          queryParameters: updatedParametersMap,
+          data: jsonEncode(bodyData),
+          options: Options(
+            receiveTimeout: receiveTimeout,
+            sendTimeout: sendTimeout,
+            responseType: ResponseType.plain,
+          ),
+        );
+      } else {
+        response = await _dio.get<String>(
+          '/$endpoint',
+          queryParameters: updatedParametersMap,
+          options: Options(
+            method: method.name.toUpperCase(),
+            receiveTimeout: receiveTimeout,
+            sendTimeout: sendTimeout,
+            responseType: ResponseType.plain,
+          ),
+        );
+      }
+    } on DioException catch (e) {
       if (verbose) {
         console.error(
           '${e.type}! ${e.response?.statusCode} : ${e.response?.realUri}\n${e.response?.data}',
@@ -104,7 +126,7 @@ class RpcHttpClient with ConsoleMixin {
     }
 
     if (verbose) {
-      console.info(
+      console.debug(
         '${response.statusCode} : ${response.realUri}\n${response.data}',
       );
     }

@@ -1,0 +1,107 @@
+{
+    "contract": {
+        "address": "0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258"
+    },
+    "id": {
+        "tokenId": "48170",
+        "tokenMetadata": {
+            "tokenType": "ERC721"
+        }
+    },
+    "title": "",
+    "description": "",
+    "tokenUri": {
+        "gateway": "https://api.otherside.xyz/lands/48170",
+        "raw": "https://api.otherside.xyz/lands/48170"
+    },
+    "media": [
+        {
+            "gateway": "https://nft-cdn.alchemy.com/eth-mainnet/a103ef63393fe4e99d7b4d1f49437369",
+            "thumbnail": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/a103ef63393fe4e99d7b4d1f49437369",
+            "raw": "https://assets.otherside.xyz/otherdeeds/63ab9ba310e78934622a2817dee873d66ca392cb39ae6a52be73e0b16b24cf70.jpg",
+            "format": "jpeg",
+            "bytes": 1574180
+        }
+    ],
+    "metadata": {
+        "image": "https://assets.otherside.xyz/otherdeeds/63ab9ba310e78934622a2817dee873d66ca392cb39ae6a52be73e0b16b24cf70.jpg",
+        "attributes": [
+            {
+                "value": "Harsh",
+                "trait_type": "Category"
+            },
+            {
+                "value": "Infinite Expanse",
+                "trait_type": "Sediment"
+            },
+            {
+                "display_type": "number",
+                "value": 1,
+                "trait_type": "Sediment Tier"
+            },
+            {
+                "value": "Splinter",
+                "trait_type": "Environment"
+            },
+            {
+                "display_type": "number",
+                "value": 2,
+                "trait_type": "Environment Tier"
+            },
+            {
+                "value": "Oblivion",
+                "trait_type": "Eastern Resource"
+            },
+            {
+                "display_type": "number",
+                "value": 1,
+                "trait_type": "Eastern Resource Tier"
+            },
+            {
+                "value": "Kinsoul",
+                "trait_type": "Western Resource"
+            },
+            {
+                "display_type": "number",
+                "value": 1,
+                "trait_type": "Western Resource Tier"
+            },
+            {
+                "value": "Brimstone",
+                "trait_type": "Northern Resource"
+            },
+            {
+                "display_type": "number",
+                "value": 1,
+                "trait_type": "Northern Resource Tier"
+            },
+            {
+                "display_type": "number",
+                "value": 48170,
+                "trait_type": "Plot"
+            }
+        ],
+        "id": 48170
+    },
+    "timeLastUpdated": "2024-02-12T07:51:48.044Z",
+    "contractMetadata": {
+        "name": "Otherdeed",
+        "symbol": "OTHR",
+        "totalSupply": "100000",
+        "tokenType": "ERC721",
+        "contractDeployer": "0xe53c9cbfc1314b6cf6ba508230457df130552bc6",
+        "deployedBlockNumber": 14672945,
+        "openSea": {
+            "floorPrice": 0.479989,
+            "collectionName": "Otherdeed for Otherside",
+            "collectionSlug": "otherdeed",
+            "safelistRequestStatus": "verified",
+            "imageUrl": "https://lh3.googleusercontent.com/yIm-M5-BpSDdTEIJRt5D6xphizhIdozXjqSITgK4phWq7MmAU3qE7Nw7POGCiPGyhtJ3ZFP8iJ29TFl-RLcGBWX5qI4-ZcnCPcsY4zI=s120",
+            "description": "Otherdeed is the key to claiming land in Otherside. Each have a unique blend of environment and sediment — some with resources, some home to powerful artifacts. And on a very few, a Koda roams.",
+            "twitterUsername": "othersidemeta",
+            "discordUrl": "https://discord.gg/the-otherside",
+            "bannerImageUrl": "https://lh3.googleusercontent.com/E_XVuM8mX1RuqBym2JEX4RBg_sj9KbTFBAi0qU4eBr2E3VCC0bwpWrgHqBOaWsKGTf4-DBseuZJGvsCVBnzLjxqgq7rAb_93zkZ-=s2500",
+            "lastIngestedAt": "2024-02-04T21:28:43.000Z"
+        }
+    }
+}

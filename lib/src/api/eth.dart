@@ -1,12 +1,10 @@
-import 'package:alchemy_web3/src/client/rpc_ws_client.dart';
-import 'package:console_mixin/console_mixin.dart';
+import 'package:alchemy_web3/alchemy_web3.dart';
+import 'package:alchemy_web3/src/utils/extensions/map_extensions.dart';
+import 'package:alchemy_web3/src/utils/formatting.dart';
 import 'package:either_dart/either.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../../alchemy_web3.dart';
-import '../utils/formatting.dart';
-
-class EthAPI with ConsoleMixin {
+class EthAPI with AlchemyConsoleMixin {
   late RpcWsClient wsClient;
 
   void setClient(RpcWsClient client) {
@@ -203,64 +201,37 @@ class EthAPI with ConsoleMixin {
     );
   }
 
-  Future<Either<RPCErrorData, List<EthTransfer>>> getAssetTransfersFromAddress({
-    required String fromAddress,
+  Future<Either<RPCErrorData, List<EthTransfer>>> getAssetTransfers({
+    String? fromAddress,
+    String? toAddress,
     List<String> categories = const [
       "external",
     ],
     List<String> contractAddresses = const [],
     String order = "desc",
     bool withMetadata = true,
+    String? fromBlock,
+    String? toBlock,
+    //Max hex string number of results to return per call. Api Defaults to 0x3e8 (1000).
+    String? maxCount,
+    //Boolean - A boolean to exclude transfers with zero value - zero value is not the same as null value. Defaults to true.
+    bool excludeZeroValue = true,
   }) async {
-    var params = {
-      "fromAddress": fromAddress.toString(),
-      "category": categories,
-      "order": order.toString(),
-      "withMetadata": withMetadata,
-    };
-
-    if (contractAddresses.isNotEmpty) {
-      params.addAll({
-        'contractAddresses': contractAddresses,
-      });
+    if (fromAddress == null && toAddress == null) {
+      throw Exception('fromAddress or toAddress must be provided');
     }
 
-    final result = await wsClient.request(
-      method: 'alchemy_getAssetTransfers',
-      params: [params],
-    );
-
-    return result.fold(
-      (error) => Left(error),
-      (response) => Right(
-        List<EthTransfer>.from(
-          response['transfers'].map((x) => EthTransfer.fromJson(x)),
-        ),
-      ),
-    );
-  }
-
-  Future<Either<RPCErrorData, List<EthTransfer>>> getAssetTransfersToAddress({
-    required String toAddress,
-    List<String> categories = const [
-      "external",
-    ],
-    List<String> contractAddresses = const [],
-    String order = "desc",
-    bool withMetadata = true,
-  }) async {
     var params = {
-      "toAddress": toAddress.toString(),
       "category": categories,
-      "order": order.toString(),
+      "order": order,
       "withMetadata": withMetadata,
-    };
+      "toAddress": toAddress,
+      "fromAddress": fromAddress,
+      'contractAddresses': contractAddresses,
+      'fromBlock': fromBlock,
+      'toBlock': toBlock,
+    }..removeNullValues();
 
-    if (contractAddresses.isNotEmpty) {
-      params.addAll({
-        "contractAddresses": contractAddresses,
-      });
-    }
     final result = await wsClient.request(
       method: 'alchemy_getAssetTransfers',
       params: [params],
@@ -301,8 +272,7 @@ class EthAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EtherAmount.fromUnitAndValue(
-        EtherUnit.wei,
+      (response) => Right(EtherAmount.inWei(
         hexToInt(response),
       )),
     );
@@ -420,8 +390,7 @@ class EthAPI with ConsoleMixin {
 
     return result.fold(
       (error) => Left(error),
-      (response) => Right(EtherAmount.fromUnitAndValue(
-        EtherUnit.wei,
+      (response) => Right(EtherAmount.inWei(
         hexToInt(response),
       )),
     );

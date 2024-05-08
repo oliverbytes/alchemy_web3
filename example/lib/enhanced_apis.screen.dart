@@ -1,5 +1,4 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
-import 'package:console_mixin/console_mixin.dart';
 import 'package:flutter/material.dart';
 
 class EnhancedAPIsScreen extends StatefulWidget {
@@ -9,8 +8,7 @@ class EnhancedAPIsScreen extends StatefulWidget {
   State<EnhancedAPIsScreen> createState() => _EnhancedAPIsScreenState();
 }
 
-class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
-    with ConsoleMixin {
+class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen> with AlchemyConsoleMixin {
   final alchemy = Alchemy();
 
   // Result TextEditingController
@@ -41,8 +39,7 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
         console.error(text);
       },
       (response) {
-        final text =
-            response is String ? response : response.toJson().toString();
+        final text = response is String ? response : response.toJson().toString();
         resultAreaController.text = text;
         resultColor = null;
         console.debug(text);
@@ -98,8 +95,7 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
                 child: const Text('getNFTMetadata'),
                 onPressed: () => call(
                   alchemy.enhanced.nft.getNFTMetadata(
-                    contractAddress:
-                        '0x5180db8F5c931aaE63c74266b211F580155ecac8',
+                    contractAddress: '0x5180db8F5c931aaE63c74266b211F580155ecac8',
                     tokenId: '1590',
                   ),
                 ),
@@ -109,8 +105,7 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
                 child: const Text('getNFTsForCollection'),
                 onPressed: () => call(
                   alchemy.enhanced.nft.getNFTsForCollection(
-                    contractAddress:
-                        '0x61fce80d72363b731425c3a2a46a1a5fed9814b2',
+                    contractAddress: '0x61fce80d72363b731425c3a2a46a1a5fed9814b2',
                     withMetadata: true,
                     startToken: '0x1ea2',
                   ),
@@ -121,8 +116,7 @@ class _EnhancedAPIsScreenState extends State<EnhancedAPIsScreen>
                 child: const Text('getOwnersForToken'),
                 onPressed: () => call(
                   alchemy.enhanced.nft.getOwnersForToken(
-                    contractAddress:
-                        '0x04b14e3383d42685ae16af3c47b21b2d5941d27e',
+                    contractAddress: '0x04b14e3383d42685ae16af3c47b21b2d5941d27e',
                     tokenId: '867',
                   ),
                 ),

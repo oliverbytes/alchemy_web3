@@ -1,10 +1,7 @@
-import 'package:alchemy_web3/src/client/rpc_http_client.dart';
-import 'package:console_mixin/console_mixin.dart';
+import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:either_dart/either.dart';
 
-import '../../../alchemy_web3.dart';
-
-class EnhancedNFTAPI with ConsoleMixin {
+class EnhancedNFTAPI with AlchemyConsoleMixin {
   late RpcHttpClient httpClient;
 
   void setClient(RpcHttpClient client) {
@@ -13,27 +10,51 @@ class EnhancedNFTAPI with ConsoleMixin {
 
   // FUNCTIONS
 
+  ///Marks all cached tokens for the particular contract as stale. So the next time the endpoint is queried it fetches live data instead of fetching from cache.
+  Future<Either<RpcResponse, bool>> invalidateContract({
+    required String contractAddress,
+  }) async {
+    var result = await httpClient.request(
+      endpoint: 'invalidateContract',
+      method: HTTPMethod.get,
+      queryParameters: {
+        'contractAddress': contractAddress,
+      },
+    );
+
+    return result.fold(
+      (error) => Left(error),
+      (json) => Right(json['success']),
+    );
+  }
+
   Future<Either<RpcResponse, EnhancedNFTResponse>> getNFTs({
     required String owner,
     String? pageKey,
     List<String> contractAddresses = const [],
     bool withMetadata = true,
     int? tokenUriTimeoutInMs,
-    List<NFTFilters> filters = const [],
+    List<NFTSpamFilter> filters = const [],
     OrderBy orderBy = OrderBy.desc,
+    SpamConfidenceLevel? spamConfidenceLevel,
   }) async {
+    var parameters = {
+      'owner': owner,
+      'pageKey': pageKey,
+      'contractAddresses': contractAddresses,
+      'withMetadata': withMetadata,
+      'tokenUriTimeoutInMs': tokenUriTimeoutInMs,
+      'includeFilters[]': filters.map((e) => e.toParam()).toList(),
+      'orderBy': orderBy.toParam(),
+    };
+
+    if (spamConfidenceLevel != null) {
+      parameters['spamConfidenceLevel'] = spamConfidenceLevel.toParam();
+    }
     final result = await httpClient.request(
       endpoint: 'getNFTs',
       method: HTTPMethod.get,
-      parameters: {
-        'owner': owner,
-        'pageKey': pageKey,
-        'contractAddresses': contractAddresses,
-        'withMetadata': withMetadata,
-        'tokenUriTimeoutInMs': tokenUriTimeoutInMs,
-        'filters': filters,
-        'orderBy': orderBy.toString().split('.').last,
-      },
+      queryParameters: parameters,
     );
 
     return result.fold(
@@ -49,7 +70,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getOwnersForToken',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'tokenId': tokenId,
       },
@@ -70,7 +91,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getOwnersForCollection',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'withTokenBalances': withTokenBalances,
         'block': block,
@@ -91,7 +112,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'isHolderOfCollection',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'wallet': wallet,
         'contractAddress': contractAddress,
       },
@@ -106,17 +127,17 @@ class EnhancedNFTAPI with ConsoleMixin {
   Future<Either<RpcResponse, EnhancedNFTContracts>> getContractsForOwner({
     required String owner,
     String? pageKey,
-    List<NFTFilters> filters = const [],
+    List<NFTSpamFilter> filters = const [],
     OrderBy orderBy = OrderBy.desc,
   }) async {
     final result = await httpClient.request(
       endpoint: 'getContractsForOwner',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'owner': owner,
         'pageKey': pageKey,
-        'filters': filters,
-        'orderBy': orderBy.toString().split('.').last,
+        'includeFilters[]': filters.map((e) => e.toParam()).toList(),
+        'orderBy': orderBy.toParam(),
       },
     );
 
@@ -129,14 +150,14 @@ class EnhancedNFTAPI with ConsoleMixin {
   Future<Either<RpcResponse, EnhancedNFT>> getNFTMetadata({
     required String contractAddress,
     required String tokenId,
-    TokenType? tokenType,
+    NFTTokenType? tokenType,
     int? tokenUriTimeoutInMs,
     bool? refreshCache,
   }) async {
     final result = await httpClient.request(
       endpoint: 'getNFTMetadata',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'tokenId': tokenId,
         'tokenType': tokenType?.toString().split('.').last,
@@ -157,7 +178,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getContractMetadata',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
@@ -174,7 +195,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'reingestContract',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
@@ -191,7 +212,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'searchContractMetadata',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'query': query,
       },
     );
@@ -213,7 +234,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getNFTsForCollection',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'withMetadata': withMetadata,
         'startToken': startToken,
@@ -230,7 +251,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getSpamContracts',
       method: HTTPMethod.get,
-      parameters: {},
+      queryParameters: {},
     );
 
     return result.fold(
@@ -245,7 +266,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'isSpamContract',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
@@ -263,7 +284,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'isAirdrop',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'tokenId': tokenId,
       },
@@ -281,7 +302,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'reportSpam',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'address': address,
       },
     );
@@ -298,7 +319,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getFloorPrice',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
@@ -325,10 +346,10 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'getNFTSales',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'fromBlock': fromBlock,
         'toBlock': toBlock,
-        'order': order.toString().split('.').last,
+        'order': order.toParam(),
         'marketplace': marketplace,
         'contractAddress': contractAddress,
         'tokenId': tokenId,
@@ -353,7 +374,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'computeRarity',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
         'tokenId': tokenId,
       },
@@ -371,7 +392,7 @@ class EnhancedNFTAPI with ConsoleMixin {
     final result = await httpClient.request(
       endpoint: 'summarizeNFTAttributes',
       method: HTTPMethod.get,
-      parameters: {
+      queryParameters: {
         'contractAddress': contractAddress,
       },
     );
