@@ -3,7 +3,7 @@ import 'rpc_error_data.model.dart';
 class RPCError {
   int? code;
   String? message;
-  List<RPCErrorData>?  data;
+  List<RPCErrorData>? data;
 
   RPCError({
     required this.code,
