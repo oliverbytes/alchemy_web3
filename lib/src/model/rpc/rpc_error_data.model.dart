@@ -1,7 +1,3 @@
-
-
-
-
 class RPCErrorData {
   final int? code;
   final String? message;
